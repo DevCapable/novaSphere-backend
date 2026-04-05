@@ -89,7 +89,7 @@ export const AuditLogInterceptor = <
       }
 
       return next.handle().pipe(
-        tap(async (result) => {
+        tap((result) => {
           let changes: Record<string, AuditLogChanges<any>> | null;
           entityId = entityId || result?.id;
           if (action === AuditAction.UPDATE && changeKeys) {

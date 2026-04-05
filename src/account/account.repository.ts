@@ -7,7 +7,6 @@ import {
 } from '@app/core/error';
 import { StringHelper } from '@app/core/helpers';
 import { LoggerService } from '@app/logger';
-import { ShareholderRepository } from '@app/shareholder/shareholder.repository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, EntityManager, Like, Repository } from 'typeorm';
@@ -57,7 +56,6 @@ export class AccountRepository extends BaseRepository<Account> {
     private readonly agencyRepository: Repository<Agency>,
     @InjectRepository(CommunityVendor)
     private readonly communityVendorRepository: Repository<CommunityVendor>,
-    private readonly shareholderRepository: ShareholderRepository,
     @InjectRepository(Auditor)
     private readonly auditorRepository: Repository<Auditor>,
     private eventEmitter: EventEmitter2,
@@ -254,7 +252,7 @@ export class AccountRepository extends BaseRepository<Account> {
           );
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       this.loggerService.error(
         'Workflow user creation failed for account: ' + accountId,
         error,
@@ -537,12 +535,6 @@ export class AccountRepository extends BaseRepository<Account> {
     });
   }
 
-  async findShareholdersTotalShares(accountId: number) {
-    return await this.shareholderRepository.findShareHoldersTotalShare(
-      accountId,
-    );
-  }
-
   async update(id: number, data): Promise<any> {
     const account = await this.accountRepository.findOne({
       where: { id },
@@ -658,7 +650,7 @@ export class AccountRepository extends BaseRepository<Account> {
             this.loggerService.log(
               `Assigned user ${updatedUser.id} to ${data.workflowGroups.length} groups`,
             );
-          } catch (error) {
+          } catch (error: any) {
             this.loggerService.error(
               `Failed to assign workflow groups: ${error.message}`,
             );
@@ -690,7 +682,7 @@ export class AccountRepository extends BaseRepository<Account> {
         return this.auditorRepository;
       default:
         throw new CustomInternalServerException(
-          `Unsupported account type: ${accountType}`,
+          `Unsupported account type: ${accountType as string}`,
         );
     }
   }

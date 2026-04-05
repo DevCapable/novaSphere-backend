@@ -36,6 +36,6 @@ export class CreateBulkUploadDto {
 
   @IsOptional()
   @IsJSON()
-  @ApiProperty({ type: 'object' })
+  @ApiProperty({ type: 'object', additionalProperties: true })
   messageLog?: any;
 }

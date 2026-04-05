@@ -25,7 +25,7 @@
   
 
     "resolveJsonModule": true,
-    "ignoreDeprecations": "6.0",
+    // "ignoreDeprecations": "6.0",
     "strictPropertyInitialization": false,
     "paths": {
       "@app/*": ["src/*"],

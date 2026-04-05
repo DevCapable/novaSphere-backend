@@ -1,0 +1,122 @@
+version: '3'
+
+services:
+  app:
+    image: capetech/novasphere-api
+    build:
+      context: ./
+      target: final-stage
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      # Changed from 4000 to 4001 (or set PORT=4001 in .env)
+      - 127.0.0.1:${PORT:-4001}:${PORT:-4001}
+
+  db:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: 'novasphere_mysql'
+    restart: always
+    ports:
+      # Changed from 33062 to 33063
+      - '127.0.0.1:33063:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: novasphere
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: novasphere
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - novasphere_db_data:/var/lib/mysql
+    networks:
+      - nestjs-network
+
+  pm-mysql:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: 'novasphere_pm_mysql'
+    restart: always
+    ports:
+      # Changed from 33061 to 33064
+      - '127.0.0.1:33064:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: PM-DBPassw0rd
+      MYSQL_USER: pm-user
+      MYSQL_DATABASE: workflow
+      MYSQL_PASSWORD: PM-DBPassw0rd
+    networks:
+      - pm-net
+    volumes:
+      - pm_db_data:/var/lib/mysql
+
+  processmaker:
+    depends_on:
+      - pm-mysql
+    image: jomoflash/processmaker:3.8.3
+    container_name: 'novasphere_pm'
+    ports:
+      # Changed from 8095 to 8096
+      - '127.0.0.1:8096:8080'
+    restart: always
+    environment:
+      URL: '127.0.0.1'
+    networks:
+      - pm-net
+    volumes:
+      - pm_shared:/opt/pm/processmaker/shared:rw
+      - pm_config:/opt/pm/processmaker/workflow/engine/config
+
+  redis:
+    image: 'redis'
+    restart: unless-stopped
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
+    command: /bin/sh -c 'redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-password}'
+    ports:
+      # Changed from 6379 to 6380 (or set REDIS_PORT=6380 in .env)
+      - 127.0.0.1:${REDIS_PORT:-6380}:6379
+    networks:
+      - default
+    volumes:
+      - redis_volume:/data
+
+  redis_insight:
+    image: redis/redisinsight:latest
+    container_name: redis_insight
+    restart: unless-stopped
+    ports:
+      # Changed from 5540 to 5541
+      - 127.0.0.1:5541:5540
+    volumes:
+      - redis_insight:/data
+  
+  nats:
+    image: nats:2.10.22
+    container_name: nats-server
+    restart: always
+    ports:
+      # Shifted NATS ports up by 10 to avoid 4222 conflicts
+      - 127.0.0.1:4232:4222
+      - 127.0.0.1:8232:8222
+      - 127.0.0.1:6232:6222
+
+volumes:
+  novasphere_db_data:
+  pm_db_data:
+  pm_shared:
+  pm_config:
+  redis_insight:
+  redis_volume:
+    driver: local
+
+networks:
+  pm-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.150.0/24
+  nestjs-network:
+    driver: bridge

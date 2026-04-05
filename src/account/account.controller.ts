@@ -25,7 +25,7 @@ import { Accounts } from './decorators/accounts.decorator';
 import { AuditLogInterceptor } from '@app/audit-log/interceptors/audit-log.interceptor';
 import { EntityType } from '@app/audit-log/enum';
 import { ExternalLinkOriginEnum } from '@app/iam/enum';
-import { Request } from 'express';
+import type { Request } from 'express';
 import { Public } from '@app/iam/decorators';
 import { UpdateInstitutionDto } from '@app/account/dto';
 import { IVendor } from './interface';

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, mixin, PipeTransform } from '@nestjs/common';
+import { forwardRef, Inject, mixin, PipeTransform, Type } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { accountTypeMapping } from '../account-type.mapping';
@@ -14,9 +14,11 @@ export enum HandlerAction {
 
 export const AccountValidationPipe: (
   handlerAction: HandlerAction,
-) => PipeTransform = memoize(createAccountValidationPipe);
+) => Type<PipeTransform<any, any>> = memoize(createAccountValidationPipe);
 
-function createAccountValidationPipe(handlerAction: HandlerAction) {
+function createAccountValidationPipe(
+  handlerAction: HandlerAction,
+): Type<PipeTransform<any, any>> {
   handlerAction = !handlerAction ? HandlerAction.CREATE : handlerAction;
   class MixinAccountValidationPipe implements PipeTransform<any> {
     constructor(

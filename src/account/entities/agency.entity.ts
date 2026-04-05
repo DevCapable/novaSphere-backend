@@ -1,4 +1,3 @@
-import { Department } from '@app/department/entities';
 import {
   Column,
   Entity,
@@ -52,9 +51,6 @@ export class Agency {
 
   @Column({ type: 'clob', nullable: true })
   workflowGroups: string;
-
-  @ManyToOne(() => Department, (department) => department.accounts)
-  department: Department;
 
   @Column({ nullable: true })
   departmentId: number;
