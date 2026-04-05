@@ -4,7 +4,7 @@ import { Accounts } from './decorators/accounts.decorator';
 import { AccountTypeEnum } from './enums';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../iam/decorators';
-import { CurrentUserData } from '../iam/interfaces';
+import type { CurrentUserData } from '../iam/interfaces';
 import { ApiAccountUpdate } from './decorators';
 import {
   AccountValidationPipe,

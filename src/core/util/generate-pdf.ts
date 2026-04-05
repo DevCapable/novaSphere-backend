@@ -90,7 +90,7 @@ export const generatePdfDocument = async ({
 
     loggerService.log(`IMAGES ${pdfFilePath} ${logo}`);
 
-    const headless = isProduction ? 'new' : true;
+    const headless = true;
 
     // TODO remove the args when deploying to production due to security issues
     const browser = await puppeteer.launch({

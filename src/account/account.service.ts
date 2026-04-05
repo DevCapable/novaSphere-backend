@@ -17,7 +17,7 @@ import { RoleRepository } from '@app/role/role.repository';
 import { StatRepository } from '@app/stat/stat.repository';
 import { StatService } from '@app/stat/stat.service';
 import { UserService } from '@app/user/user.service';
-import IORedis from 'ioredis';
+import type IORedis from 'ioredis';
 import { stringSimilarity } from 'string-similarity-js';
 import { EntityManager, Like } from 'typeorm';
 import { camelCase } from 'typeorm/util/StringUtils';
@@ -502,7 +502,7 @@ export class AccountService {
       );
     }
 
-    if ([AccountTypeEnum.INSTITUTION].includes(account?.type as any)) {
+    if ([AccountTypeEnum.INSTITUTION].includes(account?.type)) {
       const userData = pick(data, ['email']);
 
       const userId = account?.users[0]?.id;
@@ -515,7 +515,7 @@ export class AccountService {
         AccountTypeEnum.COMPANY,
         AccountTypeEnum.OPERATOR,
         AccountTypeEnum.COMMUNITY_VENDOR,
-      ].includes(account?.type as any)
+      ].includes(account?.type)
     ) {
       userData = {
         firstName: data.name?.toUpperCase(),
@@ -652,7 +652,7 @@ export class AccountService {
     accountType,
     userData,
   ) {
-    if ([AccountTypeEnum.INDIVIDUAL].includes(accountType as any)) {
+    if ([AccountTypeEnum.INDIVIDUAL].includes(accountType)) {
       const defaultRole = await this.roleRepository.findOne({
         slug: RolesEnum.SUPER_ADMIN,
       });
