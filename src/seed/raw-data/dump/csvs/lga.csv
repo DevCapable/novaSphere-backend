@@ -1,0 +1,795 @@
+NAME","STATE","STATE_ID"
+"Kagarko","KADUNA",19
+"Kajuru","KADUNA",19
+"Kauru","KADUNA",19
+"Koka/Kawo","KADUNA",19
+"Kudan","KADUNA",19
+"Lere","KADUNA",19
+"Makarfi","KADUNA",19
+"Sabon-Gari","KADUNA",19
+"Sanga","KADUNA",19
+"Soba","KADUNA",19
+"Tundun-Wada/Makera","KADUNA",19
+"Zango-Kataf","KADUNA",19
+"Zaria","KADUNA",19
+"Ajingi","KANO",20
+"Albasu","KANO",20
+"Bagwai","KANO",20
+"Bebeji","KANO",20
+"Bichi","KANO",20
+"Bunkure","KANO",20
+"Dala","KANO",20
+"Dambatta","KANO",20
+"Dawakin Kudu","KANO",20
+"Dawakin Tofa","KANO",20
+"Doguwa","KANO",20
+"Fagge","KANO",20
+"Gabasawa","KANO",20
+"Garko","KANO",20
+"Garun Mallam","KANO",20
+"Gaya","KANO",20
+"Gezawa","KANO",20
+"Gwale","KANO",20
+"Gwarzo","KANO",20
+"Kabo","KANO",20
+"Kano Municipal","KANO",20
+"Karaye","KANO",20
+"Kibiya","KANO",20
+"Kiru","KANO",20
+"Kumbotso","KANO",20
+"Kunchi","KANO",20
+"Kura","KANO",20
+"Madobi","KANO",20
+"Makoda","KANO",20
+"Minjibir","KANO",20
+"Nasarawa","KANO",20
+"Rano","KANO",20
+"Rimin Gado","KANO",20
+"Rogo","KANO",20
+"Shanono","KANO",20
+"Sumaila","KANO",20
+"Takai","KANO",20
+"Tarauni","KANO",20
+"Tofa","KANO",20
+"Tsanyawa","KANO",20
+"Tudun Wada","KANO",20
+"Ungogo","KANO",20
+"Warawa","KANO",20
+"Wudil","KANO",20
+"Bakori","KATSINA",21
+"Batagarawa","KATSINA",21
+"Batsari","KATSINA",21
+"Baure","KATSINA",21
+"Bindawa","KATSINA",21
+"Charanchi","KATSINA",21
+"Danja","KATSINA",21
+"Dandume","KATSINA",21
+"Dan Musa","KATSINA",21
+"Daura","KATSINA",21
+"Dutsi","KATSINA",21
+"Dutsin-Ma","KATSINA",21
+"Faskari","KATSINA",21
+"Funtua","KATSINA",21
+"Ingawa","KATSINA",21
+"Jibia","KATSINA",21
+"Kafur","KATSINA",21
+"Kaita","KATSINA",21
+"Kankara","KATSINA",21
+"Kankia","KATSINA",21
+"Katsina","KATSINA",21
+"Kurfi","KATSINA",21
+"Kusada","KATSINA",21
+"Mai'Adua","KATSINA",21
+"Malumfashi","KATSINA",21
+"Mani","KATSINA",21
+"Mashi","KATSINA",21
+"Matazu","KATSINA",21
+"Musawa","KATSINA",21
+"Rimi","KATSINA",21
+"Sabuwa","KATSINA",21
+"Safana","KATSINA",21
+"Sandamu","KATSINA",21
+"Zango","KATSINA",21
+"Aleiro","KEBBI",22
+"Arewa Dandi","KEBBI",22
+"Argungu","KEBBI",22
+"Augie","KEBBI",22
+"Bagudo","KEBBI",22
+"Birnin Kebbi","KEBBI",22
+"Bunza","KEBBI",22
+"Dandi","KEBBI",22
+"Wasagu/Danko","KEBBI",22
+"Fakai","KEBBI",22
+"Gwandu","KEBBI",22
+"Jega","KEBBI",22
+"Kalgo","KEBBI",22
+"Koko/Besse","KEBBI",22
+"Maiyama","KEBBI",22
+"Ngaski","KEBBI",22
+"Sakaba","KEBBI",22
+"Shanga","KEBBI",22
+"Suru","KEBBI",22
+"Wasagu","KEBBI",22
+"Yauri","KEBBI",22
+"Zuru","KEBBI",22
+"Adavi","KOGI",23
+"Ajaokuta","KOGI",23
+"Ankpa","KOGI",23
+"Bassa","KOGI",23
+"Dekina","KOGI",23
+"Ibaji","KOGI",23
+"Idah","KOGI",23
+"Igbalamela-Odolu","KOGI",23
+"Ijumu","KOGI",23
+"Kabba/Bunu","KOGI",23
+"Kogi","KOGI",23
+"Lokoja","KOGI",23
+"Mopa-Muro","KOGI",23
+"Ofu","KOGI",23
+"Ogori/Magongo","KOGI",23
+"Okehi","KOGI",23
+"Okene","KOGI",23
+"Olamaboro","KOGI",23
+"Omala","KOGI",23
+"Oyi","KOGI",23
+"Yagba East","KOGI",23
+"Yagba West","KOGI",23
+"Asa","KWARA",24
+"Baruten","KWARA",24
+"Edu","KWARA",24
+"Ekiti","KWARA",24
+"Ifelodun","KWARA",24
+"Ilorin East","KWARA",24
+"Ilorin South","KWARA",24
+"Ilorin West","KWARA",24
+"Irepodun","KWARA",24
+"Isin","KWARA",24
+"Kaiama","KWARA",24
+"Moro","KWARA",24
+"Offa","KWARA",24
+"Oke-Ero","KWARA",24
+"Oyun","KWARA",24
+"Pategi","KWARA",24
+"Agege","LAGOS",25
+"Ajeromi-Ifelodun","LAGOS",25
+"Alimosho","LAGOS",25
+"Amuwo-Odofin","LAGOS",25
+"Apapa","LAGOS",25
+"Badagry","LAGOS",25
+"Epe","LAGOS",25
+"Eti-Osa","LAGOS",25
+"Ibeju-Lekki","LAGOS",25
+"Ifako-Ijaye","LAGOS",25
+"Ikeja","LAGOS",25
+"Ikorodu","LAGOS",25
+"Kosofe","LAGOS",25
+"Lagos Island","LAGOS",25
+"Lagos Mainland","LAGOS",25
+"Mushin","LAGOS",25
+"Ojo","LAGOS",25
+"Oshodi-Isolo","LAGOS",25
+"Shomolu","LAGOS",25
+"Surulere","LAGOS",25
+"Akwanga","NASARAWA",26
+"Awe","NASARAWA",26
+"Doma","NASARAWA",26
+"Karu","NASARAWA",26
+"Keana","NASARAWA",26
+"Keffi","NASARAWA",26
+"Kokona","NASARAWA",26
+"Lafia","NASARAWA",26
+"Nasarawa","NASARAWA",26
+"Nasarawa Eggon","NASARAWA",26
+"Obi","NASARAWA",26
+"Toto","NASARAWA",26
+"Wamba","NASARAWA",26
+"Agaie","NIGER",27
+"Agwara","NIGER",27
+"Bida","NIGER",27
+"Borgu","NIGER",27
+"Bosso","NIGER",27
+"Chanchaga","NIGER",27
+"Edati","NIGER",27
+"Gbako","NIGER",27
+"Gurara","NIGER",27
+"Katcha","NIGER",27
+"Kontagora","NIGER",27
+"Lapai","NIGER",27
+"Lavun","NIGER",27
+"Magama","NIGER",27
+"Mariga","NIGER",27
+"Mashegu","NIGER",27
+"Mokwa","NIGER",27
+"Munya","NIGER",27
+"Paikoro","NIGER",27
+"Rafi","NIGER",27
+"Rijau","NIGER",27
+"Shiroro","NIGER",27
+"Suleja","NIGER",27
+"Tafa","NIGER",27
+"Wushishi","NIGER",27
+"Abeokuta North","OGUN",28
+"Abeokuta South","OGUN",28
+"Ado-Odo/Ota","OGUN",28
+"Yewa North","OGUN",28
+"Yewa South","OGUN",28
+"Ewekoro","OGUN",28
+"Idarapo","OGUN",28
+"Ifo","OGUN",28
+"Ijebu East","OGUN",28
+"Ijebu North","OGUN",28
+"Ijebu North-East","OGUN",28
+"Ijebu Ode","OGUN",28
+"Ikenne","OGUN",28
+"Alaro","OGUN",28
+"Imeko Afon","OGUN",28
+"Ipokia","OGUN",28
+"Obafemi-Owode","OGUN",28
+"Odeda","OGUN",28
+"Odogbolu","OGUN",28
+"Ogun Waterside","OGUN",28
+"Remo North","OGUN",28
+"Shagamu","OGUN",28
+"Akoko North-East","ONDO",29
+"Akoko North-West","ONDO",29
+"Akoko South-West","ONDO",29
+"Akoko South-East","ONDO",29
+"Ese Odo","ONDO",29
+"Idanre","ONDO",29
+"Ifedore","ONDO",29
+"Ilaje","ONDO",29
+"Ilaje-West","ONDO",29
+"Ile-Oluji/Okeigbo","ONDO",29
+"Irele","ONDO",29
+"Odigbo","ONDO",29
+"Okitipupa","ONDO",29
+"Ondo West","ONDO",29
+"Ondo East","ONDO",29
+"Ose","ONDO",29
+"Owo","ONDO",29
+"Atakunmosa West","OSUN",30
+"Atakunmosa East","OSUN",30
+"Ayedaade","OSUN",30
+"Ayedire","OSUN",30
+"Boluwaduro","OSUN",30
+"Boripe","OSUN",30
+"Ede South","OSUN",30
+"Ede North","OSUN",30
+"Egbedore","OSUN",30
+"Ejigbo","OSUN",30
+"Ife Central","OSUN",30
+"Ife East","OSUN",30
+"Ife North","OSUN",30
+"Ife South","OSUN",30
+"Ifedayo","OSUN",30
+"Ifelodun","OSUN",30
+"Ila","OSUN",30
+"Ilesha East","OSUN",30
+"Ilesha West","OSUN",30
+"Irepodun","OSUN",30
+"Irewole","OSUN",30
+"Isokan","OSUN",30
+"Iwo","OSUN",30
+"Obokun","OSUN",30
+"Odo-otin","OSUN",30
+"Ola Oluwa","OSUN",30
+"Olorunda","OSUN",30
+"Oriade","OSUN",30
+"Orolu","OSUN",30
+"Osogbo","OSUN",30
+"Irepodun","OSUN",30
+"Afijio","OYO",31
+"Akinyele","OYO",31
+"Atiba","OYO",31
+"Atisbo","OYO",31
+"Egbeda","OYO",31
+"Ibadan North","OYO",31
+"Ibadan North-East","OYO",31
+"Ibadan North-West","OYO",31
+"Ibadan South-East","OYO",31
+"Ibadan South-West","OYO",31
+"ibarapa Central","OYO",31
+"Ibarapa East","OYO",31
+"Ibarapa North","OYO",31
+"Ido","OYO",31
+"Ifedayo","OYO",31
+"Ifeloju","OYO",31
+"Irepo","OYO",31
+"Iseyin","OYO",31
+"Itesiwaju","OYO",31
+"Iwajowa","OYO",31
+"Kajola","OYO",31
+"Lagelu","OYO",31
+"Ogo Oluwa","OYO",31
+"WARRI SOUTH WEST","DELTA",10
+"Ogbomoso North","OYO",31
+"Ogbomoso South","OYO",31
+"Olorunsogo","OYO",31
+"Oluyole","OYO",31
+"Ona Ara","OYO",31
+"Orelope","OYO",31
+"Ori Ire","OYO",31
+"Oyo East","OYO",31
+"Oyo West","OYO",31
+"Saki East","OYO",31
+"Saki West","OYO",31
+"Surulere","OYO",31
+"Barkin Ladi","PLATEAU",32
+"Bassa","PLATEAU",32
+"Bokkos","PLATEAU",32
+"Jos East","PLATEAU",32
+"Jos North","PLATEAU",32
+"Jos South","PLATEAU",32
+"Kanam","PLATEAU",32
+"Kanke","PLATEAU",32
+"Langtang North","PLATEAU",32
+"Langtang South","PLATEAU",32
+"Mangu","PLATEAU",32
+"Mikang","PLATEAU",32
+"Pankshin","PLATEAU",32
+"Qua'an Pan","PLATEAU",32
+"Riyom","PLATEAU",32
+"Shendam","PLATEAU",32
+"Wase","PLATEAU",32
+"Abua/Odual","RIVERS",33
+"Ahoada East","RIVERS",33
+"Ahoada West","RIVERS",33
+"Akuku Toru","RIVERS",33
+"Andoni","RIVERS",33
+"Asari-Toru","RIVERS",33
+"Bonny","RIVERS",33
+"Degema","RIVERS",33
+"Eleme","RIVERS",33
+"Elfane","RIVERS",33
+"Emohua","RIVERS",33
+"Etche","RIVERS",33
+"Gokana","RIVERS",33
+"Ikwerre","RIVERS",33
+"Khana","RIVERS",33
+"Obio/Akpor","RIVERS",33
+"Ogba/Egbema/Ndoni","RIVERS",33
+"Ogu/Bolo","RIVERS",33
+"Okrika","RIVERS",33
+"Omuma","RIVERS",33
+"Opobo/Nkoro","RIVERS",33
+"Oyigbo","RIVERS",33
+"Port Harcourt","RIVERS",33
+"Tai","RIVERS",33
+"Binji","SOKOTO",34
+"Bodinga","SOKOTO",34
+"Dange-Shuni","SOKOTO",34
+"Gada","SOKOTO",34
+"Goronyo","SOKOTO",34
+"Gudu","SOKOTO",34
+"Gwadabawa","SOKOTO",34
+"Illela","SOKOTO",34
+"Isa","SOKOTO",34
+"Kebbe","SOKOTO",34
+"Kware","SOKOTO",34
+"Rabah","SOKOTO",34
+"Sabon Birni","SOKOTO",34
+"Shagari","SOKOTO",34
+"Sokoto North","SOKOTO",34
+"Sokoto South","SOKOTO",34
+"Tambuwal","SOKOTO",34
+"Tangaza","SOKOTO",34
+"Tureta","SOKOTO",34
+"Wamako","SOKOTO",34
+"Wurno","SOKOTO",34
+"Yabo","SOKOTO",34
+"Akure North","ONDO",29
+"Ardo-Kola","TARABA",35
+"Bali","TARABA",35
+"Donga","TARABA",35
+"Gashaka","TARABA",35
+"Gassol","TARABA",35
+"Ibi","TARABA",35
+"Jalingo","TARABA",35
+"Karim-Lamido","TARABA",35
+"Kurmi","TARABA",35
+"Lau","TARABA",35
+"Sardauna","TARABA",35
+"Takum","TARABA",35
+"Ussa","TARABA",35
+"Wukari","TARABA",35
+"Yorro","TARABA",35
+"Zing","TARABA",35
+"Bade","YOBE",36
+"Bursari","YOBE",36
+"Damaturu","YOBE",36
+"Fika","YOBE",36
+"Fune","YOBE",36
+"Geidam","YOBE",36
+"Gogaram","YOBE",36
+"Gujba","YOBE",36
+"Gulani","YOBE",36
+"Jakusko","YOBE",36
+"Karasuwa","YOBE",36
+"Machina","YOBE",36
+"Nangere","YOBE",36
+"Nguru","YOBE",36
+"Potiskum","YOBE",36
+"Tarmuwa","YOBE",36
+"Yunusari","YOBE",36
+"Yusufari","YOBE",36
+"Anka","ZAMFARA",37
+"Bakura","ZAMFARA",37
+"Bukkuyum","ZAMFARA",37
+"Bungudu","ZAMFARA",37
+"Gummi","ZAMFARA",37
+"Gusau","ZAMFARA",37
+"Isa","ZAMFARA",37
+"Kaura Namoda","ZAMFARA",37
+"Birnin Magaji/Kiyaw","ZAMFARA",37
+"Maradun","ZAMFARA",37
+"Maru","ZAMFARA",37
+"Shinkafi","ZAMFARA",37
+"Talata Mafara","ZAMFARA",37
+"Tsafe","ZAMFARA",37
+"Zurmi","ZAMFARA",37
+"Abaji","FCT",15
+"Amac","FCT",15
+"Bwari","FCT",15
+"Gwagwalada","FCT",15
+"Kuje","FCT",15
+"Akure North","ONDO",29
+"Akure South","ONDO",29
+"Kaduna South","KADUNA",19
+"Kaura","KADUNA",19
+"Kubau","KADUNA",19
+"Ndokwa West","DELTA",10
+"Ndokwa East","DELTA",10
+"Aba North","ABIA",1
+"Aba South","ABIA",1
+"Arochukwu","ABIA",1
+"Bende","ABIA",1
+"Ikwuano","ABIA",1
+"Isiala-Ngwa North","ABIA",1
+"Isiala-Ngwa South","ABIA",1
+"Isuikwuato","ABIA",1
+"Umu Nneochi","ABIA",1
+"Obioma Ngwa","ABIA",1
+"Ohafia","ABIA",1
+"Osisioma","ABIA",1
+"Ugwunagbo","ABIA",1
+"Ukwa East","ABIA",1
+"Ukwa West","ABIA",1
+"Umuahia North","ABIA",1
+"Umuahia South","ABIA",1
+"Demsa","ADAMAWA",2
+"Fufore","ADAMAWA",2
+"Ganye","ADAMAWA",2
+"Girei","ADAMAWA",2
+"Gombi","ADAMAWA",2
+"Guyuk","ADAMAWA",2
+"Hong","ADAMAWA",2
+"Jada","ADAMAWA",2
+"Yola South","ADAMAWA",2
+"Lamurde","ADAMAWA",2
+"Madagali","ADAMAWA",2
+"Maiha","ADAMAWA",2
+"Mayo-Belwa","ADAMAWA",2
+"Michika","ADAMAWA",2
+"Mubi North","ADAMAWA",2
+"Mubi South","ADAMAWA",2
+"Numan","ADAMAWA",2
+"Shelleng","ADAMAWA",2
+"Song","ADAMAWA",2
+"Toungo","ADAMAWA",2
+"Yola North","ADAMAWA",2
+"Abak","AKWA-IBOM",3
+"Eastern Obolo","AKWA-IBOM",3
+"Eket","AKWA-IBOM",3
+"Nsit Atai","AKWA-IBOM",3
+"Essien Udim","AKWA-IBOM",3
+"Esit Eket","AKWA-IBOM",3
+"Etim Ekpo","AKWA-IBOM",3
+"Etinan","AKWA-IBOM",3
+"Ibeno","AKWA-IBOM",3
+"Ibesikpo Asutan","AKWA-IBOM",3
+"Ibiono Ibom","AKWA-IBOM",3
+"Ika","AKWA-IBOM",3
+"Ikono","AKWA-IBOM",3
+"Ikot Abasi","AKWA-IBOM",3
+"Ikot Ekpene","AKWA-IBOM",3
+"Ini","AKWA-IBOM",3
+"Itu","AKWA-IBOM",3
+"Mbo","AKWA-IBOM",3
+"Mkpat Enin","AKWA-IBOM",3
+"Nsit Ibom","AKWA-IBOM",3
+"Nsit Ubium","AKWA-IBOM",3
+"Obot Akara","AKWA-IBOM",3
+"Okobo","AKWA-IBOM",3
+"Onna","AKWA-IBOM",3
+"Oron","AKWA-IBOM",3
+"Oruk Anam","AKWA-IBOM",3
+"Udung Uko","AKWA-IBOM",3
+"Ukanafun","AKWA-IBOM",3
+"Urue-Offong/Oruko","AKWA-IBOM",3
+"Uruan","AKWA-IBOM",3
+"Uquo Ibeno","AKWA-IBOM",3
+"Uyo","AKWA-IBOM",3
+"Aguata","ANAMBRA",4
+"Anambra East","ANAMBRA",4
+"Anambra West","ANAMBRA",4
+"Anaocha","ANAMBRA",4
+"Awka North","ANAMBRA",4
+"Awka South","ANAMBRA",4
+"Ayamelum","ANAMBRA",4
+"Dunukofia","ANAMBRA",4
+"Ekwusigo","ANAMBRA",4
+"Idemili North","ANAMBRA",4
+"Idemili South","ANAMBRA",4
+"Ihiala","ANAMBRA",4
+"Njikoka","ANAMBRA",4
+"Nnewi North","ANAMBRA",4
+"Nnewi South","ANAMBRA",4
+"Ogbaru","ANAMBRA",4
+"Onitsha North","ANAMBRA",4
+"Onitsha South","ANAMBRA",4
+"Orumba North","ANAMBRA",4
+"Orumba South","ANAMBRA",4
+"Oyi","ANAMBRA",4
+"Alkaleri","BAUCHI",5
+"Bauchi","BAUCHI",5
+"Bogoro","BAUCHI",5
+"Damban","BAUCHI",5
+"Darazo","BAUCHI",5
+"Dass","BAUCHI",5
+"Gamawa","BAUCHI",5
+"Ganjuwa","BAUCHI",5
+"Giade","BAUCHI",5
+"Silame","SOKOTO",34
+"Itas/Gadau","BAUCHI",5
+"Jama'are","BAUCHI",5
+"Katagum","BAUCHI",5
+"Kirfi","BAUCHI",5
+"Misau","BAUCHI",5
+"Ningi","BAUCHI",5
+"Shira","BAUCHI",5
+"Tafawa Balewa","BAUCHI",5
+"Toro","BAUCHI",5
+"Warji","BAUCHI",5
+"Zaki","BAUCHI",5
+"Brass","BAYELSA",6
+"Ekeremor","BAYELSA",6
+"Kolokuma/Opokuma","BAYELSA",6
+"Nembe","BAYELSA",6
+"Ogbia","BAYELSA",6
+"Sagbama","BAYELSA",6
+"Southern Ijaw","BAYELSA",6
+"Yenegoa","BAYELSA",6
+"Kembe","BAYELSA",6
+"Ado","BENUE STATE",7
+"Agatu","BENUE STATE",7
+"Apa","BENUE STATE",7
+"Buruku","BENUE STATE",7
+"Gboko","BENUE STATE",7
+"Guma","BENUE STATE",7
+"Gwer East","BENUE STATE",7
+"Gwer West","BENUE STATE",7
+"Katsina-Ala","BENUE STATE",7
+"Konshisha","BENUE STATE",7
+"Kwande","BENUE STATE",7
+"Logo","BENUE STATE",7
+"Makurdi","BENUE STATE",7
+"Obi","BENUE STATE",7
+"Ogbadibo","BENUE STATE",7
+"Ohimini","BENUE STATE",7
+"Oju","BENUE STATE",7
+"Okpokwu","BENUE STATE",7
+"Otukpo","BENUE STATE",7
+"Tarka","BENUE STATE",7
+"Vandeikya","BENUE STATE",7
+"Ukum","BENUE STATE",7
+"Ushongo","BENUE STATE",7
+"Abadam","BORNO",8
+"Askira/Uba","BORNO",8
+"Bama","BORNO",8
+"Bayo","BORNO",8
+"Biu","BORNO",8
+"Chibok","BORNO",8
+"Damboa","BORNO",8
+"Dikwa","BORNO",8
+"Gubio","BORNO",8
+"Guzamala","BORNO",8
+"Gwoza","BORNO",8
+"Hawul","BORNO",8
+"Jere","BORNO",8
+"Kaga","BORNO",8
+"Kala/Balge","BORNO",8
+"Kukawa","BORNO",8
+"Konduga","BORNO",8
+"Kwaya Kusar","BORNO",8
+"Mafa","BORNO",8
+"Magumeri","BORNO",8
+"Maiduguri","BORNO",8
+"Marte","BORNO",8
+"Mobbar","BORNO",8
+"Monguno","BORNO",8
+"Ngala","BORNO",8
+"Nganzai","BORNO",8
+"Shani","BORNO",8
+"Abi","CROSS RIVER",9
+"Akamkpa","CROSS RIVER",9
+"Akpabuyo","CROSS RIVER",9
+"Bakassi","CROSS RIVER",9
+"Bekwarra","CROSS RIVER",9
+"Biase","CROSS RIVER",9
+"Boki","CROSS RIVER",9
+"Calabar Municipality","CROSS RIVER",9
+"Calabar South","CROSS RIVER",9
+"Etung","CROSS RIVER",9
+"Ikom","CROSS RIVER",9
+"Obanliku","CROSS RIVER",9
+"Obubra","CROSS RIVER",9
+"Obudu","CROSS RIVER",9
+"Odukpani","CROSS RIVER",9
+"Ogoja","CROSS RIVER",9
+"Ugep-North","CROSS RIVER",9
+"Yakurr","CROSS RIVER",9
+"Yala","CROSS RIVER",9
+"Aniocha North","DELTA",10
+"Aniocha South","DELTA",10
+"Bomadi","DELTA",10
+"Burutu","DELTA",10
+"Ethiope East","DELTA",10
+"Ethiope West","DELTA",10
+"Ika North-East","DELTA",10
+"Ika South","DELTA",10
+"Isoko North","DELTA",10
+"Isoko South","DELTA",10
+"Okpe","DELTA",10
+"Oshimili North","DELTA",10
+"Oshimili South","DELTA",10
+"Patani","DELTA",10
+"Sapele","DELTA",10
+"Udu","DELTA",10
+"Ughelli North","DELTA",10
+"Ughelli South","DELTA",10
+"Ukwuani","DELTA",10
+"Uvwie","DELTA",10
+"Warri Central","DELTA",10
+"Warri North","DELTA",10
+"Warri South","DELTA",10
+"Abakaliki","EBONYI",11
+"Afikpo North","EBONYI",11
+"Afikpo South","EBONYI",11
+"Ebonyi","EBONYI",11
+"Ezza North","EBONYI",11
+"Ezza South","EBONYI",11
+"Ikwo","EBONYI",11
+"Ishielu","EBONYI",11
+"Ivo","EBONYI",11
+"Izzi","EBONYI",11
+"Ohaukwu","EBONYI",11
+"Ohaozara","EBONYI",11
+"Onicha","EBONYI",11
+"Akoko Edo","EDO",12
+"Egor","EDO",12
+"Esan Central","EDO",12
+"Esan North-East","EDO",12
+"Esan South-East","EDO",12
+"Esan West","EDO",12
+"Etsako Central","EDO",12
+"Etsako East","EDO",12
+"Etsako West","EDO",12
+"Igueben","EDO",12
+"Ikpoba Okha","EDO",12
+"Oredo","EDO",12
+"Orhionmwon","EDO",12
+"Ovia North-East","EDO",12
+"Ovia South-West","EDO",12
+"Owan East","EDO",12
+"Owan West","EDO",12
+"Uhunmwonde","EDO",12
+"Ado Ekiti","EKITI",13
+"Gbonyin","EKITI",13
+"Efon","EKITI",13
+"Ekiti East","EKITI",13
+"Ekiti South-West","EKITI",13
+"Ekiti West","EKITI",13
+"Emure","EKITI",13
+"Ido-Osi","EKITI",13
+"Ijero","EKITI",13
+"Ikere","EKITI",13
+"Ikole","EKITI",13
+"Ilejemeje","EKITI",13
+"Irepodun/Ifelodun","EKITI",13
+"Ise/Orun","EKITI",13
+"Moba","EKITI",13
+"Oye","EKITI",13
+"Aninri","ENUGU",14
+"Awgu","ENUGU",14
+"Enugu East","ENUGU",14
+"Enugu North","ENUGU",14
+"Enugu South","ENUGU",14
+"Ezeagu","ENUGU",14
+"Igbo-Etiti","ENUGU",14
+"Igbo-Eze North","ENUGU",14
+"Igbo-Eze South","ENUGU",14
+"Isi-Uzo","ENUGU",14
+"Nkanu East","ENUGU",14
+"Nkanu West","ENUGU",14
+"Nsukka","ENUGU",14
+"Oji-River","ENUGU",14
+"Udenu","ENUGU",14
+"Udi","ENUGU",14
+"Uzo-Uwani","ENUGU",14
+"Akko","GOMBE",16
+"Balanga","GOMBE",16
+"Billiri","GOMBE",16
+"Dukku","GOMBE",16
+"Funakaye","GOMBE",16
+"Gombe","GOMBE",16
+"Kaltungo","GOMBE",16
+"Kwami","GOMBE",16
+"Nafada/Bajoga","GOMBE",16
+"Shongom","GOMBE",16
+"Yamaltu/Deba","GOMBE",16
+"Aboh Mbaise","IMO",17
+"Ahiazu Mbaise","IMO",17
+"Ehime Mbano","IMO",17
+"Ezinihitte","IMO",17
+"Ideato North","IMO",17
+"Ideato South","IMO",17
+"Ihitte/Uboma","IMO",17
+"Ikeduru","IMO",17
+"Isiala Mbano","IMO",17
+"Isu","IMO",17
+"Mbaitoli","IMO",17
+"Ngor-Okpala","IMO",17
+"Njaba","IMO",17
+"Nkwerre","IMO",17
+"Nwangele","IMO",17
+"Obowo","IMO",17
+"Oguta","IMO",17
+"Ohaji/Egbema","IMO",17
+"Okigwe","IMO",17
+"Onuimo","IMO",17
+"Orlu","IMO",17
+"Orsu","IMO",17
+"Oru East","IMO",17
+"Oru West","IMO",17
+"Owerri Municipal","IMO",17
+"Owerri North","IMO",17
+"Owerri West","IMO",17
+"Auyo","JIGAWA",18
+"Babura","JIGAWA",18
+"Birnin Kudu","JIGAWA",18
+"Birniwa","JIGAWA",18
+"Bosuwa","JIGAWA",18
+"Buji","JIGAWA",18
+"Dutse","JIGAWA",18
+"Gagarawa","JIGAWA",18
+"Garki","JIGAWA",18
+"Gumel","JIGAWA",18
+"Guri","JIGAWA",18
+"Gwaram","JIGAWA",18
+"Gwiwa","JIGAWA",18
+"Hadejia","JIGAWA",18
+"Jahun","JIGAWA",18
+"Kafin Hausa","JIGAWA",18
+"Kaugama","JIGAWA",18
+"Kazaure","JIGAWA",18
+"Kiri Kasama","JIGAWA",18
+"Kiyawa","JIGAWA",18
+"Maigatari","JIGAWA",18
+"Malam Madori","JIGAWA",18
+"Miga","JIGAWA",18
+"Ringim","JIGAWA",18
+"Roni","JIGAWA",18
+"Sule-Tankarkar","JIGAWA",18
+"Taura","JIGAWA",18
+"Yankwashi","JIGAWA",18
+"Birnin Gwari","KADUNA",19
+"Chikun","KADUNA",19
+"Giwa","KADUNA",19
+"Gwagwada","KADUNA",19
+"Igabi","KADUNA",19
+"Ikara","KADUNA",19
+"Jaba","KADUNA",19
+"Jema'a","KADUNA",19
+"Kachia","KADUNA",19
+"Kaduna North","KADUNA",19
+"Bida LGA","NIGER",27

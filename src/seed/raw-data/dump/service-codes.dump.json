@@ -1,0 +1,163 @@
+[
+  {
+    "code": "1",
+    "name": "PRODUCT/ EQUIPMENT MATERIALS",
+    "slug": "product_equipment_materials",
+    "licence": "",
+    "price": 100
+  },
+  {
+    "code": "1.01",
+    "name": "Drilling Equipment",
+    "slug": "drilling_equipment",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.01",
+    "name": "Drilling Machinery, Mud Equipment and Accessories",
+    "slug": "drilling_machinery_mud_equipment_and_accessories",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.02",
+    "name": "Surface Production, Well test/Monitoring equipment and Accessories",
+    "slug": "surface_production_monitoring",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.03",
+    "name": "Derricks and other Pipe Handling Equipment and Accessories",
+    "slug": "derricks",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.04",
+    "name": "Casing, Tubing, Liner, Connectors and Accessories (OCTG)",
+    "slug": "casing_tubing_liner_connectors",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.05",
+    "name": "Cementing Equipment and Line Hanger Systems",
+    "slug": "cementing_equipment",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.06",
+    "name": "Fishing and Repair Tools (Drilling)",
+    "slug": "fishing_and_repair_tools",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.07",
+    "name": "Wellhead Equipment, Xmas Trees and Accessories",
+    "slug": "wellhead_equipment_xmas_trees_and_accessories",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.08",
+    "name": "Production String Components",
+    "slug": "production_string_components",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.09",
+    "name": "Drill Bits and Accessories",
+    "slug": "drill_bits_and_accessories",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.10",
+    "name": "Wireline Equipment and Accessories",
+    "slug": "wireline_equipment_and_accessories",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.11",
+    "name": "Coiled Tubing Tools and Accessories",
+    "slug": "coiled_tubing_tools_and_accessories",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.12",
+    "name": "Down Hole Pressure Control Equipment",
+    "slug": "down_hole_pressure_control_equipment",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.01.13",
+    "name": "Subsea Equipment and Accessories",
+    "slug": "subsea_equipment_and_accessories",
+    "licence": "Service and Support",
+    "price": 100
+  },
+  {
+    "code": "1.02",
+    "name": "Material and Product Handling Equipment",
+    "slug": "material_and_product_handling",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.01",
+    "name": "Cranes, Davits, Hoists, Winches and Accessories",
+    "slug": "cranes_davits_hoists_winches_and_accessories",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.02",
+    "name": "Elevators and Accessories",
+    "slug": "elevators_and_accessories",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.03",
+    "name": "Trucks, Forklifts and Accessories",
+    "slug": "trucks_forklifts_and_accessories",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.04",
+    "name": "Packing /Cargo Handling Equipment and Accessories",
+    "slug": "packing_cargo_handling_equipment_and_accessories",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.05",
+    "name": "Jetty and Docking Equipment",
+    "slug": "jetty_and_docking_equipment",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.06",
+    "name": "Material and Product Handling Equipment",
+    "slug": "material_and_product_handling_equipment",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  },
+  {
+    "code": "1.02.07",
+    "name": "Weighing Equipment and Accessories",
+    "slug": "weighing_equipment_and_accessories",
+    "licence": "Construction and Movable Equipment",
+    "price": 100
+  }
+]

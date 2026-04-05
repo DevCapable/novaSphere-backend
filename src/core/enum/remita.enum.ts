@@ -1,0 +1,4 @@
+export enum RemitaPaymentOrigin {
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  SERVICE_CODE_PAYMENT = 'SERVICE_CODE_PAYMENT',
+}

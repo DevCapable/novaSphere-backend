@@ -1,0 +1,64 @@
+<tr>
+  <td style="padding-bottom:16px;font-family:Arial;font-size:14px;color:#333;">
+    A company has requested the addition of new <strong>NCTRC Training Courses</strong>.
+    Please review the request below.
+  </td>
+</tr>
+
+<tr>
+<td style="padding-bottom:20px;">
+<table width="100%" style="border:1px solid #e5e7eb;border-radius:6px;font-family:Arial;font-size:14px;color:#333;border-collapse:collapse;">
+
+  <tr>
+    <td style="padding:10px 14px;background:#f9fafb;font-weight:600;width:200px;">Company</td>
+    <td style="padding:10px 14px;"><%= company %></td>
+  </tr>
+
+  <tr>
+    <td style="padding:10px 14px;background:#f9fafb;font-weight:600;">Area of Specialization</td>
+    <td style="padding:10px 14px;"><%= type.name %> (<%= type.code %>)</td>
+  </tr>
+
+  <tr>
+    <td style="padding:10px 14px;background:#f9fafb;font-weight:600;">Requested Courses</td>
+    <td style="padding:10px 14px;">
+      <% if (createdCourses && createdCourses.length > 0) { %>
+        <% createdCourses.forEach(function(course){ %>
+          <div style="margin-bottom:4px;">• <%= course %></div>
+        <% }) %>
+      <% } else { %>
+        <div>No new courses requested.</div>
+      <% } %>
+    </td>
+  </tr>
+
+  <% if (skippedCourses && skippedCourses.length > 0) { %>
+  <tr>
+    <td style="padding:10px 14px;background:#f9fafb;font-weight:600;">Already Existing / Pending</td>
+    <td style="padding:10px 14px;">
+      <% skippedCourses.forEach(function(course){ %>
+        <div style="color:#666; margin-bottom:4px;">• <%= course %></div>
+      <% }) %>
+    </td>
+  </tr>
+  <% } %>
+
+</table>
+</td>
+</tr>
+
+<tr>
+  <td style="padding:16px 0;font-family:Arial;font-size:14px;color:#333;">
+    Kindly review and approve the newly requested courses.
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-top:10px;">
+    <a href="<%= urlLink %>" 
+       style="display:inline-block;background:#3eb959;color:#ffffff;text-decoration:none;
+       padding:10px 18px;border-radius:6px;font-family:Arial;font-size:14px;font-weight:600;">
+       Review Course Requests
+    </a>
+  </td>
+</tr>

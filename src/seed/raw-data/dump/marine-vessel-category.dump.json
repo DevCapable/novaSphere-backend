@@ -1,0 +1,31 @@
+[
+  {
+    "code": "A",
+    "name": "Category A",
+    "description" : "Nigerian Owned, Nigerian Crewed, Nigerian Flagged"
+  },
+  {
+    "code": "B",
+    "name": "Category B",
+    "description" : "Nigerian Owned, Foreign crewed, Nigerian Flagged"
+
+  },
+  {
+    "code": "C",
+    "name": "Category C",
+    "description" : "Foreign - Owned, Nigerian crewed, Nigerian Flagged"
+
+  },
+  {
+    "code": "D",
+    "name": "Category D",
+    "description" : "Foreign Owned, Foreign crewed, Foreign Flagged"
+
+  },
+  {
+    "code": "E",
+    "name": "Category E",
+    "description" : "Non-Compliant Vessels"
+
+  }
+]

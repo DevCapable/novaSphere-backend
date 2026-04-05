@@ -1,0 +1,32 @@
+[
+  {
+    "question": "How do I register my company on the E-market place?",
+    "answer": "To access the e-market place visit the https://nogicjqs.gov.ng to register your company. Same login is used to access the e-market place.",
+    "email": "tests@live.net"
+  },
+  {
+    "question": "Is there any registration fee required for e-market place?",
+    "answer": "No, you have to register as a company on the nogicjqs.gov.ng",
+    "email": "tests@live.net"
+  },
+  {
+    "question": "How do I reset my password?",
+    "answer": "Send a mail to support@nogicjqs.org or Login into the nogicjqs portal and change your password.",
+    "email": "tests@live.net"
+  },
+  {
+    "question": "How do I get service code for advert opportunities on the E-market place?",
+    "answer": "Select your preferred advert then click on bid, a screen will pop-up for remita payment online. Follow the step-by-step guide to pay for your service code on the e-market place platform.",
+    "email": "tests@live.net"
+  },
+  {
+    "question": "How can I create products for my company on the E-market place?",
+    "answer": "Login into your e-market place account, select product module from your menu then click on add product to fill the product form, submit to NCDMB.",
+    "email": "tests@live.net"
+  },
+  {
+    "question": "How can I create services for my company on the E-market place?",
+    "answer": "Login into your e-market place account, select service module from your menu then click on add services to fill the product form, submit to NCDMB.",
+    "email": "tests@live.net"
+  }
+]

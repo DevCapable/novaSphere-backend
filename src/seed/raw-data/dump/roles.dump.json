@@ -1,0 +1,141 @@
+[
+  {
+    "id": 1,
+    "name": "Super Admin",
+    "description": "The Super Admin role retains its high-level privileges for system management and configuration. This role is typically assigned to the application's superusers or administrators",
+    "slug": "super-admin"
+  },
+  {
+    "name": "Super Admin NCDF",
+    "description": "The NCDF Super Admin role retains its high-level privileges for ncdf management and configuration.",
+    "slug": "ncdf-super-admin",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "NCDF Access",
+    "description": "The NCDF accessn role determines who access ncdf portal",
+    "slug": "ncdf-access",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "Super Admin E-Market",
+    "description": "The E-Market Super Admin role retains its high-level privileges for e-market management and configuration.",
+    "slug": "e-market-super-admin",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "E-Market Access",
+    "description": "The E-Market accessn role determines who access e-market portal",
+    "slug": "e-market-access",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "E-Market PO",
+    "description": "The E-Market Processing officer role",
+    "slug": "e-market-po",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "E-Market HOD",
+    "description": "The E-Market Head of department role",
+    "slug": "e-market-hod",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "E-Market DIR",
+    "description": "The E-Market Director role",
+    "slug": "e-market-dir",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "E-Market GM",
+    "description": "The E-Market GM role",
+    "slug": "e-market-gm",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "E-Market ES",
+    "description": "The E-Market Executive Secretary role",
+    "slug": "e-market-es",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+    {
+    "name": "E-Market Operator",
+    "description": "The E-Market Operator role",
+    "slug": "e-market-operator",
+    "origin": "E_MARKET",
+    "special": 1
+  },
+  {
+    "name": "NCDF PO",
+    "description": "The NCDF processing officer role",
+    "slug": "ncdf-po",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "NCDF SP",
+    "description": "The NCDF supervisor role",
+    "slug": "ncdf-sp",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "NCDF MGR",
+    "description": "The NCDF manager role",
+    "slug": "ncdf-mgr",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "NCDF GM",
+    "description": "The NCDF general manager role",
+    "slug": "ncdf-gm",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "NCDF ES",
+    "description": "The NCDF es role",
+    "slug": "ncdf-es",
+    "origin": "NCDF",
+    "special": 1
+  },
+    {
+    "name": "NCDF Auditor",
+    "description": "The role is for auditors of the NCDF platform",
+    "slug": "ncdf-auditor",
+    "origin": "NCDF",
+    "special": 1
+  },
+  {
+    "name": "Back Office Super Admin",
+    "description": "The Super Admin role retains its high-level privileges for system management and configuration. This role is typically assigned to the application's superusers or administrators",
+    "origin": "BACK_OFFICE",
+    "slug": "back-office-super-admin",
+    "special": 1
+  },
+  {
+    "name": "Back Office Access",
+    "description": "The Back office access role determines who access back office portal",
+    "slug": "back-office-access",
+    "origin": "BACK_OFFICE",
+    "special": 0
+  },
+  {
+    "name": "Management",
+    "description": "The management role for operators",
+    "slug": "operator-management",
+    "origin": "E_MARKET",
+    "special": 1
+  }
+]

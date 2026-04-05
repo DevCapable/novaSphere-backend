@@ -1,0 +1,46 @@
+[
+  {
+    "code": "CWB",
+    "name": "Crew Boat"
+  },
+  {
+    "code": "SVC",
+    "name": "Security Vessel"
+  },
+  {
+    "code": "DSV",
+    "name": "Diving Support Vessel"
+  },
+  {
+    "code": "FSIV",
+    "name": "Fast Supply Intervention"
+  },
+  {
+    "code": "ACCV",
+    "name": "Accommodation Vessel"
+  },
+  {
+    "code": "PSV",
+    "name": "Partform Supply Vessel"
+  },
+  {
+    "code": "AHTV",
+    "name": "Anchoring Handling TUG"
+  },
+  {
+    "code": "TUGB",
+    "name": "Tug Boat"
+  },
+  {
+    "code": "INSV",
+    "name": "Installation Barges"
+  },
+  {
+    "code": "JUB",
+    "name": "Jackup Barges"
+  },
+  {
+    "code": "LFB",
+    "name": "Life Boats"
+  }
+]

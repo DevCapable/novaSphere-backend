@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Drilling Machinery, Mud Equipment and Accessories",
+    "type": "PRODUCT_CATEGORY"
+  },
+  {
+    "name": "Surface Production, Well test/Monitoring equipment and accessories",
+    "type": "PRODUCT_CATEGORY"
+  },
+  {
+    "name": "Derricks and other Pipe Handling Equipment and Accessories",
+    "type": "PRODUCT_CATEGORY"
+  },
+  {
+    "name": "cement",
+    "type": "PRODUCT_CATEGORY"
+  }
+]
