@@ -495,11 +495,8 @@ export class UserService {
       case AccountTypeEnum.COMPANY:
         name = account.company?.name ?? '';
         break;
-      case AccountTypeEnum.OPERATOR:
-        name = account.operator?.name ?? '';
-        break;
-      case AccountTypeEnum.AGENCY:
-        name = `${account.agency?.firstName} ${account.agency?.lastName}`;
+      case AccountTypeEnum.ADMIN:
+        name = `${account.admin?.firstName} ${account.admin?.lastName}`;
         break;
       case AccountTypeEnum.COMMUNITY_VENDOR:
         name = account.communityVendor?.name ?? '';
@@ -554,10 +551,9 @@ export class UserService {
     if (!RolesHelper.hasAdminRole(currentUser.roles))
       throw new CustomUnauthorizedException();
 
-    const isAgencyAccount =
-      currentUser.account?.type === AccountTypeEnum.AGENCY;
+    const isAdminAccount = currentUser.account?.type === AccountTypeEnum.ADMIN;
 
-    if (!isAgencyAccount && currentUserAccount.id !== accountId)
+    if (!isAdminAccount && currentUserAccount.id !== accountId)
       throw new CustomBadRequestException(ErrorMessages.InvalidAccount);
 
     const user = await repository.findOne({
@@ -618,7 +614,7 @@ export class UserService {
     }
 
     if (
-      [AccountTypeEnum.AGENCY, AccountTypeEnum.INDIVIDUAL].includes(
+      [AccountTypeEnum.ADMIN, AccountTypeEnum.INDIVIDUAL].includes(
         data?.accountType,
       )
     ) {
@@ -633,7 +629,7 @@ export class UserService {
         user?.accounts?.filter(
           (account) =>
             account.type &&
-            [AccountTypeEnum.AGENCY, AccountTypeEnum.INDIVIDUAL].includes(
+            [AccountTypeEnum.ADMIN, AccountTypeEnum.INDIVIDUAL].includes(
               account.type,
             ),
         ) || [];
@@ -748,7 +744,7 @@ export class UserService {
       {
         wfUserId: In(wfUserIds),
       },
-      ['accounts.agency'],
+      ['accounts.admin'],
     );
   }
 

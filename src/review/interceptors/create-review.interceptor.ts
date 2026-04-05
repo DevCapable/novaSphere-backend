@@ -153,7 +153,7 @@ export const CreateReviewInterceptor = (
     private async _createReview(reviewPayload: CreateReview) {
       let createData = {};
       const { app, reviewer } = reviewPayload;
-      const isAgency = reviewer.account.type === AccountTypeEnum.AGENCY;
+      const isAgency = reviewer.account.type === AccountTypeEnum.ADMIN;
       const position = reviewer.account.agencyPosition;
 
       if (isAgency) {

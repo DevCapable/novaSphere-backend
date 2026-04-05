@@ -49,12 +49,14 @@ export class AuditLogService {
         ...encryptedData,
         ...other,
       });
-    } catch (error) {}
+    } catch (error: any) {
+      this.loggerService.error('Error logging audit action:', error);
+    }
   }
 
   async findAll(filterOptions: any, paginationOptions: any, user: any) {
     const _all = filterOptions.all;
-    const isAgencyUser = user?.account?.type === AccountTypeEnum.AGENCY;
+    const isAgencyUser = user?.account?.type === AccountTypeEnum.ADMIN;
 
     filterOptions.userId = filterOptions.userId || user.id;
 
@@ -180,7 +182,7 @@ export class AuditLogService {
         encrypted += cipherErrorDetails.final('base64');
         encryptedErrorDetails = encrypted;
       }
-    } catch (error) {
+    } catch (error: any) {
       this.loggerService.error('Error encrypting data:', error);
     }
 

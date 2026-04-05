@@ -282,7 +282,7 @@ export class AuthenticationService {
       {
         email: payload.user.email,
       },
-      ['accounts', 'accounts.agency'],
+      ['accounts', 'accounts.admin'],
     );
 
     if (!user) throw new CustomForbiddenException('Access Denied');
@@ -310,7 +310,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: account.id,
       currentAccountType: account.type,
-      currentAccountAgencyPosition: account?.agency?.position || '',
+      currentAccountAgencyPosition: account?.admin?.position || '',
       session: sessionId,
     });
 
@@ -344,7 +344,7 @@ export class AuthenticationService {
 
     if (
       !RolesHelper.hasAdminRole(requestingUser.roles) ||
-      requestingUser.account.type !== AccountTypeEnum.AGENCY
+      requestingUser.account.type !== AccountTypeEnum.ADMIN
     )
       throw new CustomUnauthorizedException();
 
@@ -353,7 +353,7 @@ export class AuthenticationService {
     const user = await this.userRepository.findOne(userId, [
       'roles',
       'accounts',
-      'accounts.agency',
+      'accounts.admin',
     ]);
 
     if (!user) throw new CustomNotFoundException(ErrorMessages.UserNotFound);
@@ -378,7 +378,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: account.id,
       currentAccountType: account.type,
-      currentAccountAgencyPosition: account.agency?.position || '',
+      currentAccountAgencyPosition: account?.admin?.position || '',
     });
 
     this.auditLogService.emitAction({
@@ -405,7 +405,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: account.id,
       currentAccountType: account.type,
-      currentAccountAgencyPosition: account.agency?.position || '',
+      currentAccountAgencyPosition: account?.admin?.position || '',
     });
 
     this.auditLogService.emitAction({

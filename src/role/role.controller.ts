@@ -27,11 +27,7 @@ import { AuditLogInterceptor } from '@app/audit-log/interceptors/audit-log.inter
 import { EntityType } from '@app/audit-log/enum';
 
 @Controller('roles')
-@Accounts(
-  AccountTypeEnum.AGENCY,
-  AccountTypeEnum.OPERATOR,
-  AccountTypeEnum.COMPANY,
-)
+@Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.COMPANY)
 @ApiTags('roles')
 export class RoleController {
   constructor(private readonly rolesService: RoleService) {}

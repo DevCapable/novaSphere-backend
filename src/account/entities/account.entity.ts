@@ -4,11 +4,10 @@ import { ExternalLinkOriginEnum } from '@app/iam/enum';
 import { User } from '@app/user/entities/user.entity';
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { AccountTypeEnum } from '../enums';
-import { Agency } from './agency.entity';
+import { Admin } from './admin.entity';
 import { CommunityVendor } from './community-vendor.entity';
 import { Company } from './company.entity';
 import { Individual } from './individual.entity';
-import { Operator } from './operator.entity';
 import { Auditor } from './auditor.entity';
 
 @Entity()
@@ -50,14 +49,11 @@ export class Account extends BaseEntity<Account> {
   })
   individual?: Individual;
 
-  @OneToOne(() => Agency, (agency) => agency.account, { cascade: true })
-  agency?: Agency;
+  @OneToOne(() => Admin, (admin) => admin.account, { cascade: true })
+  admin?: Admin;
 
   @OneToOne(() => Company, (company) => company.account, { cascade: true })
   company?: Company;
-
-  @OneToOne(() => Operator, (operator) => operator.account, { cascade: true })
-  operator?: Operator;
 
   @OneToOne(() => Auditor, (auditor) => auditor.account, {
     cascade: true,

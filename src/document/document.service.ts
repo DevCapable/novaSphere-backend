@@ -217,7 +217,7 @@ export class DocumentService {
     parentFileableId?: number;
   }) {
     const isAgencyAccount =
-      currentUser?.account?.type === AccountTypeEnum.AGENCY;
+      currentUser?.account?.type === AccountTypeEnum.ADMIN;
 
     let documentReviews = [];
 

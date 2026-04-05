@@ -40,6 +40,7 @@ export default tseslint.config(
       'no-case-declarations': 'off',
       'no-useless-catch': 'off',
       
+      
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -56,6 +57,7 @@ export default tseslint.config(
       '@typescript-eslint/no-misused-promises': 'off',  
       '@typescript-eslint/no-unsafe-enum-comparison': 'off',  
       '@typescript-eslint/await-thenable': 'off',  
+      '@typescript-eslint/no-fallthrough': 'off',  
 
     },
   },

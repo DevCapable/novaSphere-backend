@@ -292,7 +292,7 @@ export class AccountService {
         ...data,
         accountType: AccountTypeEnum.INSTITUTION,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error && error.code === 'ER_DUP_ENTRY') {
         throw new CustomBadRequestException(
           'User with that email already exists',
@@ -387,7 +387,7 @@ export class AccountService {
     }
   }
 
-  async sendNotification(accountType, payload: any) {
+  sendNotification(accountType, payload: any) {
     switch (accountType.toUpperCase()) {
       case AccountTypeEnum.INSTITUTION:
         this.accountEvent.institutionWelcome(payload);
@@ -398,7 +398,7 @@ export class AccountService {
       case AccountTypeEnum.OPERATOR:
         this.accountEvent.operatorWelcome(payload);
         break;
-      case AccountTypeEnum.AGENCY:
+      case AccountTypeEnum.ADMIN:
         this.accountEvent.agencyWelcome(payload);
         break;
       default:
@@ -677,14 +677,12 @@ export class AccountService {
       case AccountTypeEnum.COMPANY:
         name = account.company?.name;
         break;
-      case AccountTypeEnum.OPERATOR:
-        name = account.operator?.name;
-        break;
-      case AccountTypeEnum.AGENCY:
-        name = `${account.agency?.firstName} ${account.agency?.lastName}`;
+      case AccountTypeEnum.ADMIN:
+        name = `${account.admin?.firstName} ${account.admin?.lastName}`;
         break;
       case AccountTypeEnum.COMMUNITY_VENDOR:
         name = account.communityVendor.name;
+      // eslint-disable-next-line no-fallthrough
       case AccountTypeEnum.INSTITUTION:
         name = `${account.institution?.institutionName} ${account.institution?.registrationNumber}`;
         break;
@@ -707,7 +705,7 @@ export class AccountService {
       let highestScore = 0;
 
       for (const company of companies) {
-        const source = company.company ?? company.operator;
+        const source = company.company;
         const sourceName = source?.name?.toLowerCase() ?? '';
         const nameScore = stringSimilarity(vendorName, sourceName);
 
@@ -773,14 +771,14 @@ export class AccountService {
             : null,
         };
 
-      case 'AGENCY':
+      case 'ADMIN':
         return {
           ...base,
-          agency: account.agency
+          admin: account.admin
             ? {
-                firstName: account.agency.firstName,
-                lastName: account.agency.lastName,
-                position: account.agency.position,
+                firstName: account.admin.firstName,
+                lastName: account.admin.lastName,
+                position: account.admin.position,
               }
             : null,
         };

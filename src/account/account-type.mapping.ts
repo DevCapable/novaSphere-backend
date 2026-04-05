@@ -94,7 +94,7 @@ export const accountTypeMapping: AccountTypeMapping = {
     createDto: CreateIndividualDto,
     updateDto: UpdateIndividualDto,
   },
-  [AccountTypeEnum.AGENCY]: {
+  [AccountTypeEnum.ADMIN]: {
     fillable: [
       'firstName',
       'lastName',
@@ -108,8 +108,8 @@ export const accountTypeMapping: AccountTypeMapping = {
     searchable: [
       'users.firstName',
       'users.lastName',
-      'agency.firstName',
-      'agency.lastName',
+      'admin.firstName',
+      'admin.lastName',
       'users.email',
     ],
     createDto: CreateAgencyDto,

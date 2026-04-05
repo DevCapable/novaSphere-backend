@@ -26,7 +26,7 @@ export class AccountGuard implements CanActivate {
     const accountType = user.account.type;
     const accountId = user.account.id;
     // Append Current User AccountID to request body and query
-    if (user.account.type !== AccountTypeEnum.AGENCY) {
+    if (user.account.type !== AccountTypeEnum.ADMIN) {
       request.body['accountId'] = accountId;
       request.query['accountId'] = accountId;
       // Hack to append ID to request for updating account profile

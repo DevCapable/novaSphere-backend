@@ -11,11 +11,7 @@ import { LoggerService } from '@app/logger';
 /**
  * @TODO activate permission guards
  */
-@Accounts(
-  AccountTypeEnum.AGENCY,
-  AccountTypeEnum.COMPANY,
-  AccountTypeEnum.OPERATOR,
-)
+@Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.COMPANY)
 @Controller('permissions')
 export class PermissionController {
   constructor(

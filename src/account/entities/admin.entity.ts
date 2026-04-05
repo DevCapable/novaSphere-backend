@@ -19,13 +19,13 @@ export enum Position {
 }
 
 @Entity({
-  name: 'ACCOUNT_AGENCY',
+  name: 'ACCOUNT_ADMIN',
 })
-export class Agency {
+export class Admin {
   @PrimaryColumn()
   accountId: number;
 
-  @OneToOne(() => Account, (account) => account.agency, {
+  @OneToOne(() => Account, (account) => account.admin, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()

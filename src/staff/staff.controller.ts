@@ -52,11 +52,7 @@ export class StaffController {
     return this.staffService.createStaff(createStaffDto);
   }
 
-  @Accounts(
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-    AccountTypeEnum.AGENCY,
-  )
+  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
   @ApiFilterPagination('Get all staffs')
   @UseInterceptors(PaginationInterceptor)
   @Get()
@@ -81,11 +77,7 @@ export class StaffController {
     );
   }
 
-  @Accounts(
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-    AccountTypeEnum.AGENCY,
-  )
+  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Get a Staff Record')
   @ApiResponse({

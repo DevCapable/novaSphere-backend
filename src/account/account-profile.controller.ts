@@ -19,7 +19,7 @@ import { EntityType } from '@app/audit-log/enum';
   AccountTypeEnum.INDIVIDUAL,
   AccountTypeEnum.COMPANY,
   AccountTypeEnum.OPERATOR,
-  AccountTypeEnum.AGENCY,
+  AccountTypeEnum.ADMIN,
   AccountTypeEnum.COMMUNITY_VENDOR,
 )
 @ApiTags('account')

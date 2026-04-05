@@ -49,7 +49,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.OPERATOR,
   )
@@ -115,7 +115,7 @@ export class UserController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.OPERATOR,
   )
@@ -161,7 +161,7 @@ export class UserController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.OPERATOR,
   )
@@ -181,7 +181,7 @@ export class UserController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.OPERATOR,
   )
@@ -198,7 +198,7 @@ export class UserController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.OPERATOR,
   )
@@ -228,7 +228,7 @@ export class UserController {
     return this.userService.update(+id, userData);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.PASSWORD, PermisionSubjectTypeEnum.USER)
   @UseInterceptors(
     AuditLogInterceptor({
@@ -277,7 +277,7 @@ export class UserController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.OPERATOR,
   )
@@ -299,7 +299,7 @@ export class UserController {
     return this.userService.delete(+id);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY, AccountTypeEnum.COMPANY)
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.COMPANY)
   @ApiEndpoint('Delete account for user')
   @ApiResponse({
     status: 200,

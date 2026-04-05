@@ -40,11 +40,7 @@ export class BulkUploadController {
     return this.bulkUploadService.create(createBulkUploadDto);
   }
 
-  @Accounts(
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.AGENCY,
-    AccountTypeEnum.OPERATOR,
-  )
+  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
   @ApiFilterPagination('Get all upload files')
   @UseInterceptors(PaginationInterceptor)
   @Get()

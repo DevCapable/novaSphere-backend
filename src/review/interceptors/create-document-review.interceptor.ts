@@ -81,7 +81,7 @@ export const CreateDocumentReviewInterceptor = (Service: Type): any => {
       documentReviewPayload: CreateDocumentReview,
     ) {
       const { reviewer } = documentReviewPayload;
-      const isAgency = reviewer.account.type === AccountTypeEnum.AGENCY;
+      const isAgency = reviewer.account.type === AccountTypeEnum.ADMIN;
       const position = reviewer.account.agencyPosition;
 
       if (isAgency) {

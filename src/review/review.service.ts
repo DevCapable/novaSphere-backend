@@ -27,7 +27,7 @@ export class ReviewService {
       ['reviewer.accounts.agency'],
     );
 
-    if (user.account.type !== AccountTypeEnum.AGENCY) {
+    if (user.account.type !== AccountTypeEnum.ADMIN) {
       const companyReviews = reviews.filter((review: any) => {
         const position = review?.reviewer?.accounts[0]?.agency?.position;
         return (

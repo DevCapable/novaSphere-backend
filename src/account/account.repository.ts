@@ -22,12 +22,11 @@ import {
 } from '../core/util';
 import { accountTypeMapping } from './account-type.mapping';
 import { Account } from './entities/account.entity';
-import { Agency } from './entities/agency.entity';
+import { Admin } from './entities/admin.entity';
 import { Auditor } from './entities/auditor.entity';
 import { CommunityVendor } from './entities/community-vendor.entity';
 import { Company } from './entities/company.entity';
 import { Individual } from './entities/individual.entity';
-import { Operator } from './entities/operator.entity';
 import { AccountTypeEnum } from './enums';
 import { generateCompetency } from './utils';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -50,10 +49,8 @@ export class AccountRepository extends BaseRepository<Account> {
     private readonly individualRepository: Repository<Individual>,
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
-    @InjectRepository(Operator)
-    private readonly operatorRepository: Repository<Operator>,
-    @InjectRepository(Agency)
-    private readonly agencyRepository: Repository<Agency>,
+    @InjectRepository(Admin)
+    private readonly adminRepository: Repository<Admin>,
     @InjectRepository(CommunityVendor)
     private readonly communityVendorRepository: Repository<CommunityVendor>,
     @InjectRepository(Auditor)
@@ -141,30 +138,13 @@ export class AccountRepository extends BaseRepository<Account> {
           ),
         );
         break;
-      case AccountTypeEnum.OPERATOR:
+      case AccountTypeEnum.ADMIN:
         account = await entityManager.save(Account, {
           ...userData,
           uuid: uuidv4(),
         });
         await entityManager.save(
-          Operator,
-          buildFillable(
-            {
-              ...userData,
-              accountId: account.id,
-              uuid: uuidv4(),
-            },
-            accountTypeMapping.OPERATOR.fillable,
-          ),
-        );
-        break;
-      case AccountTypeEnum.AGENCY:
-        account = await entityManager.save(Account, {
-          ...userData,
-          uuid: uuidv4(),
-        });
-        await entityManager.save(
-          Agency,
+          Admin,
           buildFillable(
             {
               ...userData,
@@ -174,7 +154,7 @@ export class AccountRepository extends BaseRepository<Account> {
               accountId: account.id,
               uuid: uuidv4(),
             },
-            accountTypeMapping.AGENCY.fillable,
+            accountTypeMapping.ADMIN.fillable,
           ),
         );
         break;
@@ -289,19 +269,6 @@ export class AccountRepository extends BaseRepository<Account> {
           ),
         );
         break;
-      case AccountTypeEnum.OPERATOR:
-        await entityManager.save(
-          Operator,
-          buildFillable(
-            {
-              ...userData,
-              accountId: account.id,
-              uuid: uuidv4(),
-            },
-            accountTypeMapping.OPERATOR.fillable,
-          ),
-        );
-        break;
     }
     return account;
   }
@@ -382,8 +349,7 @@ export class AccountRepository extends BaseRepository<Account> {
               country: true,
             },
             company: true,
-            operator: true,
-            agency: true,
+            admin: true,
             communityVendor: {
               state: true,
             },
@@ -574,15 +540,9 @@ export class AccountRepository extends BaseRepository<Account> {
           where: { accountId: account.id },
         });
         break;
-      case AccountTypeEnum.OPERATOR:
-        repository = this.operatorRepository;
-        fillableFields = accountTypeMapping[account.type].fillable;
-        existingEntity = await repository.findOne({
-          where: { accountId: account.id },
-        });
-        break;
-      case AccountTypeEnum.AGENCY:
-        repository = this.agencyRepository;
+
+      case AccountTypeEnum.ADMIN:
+        repository = this.adminRepository;
         fillableFields = accountTypeMapping[account.type].fillable;
         existingEntity = await repository.findOne({
           where: { accountId: account.id },
@@ -672,10 +632,8 @@ export class AccountRepository extends BaseRepository<Account> {
         return this.individualRepository;
       case AccountTypeEnum.COMPANY:
         return this.companyRepository;
-      case AccountTypeEnum.OPERATOR:
-        return this.operatorRepository;
-      case AccountTypeEnum.AGENCY:
-        return this.agencyRepository;
+      case AccountTypeEnum.ADMIN:
+        return this.adminRepository;
       case AccountTypeEnum.COMMUNITY_VENDOR:
         return this.communityVendorRepository;
       case AccountTypeEnum.AUDITOR:

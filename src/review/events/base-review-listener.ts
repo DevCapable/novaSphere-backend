@@ -37,7 +37,7 @@ export class BaseReviewListener {
     teamEmail = DEFAULT_TEAM_EMAIL,
   }: NotifyAgencyUserParams) {
     const agencyAccount = payload.nextReviewer?.accounts?.find(
-      ({ type }) => type === AccountTypeEnum.AGENCY,
+      ({ type }) => type === AccountTypeEnum.ADMIN,
     );
     const accountId = agencyAccount?.id;
 

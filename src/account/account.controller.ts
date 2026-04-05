@@ -51,7 +51,7 @@ export class AccountController {
     return await this.accountService.findAll(filterOptions, paginationOptions);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @ApiAccountCreate()
   @Post()
   @UseInterceptors(
@@ -70,7 +70,7 @@ export class AccountController {
     });
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @ApiAccountCreate()
   @Post('/institution')
   @UseInterceptors(
@@ -115,7 +115,7 @@ export class AccountController {
     );
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.accountService.findOne(+id);
@@ -129,7 +129,7 @@ export class AccountController {
     return await this.accountService.findStats(+id);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @ApiAccountUpdate()
   @Patch(':id')
   @UseInterceptors(
@@ -142,7 +142,7 @@ export class AccountController {
     return this.accountService.update(+id, updateAccountDto);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @ApiAccountUpdate()
   @Patch('/institution/:id')
   updateInstitution(

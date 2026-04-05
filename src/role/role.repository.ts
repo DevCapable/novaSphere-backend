@@ -98,7 +98,7 @@ export class RoleRepository extends BaseRepository<Role> {
 
     queryBuilder.loadRelationCountAndMap('entity.userCount', 'entity.users');
 
-    if (user?.account?.type !== AccountTypeEnum.AGENCY) {
+    if (user?.account?.type !== AccountTypeEnum.ADMIN) {
       queryBuilder.orWhere('entity.slug = :slug', {
         slug: RolesEnum.SUPER_ADMIN,
       });
@@ -106,7 +106,7 @@ export class RoleRepository extends BaseRepository<Role> {
 
     const [entities, totalCount] = await queryBuilder.getManyAndCount();
 
-    const transformedEntities = (await Promise.all(
+    const transformedEntities = await Promise.all(
       entities.map(async (entity) => {
         if (entity.slug == RolesEnum.SUPER_ADMIN) {
           const superAdminUserCount = await this.getSuperAdminUserCount(user);
@@ -118,7 +118,7 @@ export class RoleRepository extends BaseRepository<Role> {
 
         return entity;
       }),
-    )) as Role[];
+    );
 
     return [transformedEntities, totalCount];
   }
@@ -222,7 +222,6 @@ export class RoleRepository extends BaseRepository<Role> {
     roleId: number,
     currentUser: CurrentUserData,
   ): Promise<[User[], number]> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { sortKey, sortDir } = filterOptions;
     const { skip, limit } = paginationOptions;
 
@@ -232,7 +231,7 @@ export class RoleRepository extends BaseRepository<Role> {
       .leftJoinAndSelect('entity.roles', 'role')
       .where('role.id = :roleId', { roleId });
 
-    if (currentUser?.account?.type === AccountTypeEnum.AGENCY) {
+    if (currentUser?.account?.type === AccountTypeEnum.ADMIN) {
       queryBuilder.innerJoin(
         'entity.accounts',
         'account',
@@ -270,14 +269,14 @@ export class RoleRepository extends BaseRepository<Role> {
         accountId: user?.account?.id,
       });
 
-    if (user?.account?.type === AccountTypeEnum.AGENCY) {
+    if (user?.account?.type === AccountTypeEnum.ADMIN) {
       queryConditionFn = (qb) =>
         qb.innerJoin(
           'users.accounts',
           'account',
           'account.type = :accountType',
           {
-            accountType: AccountTypeEnum.AGENCY,
+            accountType: AccountTypeEnum.ADMIN,
           },
         );
     }

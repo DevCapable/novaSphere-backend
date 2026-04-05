@@ -32,7 +32,7 @@ import { SettingService } from './setting.service';
 export class SettingController {
   constructor(private readonly settingService: SettingService) {}
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.UPDATE, PermisionSubjectTypeEnum.SETTINGS)
   @Post()
   async create(@Body() settings: FlatSettingsDto, @Req() req: Request) {
@@ -58,7 +58,7 @@ export class SettingController {
     return this.settingService.getValue(key);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.DELETE, PermisionSubjectTypeEnum.SETTINGS)
   @UseInterceptors(
     AuditLogInterceptor({

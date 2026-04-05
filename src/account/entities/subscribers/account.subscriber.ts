@@ -25,11 +25,8 @@ export class AccountSubscriber implements EntitySubscriberInterface<Account> {
       case AccountTypeEnum.COMPANY:
         name = entity.company?.name;
         break;
-      case AccountTypeEnum.OPERATOR:
-        name = entity.operator?.name;
-        break;
-      case AccountTypeEnum.AGENCY:
-        name = `${entity.agency?.firstName} ${entity.agency?.lastName}`;
+      case AccountTypeEnum.ADMIN:
+        name = `${entity.admin?.firstName} ${entity.admin?.lastName}`;
         break;
     }
     entity.name = name;

@@ -4,8 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { Account } from '../account/entities/account.entity';
-import { Agency, Position } from '../account/entities/agency.entity';
-import { Operator } from '../account/entities/operator.entity';
+import { Admin, Position } from '../account/entities/admin.entity';
 import { Company } from '../account/entities/company.entity';
 import { Individual } from '../account/entities/individual.entity';
 import { BaseRecord } from '../base-record/entities/base-record.entity';
@@ -27,10 +26,8 @@ export class UserSeeder implements SeederInterface {
     private readonly user: Repository<User>,
     @InjectRepository(Account)
     private readonly account: Repository<Account>,
-    @InjectRepository(Agency)
-    private readonly agency: Repository<Agency>,
-    @InjectRepository(Operator)
-    private readonly operator: Repository<Operator>,
+    @InjectRepository(Admin)
+    private readonly admin: Repository<Admin>,
     @InjectRepository(Company)
     private readonly company: Repository<Company>,
     @InjectRepository(Individual)
@@ -94,13 +91,9 @@ export class UserSeeder implements SeederInterface {
         const company = await entityManager.save(Company, accountData);
         userData.company = company;
         break;
-      case AccountTypeEnum.OPERATOR:
-        const operator = await entityManager.save(Operator, accountData);
-        userData.operator = operator;
-        break;
-      case AccountTypeEnum.AGENCY:
-        const agency = await entityManager.save(Agency, accountData);
-        userData.agency = agency;
+      case AccountTypeEnum.ADMIN:
+        const admin = await entityManager.save(Admin, accountData);
+        userData.admin = admin;
         break;
     }
     return account;
@@ -140,7 +133,7 @@ export class UserSeeder implements SeederInterface {
     );
   }
 
-  async createAgencyAccount() {
+  async createAdminAccount() {
     const role = await this.role.findOne({
       where: {
         slug: RolesEnum.SUPER_ADMIN,
@@ -163,7 +156,7 @@ export class UserSeeder implements SeederInterface {
     };
 
     return await this.createAccount(
-      AccountTypeEnum.AGENCY,
+      AccountTypeEnum.ADMIN,
       userData,
       accountData,
     );
@@ -245,11 +238,11 @@ export class UserSeeder implements SeederInterface {
 
   async seed() {
     try {
-      // await this.createAgencyAccount();
+      await this.createAdminAccount();
       // await this.createIndividualAccount();
       // await this.createCompanyAccount();
       // await this.createOperatorAccount();
-    } catch (e) {
+    } catch (e: any) {
       this.loggerService.error(e);
     }
   }

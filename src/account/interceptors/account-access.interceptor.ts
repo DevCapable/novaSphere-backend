@@ -22,7 +22,7 @@ export function AccountAccessInterceptor(accountIdField: string = 'accountId') {
       if (!user) return next.handle();
       const accountId = user.account.id;
 
-      if (user.account?.type === AccountTypeEnum.AGENCY) {
+      if (user.account?.type === AccountTypeEnum.ADMIN) {
         return next.handle();
       }
 

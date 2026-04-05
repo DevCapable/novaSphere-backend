@@ -112,7 +112,7 @@ export class UserRepository extends BaseRepository<User> {
   async login(email, password) {
     const user = await this.userRepository.findOne({
       where: { email },
-      relations: ['accounts', 'accounts.agency'],
+      relations: ['accounts', 'accounts.admin'],
     });
     const failedAttempts = await this._countRecentFailedAttempts(email);
 
@@ -217,7 +217,7 @@ export class UserRepository extends BaseRepository<User> {
     options: Record<string, any>,
     relations = [
       'accounts',
-      'accounts.agency',
+      'accounts.admin',
       'roles',
       'roles.permissions',
       'permissions',

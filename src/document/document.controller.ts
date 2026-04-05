@@ -52,7 +52,7 @@ const BASE_PATH = 'generic-documents';
 export default class DocumentsController {
   constructor(private readonly documentService: DocumentService) {}
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.READ, PermisionSubjectTypeEnum.DOCUMENT)
   @ApiFilterPagination('Get all documents')
   @ApiQuery({
@@ -69,7 +69,7 @@ export default class DocumentsController {
     return await this.documentService.findAll(filterOptions, paginationOptions);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.CREATE, PermisionSubjectTypeEnum.DOCUMENT)
   @HttpCode(HttpStatus.CREATED)
   @ApiEndpoint('Create Document ')
@@ -99,7 +99,7 @@ export default class DocumentsController {
     return this.documentService.createDocumentFiles(createDocumentFilesDto);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.UPDATE, PermisionSubjectTypeEnum.DOCUMENT)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Update document')
@@ -118,7 +118,7 @@ export default class DocumentsController {
     return this.documentService.update(+id, UpdateDocumentDto);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.READ, PermisionSubjectTypeEnum.DOCUMENT)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Find one generic document')
@@ -163,7 +163,7 @@ export default class DocumentsController {
     return this.documentService.deleteDocumentFile(body.awsKey);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Permission(PermisionActionTypeEnum.DELETE, PermisionSubjectTypeEnum.DOCUMENT)
   @ApiEndpoint('Delete Document')
   @ApiBearerAuth()

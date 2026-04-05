@@ -1,8 +1,7 @@
 import { Account } from '@app/account/entities/account.entity';
-import { Agency } from '@app/account/entities/agency.entity';
+import { Admin } from '@app/account/entities/admin.entity';
 import { Company } from '@app/account/entities/company.entity';
 import { Individual } from '@app/account/entities/individual.entity';
-import { Operator } from '@app/account/entities/operator.entity';
 import { BaseRecordRepository } from '@app/base-record/base-record.repository';
 import { BaseRecord } from '@app/base-record/entities/base-record.entity';
 import { Document } from '@app/document/entities/document.entity';
@@ -36,8 +35,7 @@ import { UserSeeder } from './user-seeder';
       Account,
       Individual,
       Company,
-      Operator,
-      Agency,
+      Admin,
       User,
       Document,
       PermissionGroup,

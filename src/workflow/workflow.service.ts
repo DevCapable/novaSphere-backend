@@ -525,10 +525,9 @@ export class WorkflowService {
     raw = false,
     module = 'ALL',
   }) {
-    const isAgencyAccount =
-      currentUser?.account?.type === AccountTypeEnum.AGENCY;
+    const isAdminAccount = currentUser?.account?.type === AccountTypeEnum.ADMIN;
 
-    if (!isAgencyAccount && (userId || type === 'PARTICIPATED')) {
+    if (!isAdminAccount && (userId || type === 'PARTICIPATED')) {
       throw new CustomForbiddenException();
     }
 
@@ -866,7 +865,7 @@ export class WorkflowService {
           },
           relations: {
             accounts: {
-              agency: true,
+              admin: true,
             },
           },
         });
@@ -879,7 +878,7 @@ export class WorkflowService {
           },
           relations: {
             accounts: {
-              agency: true,
+              admin: true,
             },
           },
         });
@@ -903,7 +902,7 @@ export class WorkflowService {
           },
           relations: {
             accounts: {
-              agency: true,
+              admin: true,
             },
           },
         });

@@ -211,7 +211,7 @@ export class AuthenticationController {
 
   @HttpCode(HttpStatus.OK)
   @Post('/impersonate')
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   async impersonate(@Body() impersonateAccountDto: ImpersonateAccountDto) {
     return this.authService.impersonateAccount(impersonateAccountDto);
   }

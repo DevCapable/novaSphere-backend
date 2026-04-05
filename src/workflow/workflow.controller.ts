@@ -24,7 +24,7 @@ const BASE_PATH = 'workflows';
 export class WorkflowController {
   constructor(private readonly workflowService: WorkflowService) {}
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Get('groups')
   async groups(
     @Query('search') search: string,
@@ -35,10 +35,10 @@ export class WorkflowController {
 
     const _search = module || search || '';
 
-    const agencySearch = `NCDMB ${_search}`.trim();
+    const adminSearch = `NCDMB ${_search}`.trim();
 
     const groups = await this.workflowService.getGroups(
-      agencySearch,
+      adminSearch,
       skip,
       limit,
     );
@@ -64,7 +64,7 @@ export class WorkflowController {
     };
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Get('users/:id')
   async getUser(@Param('id') userId: string) {
     return this.workflowService.getUserById(+userId);
@@ -77,7 +77,7 @@ export class WorkflowController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.OPERATOR,
     AccountTypeEnum.COMPANY,
   )
@@ -106,7 +106,7 @@ export class WorkflowController {
   }
 
   @Accounts(
-    AccountTypeEnum.AGENCY,
+    AccountTypeEnum.ADMIN,
     AccountTypeEnum.OPERATOR,
     AccountTypeEnum.COMPANY,
     AccountTypeEnum.INDIVIDUAL,
@@ -123,7 +123,7 @@ export class WorkflowController {
     return this.workflowService.getCase(caseId, user, !!withAdhocUsers);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Post('/reassign/:caseId')
   async reassign(
     @Param('caseId') caseId: string,
@@ -144,7 +144,7 @@ export class WorkflowController {
     }
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Get('/sync/:userId')
   async sync(@Param('userId') userId: string) {
     try {
@@ -159,7 +159,7 @@ export class WorkflowController {
     }
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Post('/sync/:userId')
   async syncUpdate(@Param('userId') userId: string) {
     try {
@@ -169,7 +169,7 @@ export class WorkflowController {
     }
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Post('/case/:caseId/claim')
   async claimCase(
     @CurrentUser() user,
@@ -179,13 +179,13 @@ export class WorkflowController {
     return this.workflowService.claim(caseId, user, body.delIndex);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Get('/unassigned-tasks/:caseId')
   async unAssignedCases(@CurrentUser() user, @Param('caseId') caseId: string) {
     return this.workflowService.getUnassignCases(user, caseId);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @Post('/batch-reassign')
   async batchReassignCases(@Body() payload: BatchReassignDto) {
     return this.workflowService.batchReassignCases(payload);

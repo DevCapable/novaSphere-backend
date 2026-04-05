@@ -10,7 +10,7 @@ class ReviewServiceClass implements ReviewServiceInterface {
 
   async createReview(reviewPayload: CreateReview): Promise<CreateReview> {
     const { reviewer } = reviewPayload;
-    const isAgency = reviewer.account.type === AccountTypeEnum.AGENCY;
+    const isAgency = reviewer.account.type === AccountTypeEnum.ADMIN;
 
     if (isAgency) {
       return await this._createReviewForAgency(reviewPayload);

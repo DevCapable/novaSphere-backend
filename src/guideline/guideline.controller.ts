@@ -41,7 +41,7 @@ import { CurrentUser } from '@app/iam/decorators';
 export class GuidelineController {
   constructor(private readonly guidelineService: GuidelineService) {}
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.CREATED)
   @ApiEndpoint('Create Guideline')
   @ApiResponse({
@@ -75,7 +75,7 @@ export class GuidelineController {
     );
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Get One Guideline Record')
   @ApiResponse({
@@ -88,7 +88,7 @@ export class GuidelineController {
     return this.guidelineService.findOne(+id);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Update Guideline Record')
   @ApiResponse({
@@ -101,7 +101,7 @@ export class GuidelineController {
     return this.guidelineService.update(+id, updateGuidelineDto);
   }
 
-  @Accounts(AccountTypeEnum.AGENCY)
+  @Accounts(AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Delete Guideline Record')
   @ApiResponse({

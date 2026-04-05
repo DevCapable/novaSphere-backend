@@ -14,12 +14,11 @@ import { AccountRepository } from './account.repository';
 import { AccountService } from './account.service';
 
 import { Account } from './entities/account.entity';
-import { Agency } from './entities/agency.entity';
+import { Admin } from './entities/admin.entity';
 import { Auditor } from './entities/auditor.entity';
 import { CommunityVendor } from './entities/community-vendor.entity';
 import { Company } from './entities/company.entity';
 import { Individual } from './entities/individual.entity';
-import { Operator } from './entities/operator.entity';
 import { AccountEvent } from './events/account.event';
 import { AccountListener } from './events/listeners/account.listener';
 
@@ -27,8 +26,7 @@ import { AccountListener } from './events/listeners/account.listener';
   imports: [
     TypeOrmModule.forFeature([
       Account,
-      Agency,
-      Operator,
+      Admin,
       Company,
       Individual,
       CommunityVendor,
