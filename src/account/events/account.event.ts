@@ -6,10 +6,10 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 export class AccountEvent {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  async individualWelcome(payload) {
+  individualWelcome(payload: any) {
     this.eventEmitter.emit(eventType.INDIVIDUAL_WELCOME, {
       to: payload.user.email,
-      subject: 'Welcome to the NOGIC JQS',
+      subject: 'Welcome to NovaSphere',
       context: {
         name: `${payload.user.firstName} ${payload.user.lastName}`,
         email: payload.user.email,
@@ -17,21 +17,34 @@ export class AccountEvent {
     });
   }
 
-  async institutionWelcome(payload) {
+  institutionWelcome(payload: any) {
     this.eventEmitter.emit(eventType.INSTITUTION_WELCOME, {
       to: payload.user.email,
-      subject: 'Welcome to the NOGIC JQS',
+      subject: 'Institution Onboarding - NovaSphere',
       context: {
-        name: `${payload.user.firstName} ${payload.user.lastName}`,
+        orgName: payload.user.firstName, // Maps to Institution Short Name (e.g., UNILAG)
         email: payload.user.email,
+        password: payload.user._raw, // Only present on initial creation
       },
     });
   }
 
-  async individualActivation(payload) {
+  sugWelcome(payload: any) {
+    this.eventEmitter.emit(eventType.SUG_WELCOME, {
+      to: payload.user.email,
+      subject: 'Student Union Activation - NovaSphere',
+      context: {
+        unionName: payload.user.firstName, // Maps to SUG Acronym (e.g., ULSU)
+        email: payload.user.email,
+        password: payload.user._raw,
+      },
+    });
+  }
+
+  individualActivation(payload: any) {
     this.eventEmitter.emit(eventType.INDIVIDUAL_ACTIVATION, {
       to: payload.user.email,
-      subject: 'Activation of Account',
+      subject: 'Activate Your NovaSphere Account',
       context: {
         url: `${process.env.MAIL_FRONTEND_URL}/auth/verify/${payload.token}`,
         firstName: payload.user.firstName,
@@ -42,39 +55,28 @@ export class AccountEvent {
     });
   }
 
-  async companyWelcome(payload) {
-    this.eventEmitter.emit(eventType.COMPANY_WELCOME, {
+  adminWelcome(payload: any) {
+    this.eventEmitter.emit(eventType.ADMIN_WELCOME, {
       to: payload.user.email,
-      subject: 'Welcome to the NOGIC JQS',
-      context: {
-        email: payload.user.email,
-        password: payload.user._raw,
-        orgName: payload.user.firstName,
-      },
-    });
-  }
-
-  async operatorWelcome(payload) {
-    this.eventEmitter.emit(eventType.OPERATOR_WELCOME, {
-      to: payload.user.email,
-      subject: 'Welcome to the NOGIC JQS',
-      context: {
-        email: payload.user.email,
-        password: payload.user._raw,
-        orgName: payload.user.firstName,
-      },
-    });
-  }
-
-  async agencyWelcome(payload) {
-    this.eventEmitter.emit(eventType.AGENCY_WELCOME, {
-      to: payload.user.email,
-      subject: 'Welcome to the NOGIC JQS',
+      subject: 'Administrative Access Granted - NovaSphere',
       context: {
         email: payload.user.email,
         password: payload.user._raw,
         firstName: payload.user.firstName,
         lastName: payload.user.lastName,
+      },
+    });
+  }
+
+  // Fallback for any remaining legacy Operator/Vendor logic
+  vendorWelcome(payload: any) {
+    this.eventEmitter.emit(eventType.VENDOR_WELCOME, {
+      to: payload.user.email,
+      subject: 'Vendor Portal Access - NovaSphere',
+      context: {
+        email: payload.user.email,
+        password: payload.user._raw,
+        orgName: payload.user.firstName,
       },
     });
   }

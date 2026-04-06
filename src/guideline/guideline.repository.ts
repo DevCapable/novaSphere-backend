@@ -37,9 +37,9 @@ export class GuidelineRepository extends BaseRepository<Guideline> {
             accountType: accountType,
           });
 
-          if (['COMPANY', 'OPERATOR'].includes(accountType)) {
+          if (['INSTITUTION', 'SUG'].includes(accountType)) {
             qb.orWhere('entity.accountType = :specificAccountType', {
-              specificAccountType: GuidelineAccountType.COMPANY_OPERATOR,
+              specificAccountType: GuidelineAccountType.INSTITUTION,
             });
           }
         }),

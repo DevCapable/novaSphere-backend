@@ -50,8 +50,8 @@ export class UserController {
 
   @Accounts(
     AccountTypeEnum.ADMIN,
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.SUG,
   )
   @Permission(PermisionActionTypeEnum.CREATE, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.CREATED)
@@ -114,11 +114,7 @@ export class UserController {
     return await this.userService._resetPassword(token, resetPasseordDto);
   }
 
-  @Accounts(
-    AccountTypeEnum.ADMIN,
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-  )
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @Permission(PermisionActionTypeEnum.CREATE, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.CREATED)
   @ApiEndpoint('Create User From Staff')
@@ -160,11 +156,7 @@ export class UserController {
     return await this.userService.findSettings();
   }
 
-  @Accounts(
-    AccountTypeEnum.ADMIN,
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-  )
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @ApiFilterPagination('Get All Users')
   @UseInterceptors(PaginationInterceptor)
   @Get()
@@ -180,11 +172,7 @@ export class UserController {
     );
   }
 
-  @Accounts(
-    AccountTypeEnum.ADMIN,
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-  )
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @Permission(PermisionActionTypeEnum.READ, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Get One User ')
@@ -197,11 +185,7 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Accounts(
-    AccountTypeEnum.ADMIN,
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-  )
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @Permission(PermisionActionTypeEnum.UPDATE, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Update User')
@@ -276,11 +260,7 @@ export class UserController {
     return await this.userService.resetPassword(+id, resetPasswordDto);
   }
 
-  @Accounts(
-    AccountTypeEnum.ADMIN,
-    AccountTypeEnum.COMPANY,
-    AccountTypeEnum.OPERATOR,
-  )
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @Permission(PermisionActionTypeEnum.DELETE, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Delete User')
@@ -299,7 +279,7 @@ export class UserController {
     return this.userService.delete(+id);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.COMPANY)
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @ApiEndpoint('Delete account for user')
   @ApiResponse({
     status: 200,

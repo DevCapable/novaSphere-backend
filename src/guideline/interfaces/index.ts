@@ -13,10 +13,9 @@ export enum GuidelineModuleType {
 
 export enum GuidelineAccountType {
   ALL = 'ALL',
-  COMPANY = 'COMPANY',
-  OPERATOR = 'OPERATOR',
+  INSTITUTION = 'INSTITUTION',
+  SUG = 'SUG',
   INDIVIDUAL = 'INDIVIDUAL',
-  COMPANY_OPERATOR = 'COMPANY_OPERATOR',
 }
 
 export const GUIDELINE_FILEABLE_TYPE = 'GUIDELINE';

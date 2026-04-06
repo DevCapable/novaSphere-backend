@@ -1,22 +1,20 @@
 import { CreateInstitutionDto } from '@app/account/dto/institution/create-institution.dto';
 import { UpdateInstitutionDto } from '@app/account/dto/institution/update-institution.dto';
+import { CreateSugDto } from '@app/account/dto/sug/create-sug.dto'; // Ensure this path exists
+import { UpdateSugDto } from '@app/account/dto/sug/update-sug.dto'; // Ensure this path exists
 import {
-  CreateAgencyDto,
+  CreateAdminDto,
   CreateAuditorDto,
-  CreateCompanyDto,
   CreateIndividualDto,
   CreateOperatorDto,
-  UpdateAgencyDto,
+  UpdateAdminDto,
   UpdateAuditorDto,
-  UpdateCompanyDto,
   UpdateIndividualDto,
   UpdateOperatorDto,
 } from './dto';
 import { CreateCommunityVendorDto } from './dto/community-vendor/create-community-vendor.dto';
 import { UpdateCommunityVendorDto } from './dto/community-vendor/update-community-vendor.dto';
 import { AccountTypeEnum } from './enums';
-// import { UpdateInstituionDto } from '@app/account/dto/institution/update-institution.dto';
-// import { UpdateInstituionDto } from '@app/account/dto/institution/update-institution.dto';
 
 type Options = {
   fillable: string[];
@@ -27,31 +25,60 @@ type Options = {
 };
 
 export type AccountTypeMapping = Record<AccountTypeEnum, Options>;
+
 export const accountTypeMapping: AccountTypeMapping = {
   [AccountTypeEnum.INSTITUTION]: {
     fillable: [
       'name',
+      'shortName',
       'accountId',
-      'institutionName',
       'institutionType',
+      'ownershipType',
       'registrationNumber',
-      'dateOfEstablishment',
+      'establishmentDate',
       'address',
-      'contactNumber',
+      'phoneNumber',
       'email',
       'website',
-      'representativeName',
-      'representativeDesignation',
+      'vcOrRectorName',
+      'registrarName',
+      'stateId',
     ],
-    relations: [],
+    relations: ['departments'],
     searchable: [
-      'institution.institutionName',
+      'institution.name',
+      'institution.shortName',
       'institution.institutionType',
       'institution.registrationNumber',
-      'institution.dateOfEstablishment',
+      'users.email',
     ],
     createDto: CreateInstitutionDto,
     updateDto: UpdateInstitutionDto,
+  },
+  [AccountTypeEnum.SUG]: {
+    fillable: [
+      'unionName',
+      'acronym',
+      'accountId',
+      'institutionId',
+      'presidentName',
+      'generalSecretaryName',
+      'officialEmail',
+      'officialContactNumber',
+      'officeAddress',
+      'electionDate',
+      'tenureEndDate',
+      'isActive',
+    ],
+    relations: ['institution', 'account'],
+    searchable: [
+      'sug.unionName',
+      'sug.acronym',
+      'sug.presidentName',
+      'sug.officialEmail',
+    ],
+    createDto: CreateSugDto,
+    updateDto: UpdateSugDto,
   },
   [AccountTypeEnum.INDIVIDUAL]: {
     fillable: [
@@ -112,96 +139,10 @@ export const accountTypeMapping: AccountTypeMapping = {
       'admin.lastName',
       'users.email',
     ],
-    createDto: CreateAgencyDto,
-    updateDto: UpdateAgencyDto,
+    createDto: CreateAdminDto,
+    updateDto: UpdateAdminDto,
   },
-  [AccountTypeEnum.COMPANY]: {
-    fillable: [
-      'name',
-      'rcNumber',
-      'isOffshore',
-      'email',
-      'phoneNumber',
-      'otherPhoneNumbers',
-      'address',
-      'businessCategoryId',
-      'newFacilityId',
-      'otherPhoneNumbers',
-      'dprNumber',
-      'nseStatus',
-      'nseRegNo',
-      'incorporationDate',
-      'totalCompanyShares',
-      'taxNumber',
-      'facilityLocation',
-      'facility',
-      'staffStrengthLocal',
-      'staffStrengthForeign',
-      'staffStrengthForeignCount',
-      'staffStrengthNigeriaCount',
-      'nigerianOwnershipPercent',
-      'accountId',
-      'uuid',
-      'isExternal',
-      'remittanceId',
-      'vendorRemittanceId',
-    ],
-    relations: ['businessCategory', 'newFacility'],
-    searchable: [
-      'company.name',
-      'users.email',
-      'company.phoneNumber',
-      'company.rcNumber',
-      'company.nogicNumber',
-    ],
-    createDto: CreateCompanyDto,
-    updateDto: UpdateCompanyDto,
-  },
-  [AccountTypeEnum.OPERATOR]: {
-    fillable: [
-      'name',
-      'email',
-      'password',
-      'rcNumber',
-      'address',
-      'businessCategoryId',
-      'categoryId',
-      'category',
-      'phoneNumber',
-      'businessCategory',
-      'otherPhoneNumbers',
-      'address',
-      'businessCategoryId',
-      'otherPhoneNumbers',
-      'dprNumber',
-      'nseStatus',
-      'nseRegNo',
-      'incorporationDate',
-      'totalCompanyShares',
-      'taxNumber',
-      'facilityLocation',
-      'facility',
-      'staffStrengthLocal',
-      'staffStrengthForeign',
-      'staffStrengthForeignCount',
-      'staffStrengthNigeriaCount',
-      'nigerianOwnershipPercent',
-      'accountId',
-      'uuid',
-      'remittanceId',
-      'vendorRemittanceId',
-    ],
-    searchable: [
-      'operator.name',
-      'users.email',
-      'operator.phoneNumber',
-      'operator.rcNumber',
-      'operator.nogicNumber',
-    ],
-    relations: ['category', 'businessCategory'],
-    createDto: CreateOperatorDto,
-    updateDto: UpdateOperatorDto,
-  },
+
   [AccountTypeEnum.COMMUNITY_VENDOR]: {
     fillable: [
       'name',
@@ -224,7 +165,6 @@ export const accountTypeMapping: AccountTypeMapping = {
       'auditor.firstName',
       'auditor.lastName',
       'users.email',
-      'auditor.email',
       'auditor.phoneNumber',
     ],
     createDto: CreateAuditorDto,

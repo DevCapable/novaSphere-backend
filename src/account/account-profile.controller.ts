@@ -17,8 +17,7 @@ import { EntityType } from '@app/audit-log/enum';
 @Accounts(
   AccountTypeEnum.INSTITUTION,
   AccountTypeEnum.INDIVIDUAL,
-  AccountTypeEnum.COMPANY,
-  AccountTypeEnum.OPERATOR,
+  AccountTypeEnum.SUG,
   AccountTypeEnum.ADMIN,
   AccountTypeEnum.COMMUNITY_VENDOR,
 )

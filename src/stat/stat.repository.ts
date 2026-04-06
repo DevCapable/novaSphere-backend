@@ -24,7 +24,7 @@ export class StatRepository {
       return {};
     }
 
-    if (account.type === AccountTypeEnum.COMPANY) {
+    if (account.type === AccountTypeEnum.INSTITUTION) {
       const documentFiles = await this.documentFileRepository.findAllBy({
         fileableId: id,
         fileableType: 'OWNERSHIP_DOCUMENT',
@@ -33,12 +33,6 @@ export class StatRepository {
       return {
         ownershipDocuments: documentFiles?.length || 0,
         staff: await this.staffRepository.countForStats(id),
-      };
-    }
-
-    if (account.type === AccountTypeEnum.OPERATOR) {
-      return {
-        // shareholders: await this.shareholderRepository.count(where),
       };
     }
   }

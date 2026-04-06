@@ -1,4 +1,4 @@
-import { Institution } from '@app/account/entities/institution.entity';
+import { Sug } from '@app/account/entities/sug.entity';
 import { BaseEntity } from '@app/core/base/base.entity';
 import { ExternalLinkOriginEnum } from '@app/iam/enum';
 import { User } from '@app/user/entities/user.entity';
@@ -6,7 +6,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { AccountTypeEnum } from '../enums';
 import { Admin } from './admin.entity';
 import { CommunityVendor } from './community-vendor.entity';
-import { Company } from './company.entity';
+import { Institution } from './institution.entity';
 import { Individual } from './individual.entity';
 import { Auditor } from './auditor.entity';
 
@@ -52,8 +52,8 @@ export class Account extends BaseEntity<Account> {
   @OneToOne(() => Admin, (admin) => admin.account, { cascade: true })
   admin?: Admin;
 
-  @OneToOne(() => Company, (company) => company.account, { cascade: true })
-  company?: Company;
+  @OneToOne(() => Sug, (sug) => sug.account, { cascade: true })
+  sug?: Sug;
 
   @OneToOne(() => Auditor, (auditor) => auditor.account, {
     cascade: true,

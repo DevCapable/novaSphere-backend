@@ -440,6 +440,7 @@ export class UserService {
       ? ExternalLinkOriginEnum[originApp]
       : undefined;
 
+    // Permissions check for NovaSphere User Management
     const shouldBypassPermission =
       externalOrigin === ExternalLinkOriginEnum.NCDF &&
       filterOptions?.filterAccountId;
@@ -451,24 +452,30 @@ export class UserService {
         PermisionSubjectTypeEnum.USER,
       );
     }
+
+    // 1. Updated relations to include Institutions and SUGs
     const [users, totalCount] = await this.userRepository.findAll(
       filterOptions,
       paginationOptions,
       [
         'accounts',
         'accounts.individual',
-        'accounts.company',
-        'accounts.operator',
-        'accounts.agency',
+        'accounts.institution', // University/Polytechnic
+        'accounts.sug', // Student Union
+        'accounts.admin', // Staff/Admin
         'accounts.communityVendor',
+        'accounts.operator',
         'roles',
         'permissions',
       ],
     );
 
+    // 2. Transform nested accounts for the frontend
     users.forEach((user) => {
       (user.accounts as any) = (user.accounts || []).map((account) => {
+        // Uses the updated _getAccountName helper for "UNILAG (Federal)" or "ULSU"
         const name = this._getAccountName(account);
+
         return {
           id: account.id,
           uuid: account.uuid,
@@ -476,9 +483,10 @@ export class UserService {
           updatedAt: account.updatedAt,
           nogicNumber: account.nogicNumber,
           type: account.type,
-          bio: account.bio,
-          oldId: account.oldId,
           name,
+          // Map specific fields if needed for the UI
+          institutionType: account.institution?.institutionType,
+          sugAcronym: account.sug?.acronym,
         };
       });
     });
@@ -490,29 +498,34 @@ export class UserService {
     let name = '';
     switch (account.type) {
       case AccountTypeEnum.INDIVIDUAL:
-        name = `${account.individual?.firstName} ${account.individual?.lastName}`;
+        name = `${account.individual?.firstName ?? ''} ${account.individual?.lastName ?? ''}`;
         break;
-      case AccountTypeEnum.COMPANY:
-        name = account.company?.name ?? '';
+      case AccountTypeEnum.INSTITUTION:
+        name =
+          account.institution?.name || account.institution?.shortName || '';
+        break;
+      case AccountTypeEnum.SUG:
+        name = account.sug?.unionName || account.sug?.acronym || '';
         break;
       case AccountTypeEnum.ADMIN:
-        name = `${account.admin?.firstName} ${account.admin?.lastName}`;
+        name = `${account.admin?.firstName ?? ''} ${account.admin?.lastName ?? ''}`;
         break;
       case AccountTypeEnum.COMMUNITY_VENDOR:
-        name = account.communityVendor?.name ?? '';
+        name = account.communityVendor?.name || '';
         break;
     }
-    return name;
+    return name.trim();
   }
 
   async findOne(id: number) {
     const user = await this.userRepository.findFirstBy({ id }, [
       'accounts',
       'accounts.individual',
-      'accounts.company',
-      'accounts.operator',
-      'accounts.agency',
+      'accounts.institution', // Swapped from company
+      'accounts.sug', // Added for NovaSphere
+      'accounts.admin', // Swapped from agency
       'accounts.communityVendor',
+      'accounts.operator',
       'roles',
       'roles.permissions',
       'permissions',
@@ -528,11 +541,10 @@ export class UserService {
         uuid: account.uuid,
         createdAt: account.createdAt,
         updatedAt: account.updatedAt,
-        name: account.name,
+        // CRITICAL: Use the helper to derive the correct name
+        name: this._getAccountName(account),
         nogicNumber: account.nogicNumber,
         type: account.type,
-        bio: account.bio,
-        oldId: account.oldId,
       };
     });
 
@@ -544,17 +556,11 @@ export class UserService {
 
   async detachAccount(userId: number, accountId: number) {
     const repository = this.userRepository.getBaseRepository();
-
     const currentUser = BaseService.getCurrentUser();
-    const currentUserAccount = currentUser.account;
 
-    if (!RolesHelper.hasAdminRole(currentUser.roles))
+    if (!RolesHelper.hasAdminRole(currentUser.roles)) {
       throw new CustomUnauthorizedException();
-
-    const isAdminAccount = currentUser.account?.type === AccountTypeEnum.ADMIN;
-
-    if (!isAdminAccount && currentUserAccount.id !== accountId)
-      throw new CustomBadRequestException(ErrorMessages.InvalidAccount);
+    }
 
     const user = await repository.findOne({
       where: { id: userId },
@@ -564,87 +570,69 @@ export class UserService {
     if (!user) throw new CustomNotFoundException(ErrorMessages.UserNotFound);
 
     const accountToRemove = user.accounts.find((acc) => acc.id === accountId);
-
     if (!accountToRemove)
       throw new CustomBadRequestException(ErrorMessages.InvalidAccount);
 
-    const isCompanyOrOperator = accountToRemove.type
-      ? [AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR].includes(
-          accountToRemove.type,
-        )
-      : false;
+    // Define which account types are allowed to be detached from a user
+    const detachableTypes = [
+      AccountTypeEnum.INSTITUTION,
+      AccountTypeEnum.SUG,
+      AccountTypeEnum.COMMUNITY_VENDOR,
+    ];
 
-    if (!isCompanyOrOperator)
-      throw new CustomBadRequestException(ErrorMessages.InvalidAccountToDetach);
+    const isDetachable = detachableTypes.includes(accountToRemove.type);
 
-    const hasMultipleAccounts = user.accounts.length > 1;
+    if (!isDetachable) {
+      throw new CustomBadRequestException(
+        'You cannot detach a primary Individual or Admin account.',
+      );
+    }
 
-    if (!hasMultipleAccounts)
+    if (user.accounts.length <= 1) {
       throw new CustomBadRequestException(
         ErrorMessages.CannotDeleteOnlyAccount,
       );
+    }
 
     user.accounts = user.accounts.filter((acc) => acc.id !== accountId);
-
     await this.entityManager.save(User, user);
   }
 
   async update(id: number, data: any) {
-    let updateData = omit(data, ['accountId']);
+    const updateData: any = omit(data, ['accountId']);
 
-    if (data?.firstName) {
-      updateData = {
-        ...updateData,
-        firstName: data.firstName.toUpperCase().trim(),
-      };
-    }
+    // Normalize Strings
+    if (data?.firstName)
+      updateData.firstName = data.firstName.toUpperCase().trim();
+    if (data?.lastName)
+      updateData.lastName = data.lastName.toUpperCase().trim();
+    if (data?.email) updateData.email = data.email.toLowerCase().trim();
 
-    if (data?.lastName) {
-      updateData = {
-        ...updateData,
-        lastName: data.lastName.toUpperCase().trim(),
-      };
-    }
+    // If updating a "Person" type account, sync the changes to the specific profile table
+    const personTypes = [AccountTypeEnum.ADMIN, AccountTypeEnum.INDIVIDUAL];
 
-    if (data?.email) {
-      updateData = {
-        ...updateData,
-        email: data.email.toLowerCase().trim(),
-      };
-    }
-
-    if (
-      [AccountTypeEnum.ADMIN, AccountTypeEnum.INDIVIDUAL].includes(
-        data?.accountType,
-      )
-    ) {
+    if (personTypes.includes(data?.accountType)) {
       const user = await this.userRepository.findById(id, ['accounts']);
 
-      if (!user) {
-        throw new CustomNotFoundException('User not found.');
-      }
+      if (user) {
+        const validAccounts = user.accounts.filter((acc) =>
+          personTypes.includes(acc.type),
+        );
 
-      // Filter accounts based on type
-      const validAccounts =
-        user?.accounts?.filter(
-          (account) =>
-            account.type &&
-            [AccountTypeEnum.ADMIN, AccountTypeEnum.INDIVIDUAL].includes(
-              account.type,
-            ),
-        ) || [];
-
-      for (const account of validAccounts) {
-        await this.accountRepository.update(account.id, {
-          ...data,
-          accountId: account.id,
-        });
+        for (const account of validAccounts) {
+          // This updates the Individual/Admin specific profile fields
+          await this.accountRepository.update(account.id, {
+            ...data,
+            accountId: account.id,
+          });
+        }
       }
     }
 
     const updatedEntity = await this.userRepository.update(id, updateData);
 
-    if (updatedEntity) {
+    // ProcessMaker Sync Logic
+    if (updatedEntity && updatedEntity.wfUserId) {
       const workflowData = {
         usr_username: updatedEntity.email,
         usr_firstname: updatedEntity.firstName,
@@ -652,6 +640,7 @@ export class UserService {
         usr_email: updatedEntity.email,
         usr_uid: updatedEntity.wfUserId,
       };
+
       try {
         await this.workFlowService.updateUser(
           workflowData.usr_uid,
@@ -659,9 +648,7 @@ export class UserService {
         );
       } catch (e) {
         this.loggerService.error(
-          `Failed to sync user ${updatedEntity.email} to workflow`,
-          e instanceof Error ? e.stack : String(e),
-          'UserService.update',
+          `Workflow sync failed for ${updatedEntity.email}`,
         );
       }
     }
@@ -776,7 +763,7 @@ export class UserService {
       const isExpired = latestPassword.expiryDate <= currentDate;
 
       return { isExpired };
-    } catch (error) {
+    } catch (error: any) {
       this.loggerService.log(error);
       throw error;
     }

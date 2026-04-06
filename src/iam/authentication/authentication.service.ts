@@ -179,7 +179,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: accountId,
       currentAccountType: accountType,
-      currentAccountAgencyPosition: accountAgencyPosition || '',
+      currentAccountAdminPosition: accountAgencyPosition || '',
       session: sessionId,
     });
 
@@ -310,7 +310,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: account.id,
       currentAccountType: account.type,
-      currentAccountAgencyPosition: account?.admin?.position || '',
+      currentAccountAdminPosition: account?.admin?.position || '',
       session: sessionId,
     });
 
@@ -378,7 +378,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: account.id,
       currentAccountType: account.type,
-      currentAccountAgencyPosition: account?.admin?.position || '',
+      currentAccountAdminPosition: account?.admin?.position || '',
     });
 
     this.auditLogService.emitAction({
@@ -405,7 +405,7 @@ export class AuthenticationService {
       email: user.email,
       currentAccountId: account.id,
       currentAccountType: account.type,
-      currentAccountAgencyPosition: account?.admin?.position || '',
+      currentAccountAdminPosition: account?.admin?.position || '',
     });
 
     this.auditLogService.emitAction({
@@ -443,8 +443,7 @@ export class AuthenticationService {
         email: payload.email,
         currentAccountId: payload.currentAccountId,
         currentAccountType: payload.currentAccountType,
-        currentAccountAgencyPosition:
-          payload.currentAccountAgencyPosition || '',
+        currentAccountAdminPosition: payload.currentAccountAdminPosition || '',
         session: payload.session,
       }),
       this.signToken<JwtPayload>(
@@ -454,8 +453,8 @@ export class AuthenticationService {
           email: payload.email,
           currentAccountId: payload.currentAccountId,
           currentAccountType: payload.currentAccountType,
-          currentAccountAgencyPosition:
-            payload.currentAccountAgencyPosition || '',
+          currentAccountAdminPosition:
+            payload.currentAccountAdminPosition || '',
         },
         this.jwtConfiguration.refresh_secret,
       ),

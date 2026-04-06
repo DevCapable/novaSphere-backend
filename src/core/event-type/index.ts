@@ -9,4 +9,8 @@ export enum eventType {
   AGENCY_WELCOME = 'agency_welcome',
   INSTITUTION_WELCOME = 'institution_welcome',
   AUTH_OTP = 'auth-otp',
+  SUG_WELCOME = 'sug_welcome',
+  ADMIN_WELCOME = 'admin_welcome',
+  VENDOR_WELCOME = 'vendor_welcome',
+  AUDITOR_WELCOME = 'auditor_welcome',
 }

@@ -5,51 +5,51 @@ import { User } from '../user/entities/user.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { Account } from '../account/entities/account.entity';
 import { Admin, Position } from '../account/entities/admin.entity';
-import { Company } from '../account/entities/company.entity';
+import { Institution } from '../account/entities/institution.entity'; // Changed from Company
+import { Sug } from '../account/entities/sug.entity'; // Added Sug
 import { Individual } from '../account/entities/individual.entity';
 import { BaseRecord } from '../base-record/entities/base-record.entity';
 import { generateRandomCode } from '../core/util';
-import { AccountTypeEnum } from '../account/enums';
 import { BcryptService } from '@app/user/hashing/bcrypt.service';
 import { Role } from '@app/role/entities/role.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { RolesEnum } from '@app/role/enums';
 import { LoggerService } from '@app/logger';
-import { StringHelper } from '@app/core/helpers';
+import {
+  AccountTypeEnum,
+  InstitutionTypeEnum,
+  OwnershipType,
+} from '@app/account/enums';
 
 const hashService = new BcryptService();
 
 @Injectable()
 export class UserSeeder implements SeederInterface {
   constructor(
-    @InjectRepository(User)
-    private readonly user: Repository<User>,
-    @InjectRepository(Account)
-    private readonly account: Repository<Account>,
-    @InjectRepository(Admin)
-    private readonly admin: Repository<Admin>,
-    @InjectRepository(Company)
-    private readonly company: Repository<Company>,
+    @InjectRepository(User) private readonly user: Repository<User>,
+    @InjectRepository(Account) private readonly account: Repository<Account>,
+    @InjectRepository(Admin) private readonly admin: Repository<Admin>,
+    @InjectRepository(Institution)
+    private readonly institution: Repository<Institution>,
+    @InjectRepository(Sug) private readonly sug: Repository<Sug>,
     @InjectRepository(Individual)
     private readonly individual: Repository<Individual>,
     @InjectRepository(BaseRecord)
     private readonly baseRecord: Repository<BaseRecord>,
-    @InjectRepository(Role)
-    private readonly role: Repository<Role>,
+    @InjectRepository(Role) private readonly role: Repository<Role>,
     private readonly entityManager: EntityManager,
     private readonly loggerService: LoggerService,
   ) {}
 
-  async createAccount(accountType, userData, accountData) {
+  async createAccount(
+    accountType: AccountTypeEnum,
+    userData: any,
+    accountData: any,
+  ) {
     const uniqueUser = await this.user.findOne({
-      where: {
-        email: userData.email,
-      },
+      where: { email: userData.email },
     });
-
-    if (uniqueUser) {
-      return;
-    }
+    if (uniqueUser) return;
 
     await this.entityManager.transaction(async (manager: EntityManager) => {
       const user = await manager.save(User, {
@@ -66,9 +66,8 @@ export class UserSeeder implements SeederInterface {
     });
   }
 
-  async create(data, entityManager?: EntityManager): Promise<any> {
+  async create(data: any, entityManager: EntityManager): Promise<any> {
     const nogicNumber = generateRandomCode(8);
-
     const userData = {
       ...data,
       nogicNumber,
@@ -77,82 +76,100 @@ export class UserSeeder implements SeederInterface {
     };
 
     const account = await entityManager.save(Account, userData);
-    const accountData = {
-      ...userData,
-      accountId: account.id,
-      uuid: uuidv4(),
-    };
+    const accountData = { ...userData, accountId: account.id, uuid: uuidv4() };
+
     switch (data.accountType) {
       case AccountTypeEnum.INDIVIDUAL:
-        const individual = await entityManager.save(Individual, accountData);
-        userData.individual = individual;
+        await entityManager.save(Individual, accountData);
         break;
-      case AccountTypeEnum.COMPANY:
-        const company = await entityManager.save(Company, accountData);
-        userData.company = company;
+      case AccountTypeEnum.INSTITUTION:
+        await entityManager.save(Institution, accountData);
+        break;
+      case AccountTypeEnum.SUG:
+        await entityManager.save(Sug, accountData);
         break;
       case AccountTypeEnum.ADMIN:
-        const admin = await entityManager.save(Admin, accountData);
-        userData.admin = admin;
+        await entityManager.save(Admin, accountData);
         break;
     }
     return account;
   }
 
-  async createIndividualAccount() {
-    const country = await this.baseRecord.findOne({
-      where: {
-        slug: 'nigeria',
-      },
+  async createInstitutionAccount() {
+    const role = await this.role.findOne({
+      where: { slug: RolesEnum.SUPER_ADMIN },
     });
-    const nationality = await this.baseRecord.findOne({
-      where: {
-        slug: 'nigerian',
-      },
-    });
-    const userData = {
-      firstName: 'JOHN',
-      lastName: 'SMITH',
-      email: 'individual@gmail.com',
-    };
-
     const accountData = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      countryId: country.id,
-      nationalityId: nationality.id,
-      dob: '1888-04-24',
-      gender: 'MALE',
-      phoneNumber: '0099e8e8e7',
+      name: 'University of Lagos',
+      shortName: 'UNILAG',
+      institutionType: InstitutionTypeEnum.UNIVERSITY,
+      ownershipType: OwnershipType.FEDERAL,
+      registrationNumber: 'NUC/UNIV/001',
+      establishmentDate: new Date('1962-10-03'),
+      email: 'info@unilag.edu.ng',
+      phoneNumber: '08012345678',
+      address: 'Akoka, Yaba, Lagos',
     };
 
-    return this.createAccount(
-      AccountTypeEnum.INDIVIDUAL,
+    const userData = {
+      firstName: accountData.shortName,
+      lastName: 'OFFICIAL',
+      email: accountData.email,
+      roles: [role],
+    };
+
+    return await this.createAccount(
+      AccountTypeEnum.INSTITUTION,
       userData,
       accountData,
     );
   }
 
-  async createAdminAccount() {
-    const role = await this.role.findOne({
-      where: {
-        slug: RolesEnum.SUPER_ADMIN,
-      },
+  async createSugAccount() {
+    // Find the institution to link the SUG to
+    const institution = await this.institution.findOne({
+      where: { shortName: 'UNILAG' },
     });
+    const role = await this.role.findOne({
+      where: { slug: RolesEnum.SUPER_ADMIN },
+    });
+
     const accountData = {
-      firstName: 'SUPER',
-      lastName: 'ADMIN',
-      email: 'super_admin@nogicjqs.gov.ng',
-      phoneNumber: '0099e8e8e7',
-      position: Position.PO,
-      // workflowGroups: [],
+      unionName: 'UNILAG Student Union Government',
+      acronym: 'ULSU',
+      institutionId: institution?.accountId,
+      presidentName: 'COMRADE ADEBAYO',
+      officialEmail: 'sug@unilag.edu.ng',
+      officialContactNumber: '08099998888',
+      officeAddress: 'SUG Secretariat, Unilag',
     };
 
     const userData = {
-      firstName: accountData.firstName,
-      lastName: accountData.lastName,
-      email: accountData.email,
+      firstName: accountData.acronym,
+      lastName: 'PRESIDENT',
+      email: accountData.officialEmail,
       roles: [role],
+    };
+
+    return await this.createAccount(AccountTypeEnum.SUG, userData, accountData);
+  }
+
+  async createAdminAccount() {
+    const role = await this.role.findOne({
+      where: { slug: RolesEnum.SUPER_ADMIN },
+    });
+    const userData = {
+      firstName: 'SYSTEM',
+      lastName: 'ADMIN',
+      email: 'admin@novasphere.edu.ng',
+      roles: [role],
+    };
+
+    const accountData = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      position: Position.PO,
     };
 
     return await this.createAccount(
@@ -162,88 +179,20 @@ export class UserSeeder implements SeederInterface {
     );
   }
 
-  async createCompanyAccount() {
-    const businessCategory = await this.baseRecord.findOne({
-      where: {
-        slug: StringHelper.slugify('Business Name [BUSN]'),
-      },
-    });
-    const role = await this.role.findOne({
-      where: {
-        slug: RolesEnum.SUPER_ADMIN,
-      },
-    });
-    const accountData = {
-      address: 'Surulere, Aguda',
-      businessCategoryId: businessCategory.id,
-      email: 'company@vas.com',
-      name: 'VASCON SOLUTIONS',
-      phoneNumber: '0838393837',
-      rcNumber: '3837373',
-    };
-
-    const userData = {
-      firstName: accountData.name,
-      lastName: accountData.rcNumber,
-      email: accountData.email,
-      roles: [role],
-    };
-
-    return await this.createAccount(
-      AccountTypeEnum.COMPANY,
-      userData,
-      accountData,
-    );
-  }
-
-  async createOperatorAccount() {
-    const category = await this.baseRecord.findOne({
-      where: {
-        slug: StringHelper.slugify('International Oil Companies'),
-      },
-    });
-    const businessCategory = await this.baseRecord.findOne({
-      where: {
-        slug: StringHelper.slugify('Private Limited Company (LTD)'),
-      },
-    });
-    const role = await this.role.findOne({
-      where: {
-        name: 'Super Admin',
-      },
-    });
-    const accountData = {
-      categoryId: category.id,
-      address: 'Surulere, Aguda',
-      businessCategoryId: businessCategory.id,
-      email: 'operator@vas.com',
-      name: 'VASCON OPERATOR SOLUTIONS',
-      phoneNumber: '0838393837',
-      rcNumber: '3837373',
-    };
-
-    const userData = {
-      firstName: accountData.name,
-      lastName: accountData.rcNumber,
-      email: accountData.email,
-      roles: [role],
-    };
-
-    return await this.createAccount(
-      AccountTypeEnum.OPERATOR,
-      userData,
-      accountData,
-    );
-  }
-
   async seed() {
     try {
+      this.loggerService.log('Seeding Administrative Data...');
       await this.createAdminAccount();
-      // await this.createIndividualAccount();
-      // await this.createCompanyAccount();
-      // await this.createOperatorAccount();
+
+      this.loggerService.log('Seeding Institution Data...');
+      await this.createInstitutionAccount();
+
+      this.loggerService.log('Seeding SUG Data...');
+      await this.createSugAccount();
+
+      this.loggerService.log('Seeding completed successfully.');
     } catch (e: any) {
-      this.loggerService.error(e);
+      this.loggerService.error('Seeding failed: ' + e.message);
     }
   }
 }

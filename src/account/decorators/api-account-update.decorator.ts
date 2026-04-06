@@ -6,8 +6,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import {
-  UpdateAgencyDto,
-  UpdateCompanyDto,
+  UpdateAdminDto,
+  UpdateInstitutionDto,
   UpdateIndividualDto,
   UpdateOperatorDto,
 } from '../dto';
@@ -19,8 +19,8 @@ export const ApiAccountUpdate = () =>
     }),
     ApiExtraModels(
       UpdateIndividualDto,
-      UpdateCompanyDto,
-      UpdateAgencyDto,
+      UpdateInstitutionDto,
+      UpdateAdminDto,
       UpdateOperatorDto,
     ),
     ApiBody({
@@ -30,10 +30,10 @@ export const ApiAccountUpdate = () =>
             $ref: getSchemaPath(UpdateIndividualDto),
           },
           {
-            $ref: getSchemaPath(UpdateCompanyDto),
+            $ref: getSchemaPath(UpdateInstitutionDto),
           },
           {
-            $ref: getSchemaPath(UpdateAgencyDto),
+            $ref: getSchemaPath(UpdateAdminDto),
           },
           {
             $ref: getSchemaPath(UpdateOperatorDto),

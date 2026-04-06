@@ -1,88 +1,107 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { CreateAccountDto } from '../create-account.dto';
+import { InstitutionTypeEnum, OwnershipType } from '@app/account/enums';
 
 export class CreateInstitutionDto extends PickType(CreateAccountDto, [
   'accountType',
 ]) {
   @ApiProperty({
-    type: String,
-    description: 'Institution name',
+    description: 'Full name of the tertiary institution',
+    example: 'University of Lagos',
   })
   @IsNotEmpty()
   @IsString()
-  institutionName: string;
+  name: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Institution type',
+    description: 'Abbreviated name or acronym',
+    example: 'UNILAG',
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  institutionType: string;
+  shortName?: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Registration number',
+    enum: InstitutionTypeEnum,
+    description: 'Category of institution (University, Polytechnic, etc.)',
+  })
+  @IsEnum(InstitutionTypeEnum)
+  @IsNotEmpty()
+  institutionType: InstitutionTypeEnum;
+
+  @ApiProperty({
+    enum: OwnershipType,
+    description: 'Ownership category (Federal, State, or Private)',
+  })
+  @IsEnum(OwnershipType)
+  @IsNotEmpty()
+  ownershipType: OwnershipType;
+
+  @ApiProperty({
+    description: 'Regulatory registration/accreditation number',
+    example: 'NUC/AS/V01',
   })
   @IsNotEmpty()
   @IsString()
   registrationNumber: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Date of establishment',
+    description: 'The date the institution was officially established',
+    example: '1962-10-03',
   })
   @IsNotEmpty()
-  @IsString()
-  dateOfEstablishment: string;
+  @IsDateString()
+  establishmentDate: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Institution address',
+    description: 'Official physical address',
   })
   @IsNotEmpty()
   @IsString()
   address: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Contact phone number',
+    description: 'Official primary contact phone number',
   })
   @IsNotEmpty()
   @IsString()
-  contactNumber: string;
+  phoneNumber: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Email address',
+    description: 'Official institution email address',
   })
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Website URL',
+    description: 'Official website URL',
     required: false,
   })
   @IsOptional()
-  @IsString()
+  @IsUrl()
   website?: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Name of representative',
+    description: 'Full name of the Vice Chancellor or Rector',
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  representativeName: string;
+  vcOrRectorName?: string;
 
   @ApiProperty({
-    type: String,
-    description: 'Designation of representative',
+    description: 'Full name of the Registrar',
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  representativeDesignation: string;
+  registrarName?: string;
 }

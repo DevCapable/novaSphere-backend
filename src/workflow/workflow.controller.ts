@@ -78,8 +78,8 @@ export class WorkflowController {
 
   @Accounts(
     AccountTypeEnum.ADMIN,
-    AccountTypeEnum.OPERATOR,
-    AccountTypeEnum.COMPANY,
+    AccountTypeEnum.SUG,
+    AccountTypeEnum.INSTITUTION,
   )
   @Get('/tasks')
   async tasks(
@@ -107,8 +107,7 @@ export class WorkflowController {
 
   @Accounts(
     AccountTypeEnum.ADMIN,
-    AccountTypeEnum.OPERATOR,
-    AccountTypeEnum.COMPANY,
+    AccountTypeEnum.SUG,
     AccountTypeEnum.INDIVIDUAL,
     AccountTypeEnum.INSTITUTION,
   )

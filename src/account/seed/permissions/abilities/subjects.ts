@@ -1,8 +1,7 @@
 export const subject = {
   individual: 'individual',
-  company: 'company',
-  operator: 'operator',
-  ncdmb_staff: 'ncdmb-staff',
+  sug: 'sug',
+  admin: 'admin',
   institution: 'institution',
 };
 

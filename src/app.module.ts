@@ -34,6 +34,7 @@ import { AppSocketGateway } from './socket/socket.gateway';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MailModule } from './mail/mail.module';
 import { StatModule } from './stat/stat.module';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { StatModule } from './stat/stat.module';
     StatModule,
     GuidelineModule,
     AuditLogModule,
+    DepartmentModule,
   ],
   providers: [
     {

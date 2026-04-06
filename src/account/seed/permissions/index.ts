@@ -1,13 +1,11 @@
-import { ncdmbPermissionDbSeed } from './agency.permission';
-import { companyPermissionDbSeed } from './company.permission';
+import { adminPermissionDbSeed } from './admin.permission';
+import { sugPermissionDbSeed } from './sug.permission';
 import { individualPermissionDbSeed } from './individual.permission';
-import { operatorPermissionDbSeed } from './operator.permission';
 import { institutionPermissionDbSeed } from '@app/account/seed/permissions/institutiton.permission';
 
 export const accountPermissionsDbSeed = [
   ...individualPermissionDbSeed,
-  ...companyPermissionDbSeed,
-  ...operatorPermissionDbSeed,
-  ...ncdmbPermissionDbSeed,
+  ...sugPermissionDbSeed,
+  ...adminPermissionDbSeed,
   ...institutionPermissionDbSeed,
 ];

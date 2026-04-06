@@ -1,4 +1,4 @@
-import { Institution } from '@app/account/entities/institution.entity';
+import { Sug } from '@app/account/entities/sug.entity';
 import { AccountSubscriber } from '@app/account/entities/subscribers/account.subscriber';
 import { BaseRecordModule } from '@app/base-record/base-record.module';
 import { DocumentModule } from '@app/document/document.module';
@@ -17,7 +17,7 @@ import { Account } from './entities/account.entity';
 import { Admin } from './entities/admin.entity';
 import { Auditor } from './entities/auditor.entity';
 import { CommunityVendor } from './entities/community-vendor.entity';
-import { Company } from './entities/company.entity';
+import { Institution } from './entities/institution.entity';
 import { Individual } from './entities/individual.entity';
 import { AccountEvent } from './events/account.event';
 import { AccountListener } from './events/listeners/account.listener';
@@ -27,11 +27,12 @@ import { AccountListener } from './events/listeners/account.listener';
     TypeOrmModule.forFeature([
       Account,
       Admin,
-      Company,
+      Institution,
       Individual,
       CommunityVendor,
       Institution,
       Auditor,
+      Sug,
     ]),
     forwardRef(() => UserModule),
     RoleModule,

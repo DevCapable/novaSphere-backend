@@ -6,8 +6,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import {
-  CreateAgencyDto,
-  CreateCompanyDto,
+  CreateAdminDto,
+  CreateInstitutionDto,
   CreateIndividualDto,
   CreateOperatorDto,
 } from '../dto';
@@ -23,8 +23,8 @@ export const ApiAccountCreate = () =>
     }),
     ApiExtraModels(
       CreateIndividualDto,
-      CreateCompanyDto,
-      CreateAgencyDto,
+      CreateInstitutionDto,
+      CreateAdminDto,
       CreateOperatorDto,
     ),
     ApiBody({
@@ -34,10 +34,10 @@ export const ApiAccountCreate = () =>
             $ref: getSchemaPath(CreateIndividualDto),
           },
           {
-            $ref: getSchemaPath(CreateCompanyDto),
+            $ref: getSchemaPath(CreateInstitutionDto),
           },
           {
-            $ref: getSchemaPath(CreateAgencyDto),
+            $ref: getSchemaPath(CreateAdminDto),
           },
           {
             $ref: getSchemaPath(CreateOperatorDto),

@@ -5,7 +5,7 @@ import { User } from '@app/user/entities/user.entity';
 export type JwtPayload = {
   currentAccountId: number;
   currentAccountType: string;
-  currentAccountAgencyPosition: string;
+  currentAccountAdminPosition?: string;
   email: string;
   session?: string;
 };

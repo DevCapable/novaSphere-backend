@@ -21,7 +21,7 @@ import {
 
 @ApiTags('audit-logs')
 @Controller('audit-logs')
-@Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.COMPANY)
+@Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
 export class AuditLogController {
   constructor(private readonly auditLogService: AuditLogService) {}
 

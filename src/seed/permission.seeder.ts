@@ -30,7 +30,7 @@ export class PermissionSeeder implements SeederInterface {
         action: 'create',
         title: 'access ncdf',
         subject: 'special-permission',
-        permissionGroupId: 27,
+        permissionGroupId: 5,
       },
       ...accountPermissionsDbSeed,
       ...baseRecordPermissionDbSeed,

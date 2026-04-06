@@ -75,29 +75,27 @@ export class AccountService {
     const types = filterOptions.type?.split(',');
     const isPublic = filterOptions.isPublic;
     delete filterOptions.isPublic;
+
+    // Validate account types against the new AccountTypeEnum
     if (
       !types ||
       !types.length ||
-      !types.every((type) => Object.keys(AccountTypeEnum).includes(type))
+      !types.every((type) => Object.values(AccountTypeEnum).includes(type))
     ) {
       throw new CustomValidationException({
-        type: 'Account type is required',
+        type: 'A valid Account type is required',
       });
     }
 
-    const cacheKey = `accounts:${JSON.stringify({
-      filterOptions,
-      paginationOptions,
-    })}`;
+    const cacheKey = `accounts:${JSON.stringify({ filterOptions, paginationOptions })}`;
 
     try {
       const cachedResult = await this.redis.get(cacheKey);
       if (cachedResult) {
-        this.logger.log(`Fetched accounts ${cacheKey} from redis`);
         return JSON.parse(cachedResult);
       }
     } catch (e) {
-      this.logger.error('Error while fetching from redis');
+      this.logger.error('Redis cache fetch failed');
     }
 
     const [data, totalCount] = await this.accountRepository.findAll(
@@ -106,58 +104,70 @@ export class AccountService {
     );
 
     const accountIds = data.map((item) => item.id);
-
     const allDocuments = await this.documentService.findFilesByFileableIds(
       accountIds,
       FILEABLE_TYPE,
     );
 
     const documentsByAccountId = allDocuments.reduce((acc, doc) => {
-      if (!acc.has(doc.fileableId)) {
-        acc.set(doc.fileableId, doc);
-      }
+      if (!acc.has(doc.fileableId)) acc.set(doc.fileableId, doc);
       return acc;
     }, new Map());
 
-    let transformedData = data.map((item: any) => {
-      let transformedItem = item;
+    const transformedData = data.map((item: any) => {
+      let transformedItem = { ...item };
 
-      if (item.type === AccountTypeEnum.COMPANY) {
+      // 1. INSTITUTION Transformation
+      if (item.type === AccountTypeEnum.INSTITUTION) {
         transformedItem = {
           ...item,
-          id: item.id,
-          rcNumber: item?.isOffshore ? 'N/A' : item?.rcNumber,
-          name: item.company.name.toUpperCase(),
+          name: item.institution?.name?.toUpperCase(),
+          shortName: item.institution?.shortName,
+          institutionType: item.institution?.institutionType,
+          ownershipType: item.institution?.ownershipType,
+          regNumber: item.institution?.registrationNumber,
         };
       }
 
+      // 2. SUG (Student Union) Transformation
+      if (item.type === AccountTypeEnum.SUG) {
+        transformedItem = {
+          ...item,
+          name: item.sug?.unionName?.toUpperCase(),
+          acronym: item.sug?.acronym,
+          president: item.sug?.presidentName,
+          institution: item.sug?.institution?.name,
+        };
+      }
+
+      // 3. INDIVIDUAL (Student/Staff) Transformation
       if (item.type === AccountTypeEnum.INDIVIDUAL) {
         transformedItem = {
-          id: item.id,
-          firstName: item.individual.firstName.toUpperCase(),
-          lastName: item.individual.lastName.toUpperCase(),
-          dob: item.individual.dob,
-          gender: item.individual.gender,
+          ...item,
+          firstName: item.individual?.firstName?.toUpperCase(),
+          lastName: item.individual?.lastName?.toUpperCase(),
           state: item?.individual?.state?.name,
-          users: item.users,
-          individual: item.individual,
           competencyId: item.individual?.competencyId,
         };
       }
 
+      // 4. ADMIN Transformation
+      if (item.type === AccountTypeEnum.ADMIN) {
+        transformedItem = {
+          ...item,
+          firstName: item.admin?.firstName?.toUpperCase(),
+          lastName: item.admin?.lastName?.toUpperCase(),
+          position: item.admin?.position,
+          department: item.admin?.department?.name,
+        };
+      }
+
+      // 5. COMMUNITY VENDOR Transformation
       if (item.type === AccountTypeEnum.COMMUNITY_VENDOR) {
         transformedItem = {
           ...item,
-          communityVendor: {
-            id: item?.id,
-            name: item.communityVendor?.name?.toUpperCase() || '',
-            email: item.communityVendor?.email,
-            address: item.communityVendor?.address,
-            phoneNumber: item.communityVendor?.phoneNumber,
-            stateId: item.communityVendor?.stateId,
-            nogicNumber: item?.nogicNumber,
-            state: item?.communityVendor?.state?.name,
-          },
+          name: item.communityVendor?.name?.toUpperCase() || '',
+          state: item?.communityVendor?.state?.name,
         };
       }
 
@@ -167,18 +177,13 @@ export class AccountService {
       };
     });
 
-    if (isPublic) {
-      transformedData = data.map((account) =>
-        this.sanitizePublicAccount(account),
-      );
-    }
+    const result = [transformedData, totalCount];
 
-    const result = { data: transformedData, totalCount };
-
+    // Cache the result before returning
     try {
-      await this.redis.setex(cacheKey, 300, JSON.stringify(result));
+      await this.redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
     } catch (e) {
-      this.logger.error('Error while setting in redis');
+      this.logger.error('Redis cache set failed');
     }
 
     return result;
@@ -186,60 +191,68 @@ export class AccountService {
 
   async create(data: any) {
     try {
-      let userData;
+      let userData: any;
       const accountData = {
         ...data,
-        email: data.email?.toLowerCase()?.trim(),
+        email: (data.email || data.officialEmail)?.toLowerCase()?.trim(),
         workflowGroups: data.workflowGroups || [],
       };
+
       const defaultRole = await this.roleRepository.findOne({
-        slug: RolesEnum.SUPER_ADMIN,
+        where: { slug: RolesEnum.SUPER_ADMIN },
       });
-      if (
-        [
-          AccountTypeEnum.COMPANY,
-          AccountTypeEnum.OPERATOR,
-          AccountTypeEnum.COMMUNITY_VENDOR,
-        ].includes(accountData.accountType)
-      ) {
-        const defaultRole = await this.roleRepository.findOne({
-          slug: RolesEnum.SUPER_ADMIN,
-        });
 
-        accountData['name'] = data.name.toUpperCase();
+      // 1. Logic for Organizational Accounts (Institutions, SUG, Vendors, Operators)
+      const orgTypes = [
+        AccountTypeEnum.INSTITUTION,
+        AccountTypeEnum.SUG,
+        AccountTypeEnum.COMMUNITY_VENDOR,
+      ];
+
+      if (orgTypes.includes(accountData.accountType)) {
+        // Determine the display name and "Last Name" identifier based on account type
+        let displayName = '';
+        let identifier = DEFAULT_LAST_NAME;
+
+        if (accountData.accountType === AccountTypeEnum.SUG) {
+          displayName = data.unionName?.toUpperCase();
+          identifier = data.acronym || 'SUG';
+        } else if (accountData.accountType === AccountTypeEnum.INSTITUTION) {
+          displayName =
+            data.name?.toUpperCase() || data.institutionName?.toUpperCase();
+          identifier = data.registrationNumber || data.shortName || 'INST';
+        } else {
+          displayName = data.name?.toUpperCase();
+          identifier = data.rcNumber || DEFAULT_LAST_NAME;
+        }
+
+        accountData['name'] = displayName;
         accountData['isOffshore'] = data?.isOffshore === 'YES';
+
         userData = {
           ...accountData,
-          firstName: accountData.name,
-          lastName: accountData?.rcNumber || DEFAULT_LAST_NAME,
+          firstName: displayName,
+          lastName: identifier,
         };
 
         if (defaultRole) {
           userData.roles = [defaultRole.id];
         }
-      } else if (
-        [AccountTypeEnum.INSTITUTION].includes(accountData.accountType)
-      ) {
-        accountData['name'] = data.institutionName.toUpperCase();
+      }
+      // 2. Logic for Individual Accounts (Students/Staff/Alumni)
+      else {
+        accountData['firstName'] = data.firstName?.toUpperCase();
+        accountData['lastName'] = data.lastName?.toUpperCase();
+
         userData = {
           ...accountData,
-          firstName: accountData.name,
-          lastName: accountData.registrationNumber,
+          isPasswordReset: false,
         };
-        if (defaultRole) {
-          userData.roles = [defaultRole.id];
-        }
-      } else {
-        accountData['firstName'] = data.firstName.toUpperCase();
-        accountData['lastName'] = data.lastName.toUpperCase();
-        userData = { ...accountData, isPasswordReset: false };
 
-        if (accountData.stateId === 0) {
-          delete accountData.stateId;
-        }
-        if (accountData.lgaId === 0) {
-          delete accountData.lgaId;
-        }
+        // Clean up optional location IDs
+        if (Number(accountData.stateId) === 0) delete accountData.stateId;
+        if (Number(accountData.lgaId) === 0) delete accountData.lgaId;
+
         if (defaultRole) {
           userData.roles = [defaultRole.id];
         }
@@ -248,17 +261,22 @@ export class AccountService {
       let user;
       let account;
       const reservedSlugs = new Set<string>();
-      const slugName = data.name
-        ? data.name
-        : `${data.firstName}${data.lastName}`;
+
+      // Generate slug from the most relevant name field
+      const slugName =
+        accountData.name || `${accountData.firstName}${accountData.lastName}`;
       const slug = await this.accountRepository.generateUniqueSlug(
         slugName,
         reservedSlugs,
       );
 
+      // 3. Database Transaction for Atomicity
       await this.entityManager.transaction(
         async (entityManager: EntityManager) => {
+          // Create the User first
           user = await this.userService.create(userData, entityManager);
+
+          // Create the Account and link the User
           account = await this.accountRepository.create(
             {
               ...accountData,
@@ -270,22 +288,24 @@ export class AccountService {
         },
       );
 
-      if (user.id && account.id) {
+      // 4. Post-Creation Notification
+      if (user?.id && account?.id) {
         const verificationData = await this.userService.generateToken(user.id);
         await this.sendNotification(accountData.accountType, {
           token: verificationData.token,
           user,
         });
       }
-    } catch (error) {
+
+      return account;
+    } catch (error: any) {
       throw new CustomBadRequestException(
-        'Error encountered please check ' + error,
+        'Error encountered during account creation: ' + error.message,
       );
     } finally {
       await this.clearCache();
     }
   }
-
   async createInstitution(data: CreateInstitutionDto) {
     try {
       await this.create({
@@ -314,98 +334,108 @@ export class AccountService {
     return this.accountRepository.findCompaniesByIdentifiers(identifiers);
   }
 
-  async createExternal(
-    data: any,
-    externalOrigin: ExternalLinkOriginEnum | null,
-  ) {
-    try {
-      const accountData = {
-        ...data,
-        email: data.email.toLowerCase(),
-        workflowGroups: [],
-        origin: externalOrigin,
-        active: false,
-      };
+  // async createExternal(
+  //   data: any,
+  //   externalOrigin: ExternalLinkOriginEnum | null,
+  // ) {
+  //   try {
+  //     const accountData = {
+  //       ...data,
+  //       email: data.email.toLowerCase(),
+  //       workflowGroups: [],
+  //       origin: externalOrigin,
+  //       active: false,
+  //     };
 
-      if (
-        [
-          AccountTypeEnum.COMPANY,
-          AccountTypeEnum.OPERATOR,
-          AccountTypeEnum.COMMUNITY_VENDOR,
-        ].includes(accountData.accountType)
-      ) {
-        accountData['name'] = data.name.toUpperCase();
-      } else {
-        accountData['firstName'] = data.firstName.toUpperCase();
-        accountData['lastName'] = data.lastName.toUpperCase();
+  //     if (
+  //       [
+  //         AccountTypeEnum.INSTITUTION,
+  //         AccountTypeEnum.COMMUNITY_VENDOR,
+  //       ].includes(accountData.accountType)
+  //     ) {
+  //       accountData['name'] = data.name.toUpperCase();
+  //     } else {
+  //       accountData['firstName'] = data.firstName.toUpperCase();
+  //       accountData['lastName'] = data.lastName.toUpperCase();
 
-        if (accountData.stateId === 0) {
-          delete accountData.stateId;
-        }
-        if (accountData.lgaId === 0) {
-          delete accountData.lgaId;
-        }
-      }
+  //       if (accountData.stateId === 0) {
+  //         delete accountData.stateId;
+  //       }
+  //       if (accountData.lgaId === 0) {
+  //         delete accountData.lgaId;
+  //       }
+  //     }
 
-      const isEmail = await this.accountRepository.checkEmailExist(
-        accountData.email,
-      );
-      if (isEmail) {
-        const sanitizedAccountName = data.name
-          .toLowerCase()
-          .replace(/[^\w\s]/gi, '')
-          .replace(/\s+/g, '_');
-        const newEmail = `${sanitizedAccountName}@jqs.com`;
-        accountData.email = newEmail;
-      }
+  //     const isEmail = await this.accountRepository.checkEmailExist(
+  //       accountData.email,
+  //     );
+  //     if (isEmail) {
+  //       const sanitizedAccountName = data.name
+  //         .toLowerCase()
+  //         .replace(/[^\w\s]/gi, '')
+  //         .replace(/\s+/g, '_');
+  //       const newEmail = `${sanitizedAccountName}@jqs.com`;
+  //       accountData.email = newEmail;
+  //     }
 
-      const reservedSlugs = new Set<string>();
-      const slugName = data.name
-        ? data.name
-        : `${data.firstName}${data.lastName}`;
-      const slug = await this.accountRepository.generateUniqueSlug(
-        slugName,
-        reservedSlugs,
-      );
+  //     const reservedSlugs = new Set<string>();
+  //     const slugName = data.name
+  //       ? data.name
+  //       : `${data.firstName}${data.lastName}`;
+  //     const slug = await this.accountRepository.generateUniqueSlug(
+  //       slugName,
+  //       reservedSlugs,
+  //     );
 
-      const respo = await this.entityManager.transaction(
-        async (entityManager: EntityManager) => {
-          return await this.accountRepository.createExternal(
-            {
-              ...accountData,
-              slug,
-              users: [],
-            },
-            entityManager,
-          );
-        },
-      );
-      return respo;
-    } catch (error) {
-      console.error(`error-check`, error);
-      throw error;
-    }
-  }
+  //     const respo = await this.entityManager.transaction(
+  //       async (entityManager: EntityManager) => {
+  //         return await this.accountRepository.createExternal(
+  //           {
+  //             ...accountData,
+  //             slug,
+  //             users: [],
+  //           },
+  //           entityManager,
+  //         );
+  //       },
+  //     );
+  //     return respo;
+  //   } catch (error) {
+  //     console.error(`error-check`, error);
+  //     throw error;
+  //   }
+  // }
 
-  sendNotification(accountType, payload: any) {
-    switch (accountType.toUpperCase()) {
+  sendNotification(accountType: string, payload: any) {
+    // Normalize the account type to match the Enum keys
+    const type = accountType?.toUpperCase();
+
+    switch (type) {
       case AccountTypeEnum.INSTITUTION:
         this.accountEvent.institutionWelcome(payload);
         break;
-      case AccountTypeEnum.COMPANY:
-        this.accountEvent.companyWelcome(payload);
+
+      case AccountTypeEnum.SUG:
+        this.accountEvent.sugWelcome(payload);
         break;
-      case AccountTypeEnum.OPERATOR:
-        this.accountEvent.operatorWelcome(payload);
-        break;
+
       case AccountTypeEnum.ADMIN:
-        this.accountEvent.agencyWelcome(payload);
+        this.accountEvent.adminWelcome(payload);
         break;
+
+      case AccountTypeEnum.COMMUNITY_VENDOR:
+        this.accountEvent.vendorWelcome(payload);
+        break;
+
+      case AccountTypeEnum.INDIVIDUAL:
       default:
+        // Standard flow for Students, Alumni, and Staff individuals
         this.accountEvent.individualWelcome(payload);
+
         setTimeout(() => {
           this.accountEvent.individualActivation(payload);
         }, 2000);
+        break;
     }
   }
 
@@ -473,23 +503,30 @@ export class AccountService {
     return await this.statService.findStat(id);
   }
 
-  async update(id: number, data) {
+  async update(id: number, data: any) {
     const { profilePicture, isOffshore, active, ...profileData } = data;
 
-    const account = await this.accountRepository.update(id, {
+    // 1. Update the base Account table
+    const account = await this.accountRepository.findOne({
+      where: { id },
+      relations: ['users'],
+    });
+
+    await this.accountRepository.update(id, {
       ...profileData,
-      accountId: id,
       isOffshore: isOffshore === 'YES',
     });
 
+    // 2. Prepare user data for the associated Super Admin
     let userData = pick(data, [
       'firstName',
       'lastName',
       'email',
-      'phone',
+      'phoneNumber',
       'roles',
     ]) as any;
 
+    // Handle Profile Picture updates
     if (profilePicture) {
       await this.documentService.deleteDocumentFileByFileable(
         id,
@@ -502,40 +539,37 @@ export class AccountService {
       );
     }
 
-    if ([AccountTypeEnum.INSTITUTION].includes(account?.type)) {
-      const userData = pick(data, ['email']);
+    // 3. Logic for Organizational Accounts (Institution, SUG, Vendor, Operator)
+    const orgTypes = [
+      AccountTypeEnum.INSTITUTION,
+      AccountTypeEnum.SUG,
+      AccountTypeEnum.COMMUNITY_VENDOR,
+    ];
 
-      const userId = account?.users[0]?.id;
+    if (orgTypes.includes(account?.type)) {
+      // Map the Org Name to the User's Display name
+      const displayName = data.name || data.unionName || data.institutionName;
 
-      if (userId) await this.userService.update(userId, userData);
-    }
-
-    if (
-      [
-        AccountTypeEnum.COMPANY,
-        AccountTypeEnum.OPERATOR,
-        AccountTypeEnum.COMMUNITY_VENDOR,
-      ].includes(account?.type)
-    ) {
       userData = {
-        firstName: data.name?.toUpperCase(),
-        lastName: data?.rcNumber || DEFAULT_LAST_NAME,
-        email: data.email?.toLowerCase()?.trim(),
+        firstName: displayName?.toUpperCase(),
+        lastName: data?.registrationNumber || data?.acronym || 'OFFICIAL',
+        email:
+          data.email?.toLowerCase()?.trim() ||
+          data.officialEmail?.toLowerCase()?.trim(),
       } as any;
     }
 
-    // super admin user  for the company
     let superUser = account?.users?.[0];
 
-    if (superUser) await this.userService.update(superUser.id, userData);
+    // 4. Update existing super user if found
+    if (superUser) {
+      await this.userService.update(superUser.id, userData);
+    }
 
-    if (
-      !superUser &&
-      active &&
-      account?.type !== AccountTypeEnum.COMMUNITY_VENDOR
-    ) {
+    // 5. Create Super User if account is being activated for the first time
+    if (!superUser && active) {
       const defaultRole = await this.roleRepository.findOne({
-        slug: RolesEnum.SUPER_ADMIN,
+        where: { slug: RolesEnum.SUPER_ADMIN },
       });
 
       if (defaultRole) userData.roles = [defaultRole.id];
@@ -543,17 +577,27 @@ export class AccountService {
       await this.entityManager.transaction(
         async (entityManager: EntityManager) => {
           let nogicNumber = account?.nogicNumber;
+          const year = new Date().getFullYear().toString().slice(-2);
 
-          if (!nogicNumber.includes('201/')) {
-            const totalCompanies = await entityManager.count(Account, {
-              where: {
-                type: AccountTypeEnum.COMPANY,
-                nogicNumber: Like('201/%'),
-              },
-            });
-
-            const year = new Date().getFullYear().toString().slice(-2);
-            nogicNumber = `201/${year}/${totalCompanies + 1}`;
+          // Handle NOGIC Number generation based on type
+          if (!nogicNumber || nogicNumber.length < 5) {
+            if (account.type === AccountTypeEnum.SUG) {
+              const count = await entityManager.count(Account, {
+                where: {
+                  type: AccountTypeEnum.SUG,
+                  nogicNumber: Like('301/%'),
+                },
+              });
+              nogicNumber = `301/${year}/${count + 1}`;
+            } else if (account.type === AccountTypeEnum.INSTITUTION) {
+              const count = await entityManager.count(Account, {
+                where: {
+                  type: AccountTypeEnum.INSTITUTION,
+                  nogicNumber: Like('101/%'),
+                },
+              });
+              nogicNumber = `101/${year}/${count + 1}`;
+            }
           }
 
           superUser = await this.userService.create(
@@ -571,81 +615,78 @@ export class AccountService {
       );
 
       if (superUser) {
-        await this.sendNotification(account?.type, {
-          user: superUser,
-        });
+        await this.sendNotification(account?.type, { user: superUser });
       }
     }
 
     await this.clearCache();
-
     return account;
   }
 
-  async matchOrCreateCompany(
-    vendors: {
-      email: string;
-      name: string;
-      nogicUniqueId?: string;
-      phoneNumber: string;
-      address: string;
-    }[],
-    externalOrigin: ExternalLinkOriginEnum | null,
-  ) {
-    const companies =
-      await this.accountRepository.findCompaniesByIdentifiers(vendors);
+  // async matchOrCreateCompany(
+  //   vendors: {
+  //     email: string;
+  //     name: string;
+  //     nogicUniqueId?: string;
+  //     phoneNumber: string;
+  //     address: string;
+  //   }[],
+  //   externalOrigin: ExternalLinkOriginEnum | null,
+  // ) {
+  //   const companies =
+  //     await this.accountRepository.findCompaniesByIdentifiers(vendors);
 
-    const { matches: matchedCompanies, matchedKeys } =
-      this.findBestMatchAccounts(vendors, companies);
+  //   const { matches: matchedCompanies, matchedKeys } =
+  //     this.findBestMatchAccounts(vendors, companies);
 
-    const results: any[] = [...matchedCompanies];
+  //   const results: any[] = [...matchedCompanies];
 
-    for (const vendor of vendors) {
-      const vendorName = vendor.name.toLowerCase();
-      const matchKey = `${vendorName}`;
+  //   for (const vendor of vendors) {
+  //     const vendorName = vendor.name.toLowerCase();
+  //     const matchKey = `${vendorName}`;
 
-      if (matchedKeys.has(matchKey)) continue;
+  //     if (matchedKeys.has(matchKey)) continue;
 
-      console.log(`vendor to create`, vendor);
-      try {
-        const vendorEmail = vendor.email.toLowerCase();
+  //     console.log(`vendor to create`, vendor);
+  //     try {
+  //       const vendorEmail = vendor.email.toLowerCase();
 
-        const alreadyMatched = matchedCompanies.some(({ account }) => {
-          const source = account.company ?? account.operator;
-          const sourceName = source?.name?.toLowerCase() ?? '';
-          const sourceEmail = source?.email?.toLowerCase() ?? '';
+  //       const alreadyMatched = matchedCompanies.some(({ account }) => {
+  //         const source = account.company ?? account.operator;
+  //         const sourceName = source?.name?.toLowerCase() ?? '';
+  //         const sourceEmail = source?.email?.toLowerCase() ?? '';
 
-          const nameScore = stringSimilarity(vendorName, sourceName);
+  //         const nameScore = stringSimilarity(vendorName, sourceName);
 
-          if (nameScore >= SIMILARITY_THRESHOLD) return true;
+  //         if (nameScore >= SIMILARITY_THRESHOLD) return true;
 
-          return vendorEmail === sourceEmail;
-        });
+  //         return vendorEmail === sourceEmail;
+  //       });
 
-        if (!alreadyMatched) {
-          const created = await this.createExternal(
-            {
-              email: vendor.email,
-              name: vendor.name,
-              phoneNumber: vendor.phoneNumber,
-              address: vendor.address,
-              accountType: AccountTypeEnum.COMPANY,
-            },
-            externalOrigin,
-          );
-          results.push({ vendorName, account: created });
-        }
-      } catch (error) {
-        console.log(
-          `Failed to create account for`,
-          vendorName,
-          'with error',
-          error,
-        );
-      }
-    }
-    return results;
-  }
+  //       if (!alreadyMatched) {
+  //         const created = await this.createExternal(
+  //           {
+  //             email: vendor.email,
+  //             name: vendor.name,
+  //             phoneNumber: vendor.phoneNumber,
+  //             address: vendor.address,
+  //             accountType: AccountTypeEnum.COMPANY,
+  //           },
+  //           externalOrigin,
+  //         );
+  //         results.push({ vendorName, account: created });
+  //       }
+  //     } catch (error) {
+  //       console.log(
+  //         `Failed to create account for`,
+  //         vendorName,
+  //         'with error',
+  //         error,
+  //       );
+  //     }
+  //   }
+  //   return results;
+  // }
 
   async updateIndividualWithoutRoleAndPermission(
     userId,
@@ -668,61 +709,79 @@ export class AccountService {
     return;
   }
 
-  private _getAccountName(account: Account) {
+  private _getAccountName(account: Account): string {
     let name = '';
+
     switch (account.type) {
-      case AccountTypeEnum.INDIVIDUAL:
-        name = `${account.individual?.firstName} ${account.individual?.lastName}`;
-        break;
-      case AccountTypeEnum.COMPANY:
-        name = account.company?.name;
-        break;
-      case AccountTypeEnum.ADMIN:
-        name = `${account.admin?.firstName} ${account.admin?.lastName}`;
-        break;
-      case AccountTypeEnum.COMMUNITY_VENDOR:
-        name = account.communityVendor.name;
-      // eslint-disable-next-line no-fallthrough
       case AccountTypeEnum.INSTITUTION:
-        name = `${account.institution?.institutionName} ${account.institution?.registrationNumber}`;
+        // Primary display: "University of Lagos (UNILAG)"
+        const inst = account.institution;
+        name = inst?.shortName
+          ? `${inst.name} (${inst.shortName})`
+          : inst?.name || '';
         break;
+
+      case AccountTypeEnum.SUG:
+        // Primary display: "UNILAG SUG"
+        name = account.sug?.unionName || '';
+        break;
+
+      case AccountTypeEnum.INDIVIDUAL:
+        name = `${account.individual?.firstName ?? ''} ${account.individual?.lastName ?? ''}`;
+        break;
+
+      case AccountTypeEnum.ADMIN:
+        name = `${account.admin?.firstName ?? ''} ${account.admin?.lastName ?? ''}`;
+        break;
+
+      case AccountTypeEnum.COMMUNITY_VENDOR:
+        name = account.communityVendor?.name || '';
+        break;
+
+      case AccountTypeEnum.AUDITOR:
+        name = `${account.auditor?.firstName ?? ''} ${account.auditor?.lastName ?? ''}`;
+        break;
+
+      default:
+        name = account.nogicNumber || 'Unknown Account';
     }
+
     return name.trim();
   }
 
-  private findBestMatchAccounts(
-    identifiers: { email: string; name: string }[],
-    companies: Account[],
-  ) {
-    const matches = [];
-    const matchedKeys = new Set<string>();
+  // private findBestMatchAccounts(
+  //   identifiers: { email: string; name: string }[],
+  //   companies: Account[],
+  // ) {
+  //   const matches = [];
+  //   const matchedKeys = new Set<string>();
 
-    for (const identifier of identifiers) {
-      const vendorName = identifier.name.toLowerCase();
-      const matchKey = `${vendorName}`;
+  //   for (const identifier of identifiers) {
+  //     const vendorName = identifier.name.toLowerCase();
+  //     const matchKey = `${vendorName}`;
 
-      let bestNameMatch = null;
-      let highestScore = 0;
+  //     let bestNameMatch = null;
+  //     let highestScore = 0;
 
-      for (const company of companies) {
-        const source = company.company;
-        const sourceName = source?.name?.toLowerCase() ?? '';
-        const nameScore = stringSimilarity(vendorName, sourceName);
+  //     for (const company of companies) {
+  //       const source = company.company;
+  //       const sourceName = source?.name?.toLowerCase() ?? '';
+  //       const nameScore = stringSimilarity(vendorName, sourceName);
 
-        if (nameScore > highestScore) {
-          bestNameMatch = company;
-          highestScore = nameScore;
-        }
-      }
+  //       if (nameScore > highestScore) {
+  //         bestNameMatch = company;
+  //         highestScore = nameScore;
+  //       }
+  //     }
 
-      if (highestScore >= SIMILARITY_THRESHOLD && bestNameMatch) {
-        matches.push({ vendorName, account: bestNameMatch });
-        matchedKeys.add(matchKey);
-      }
-    }
+  //     if (highestScore >= SIMILARITY_THRESHOLD && bestNameMatch) {
+  //       matches.push({ vendorName, account: bestNameMatch });
+  //       matchedKeys.add(matchKey);
+  //     }
+  //   }
 
-    return { matches, matchedKeys };
-  }
+  //   return { matches, matchedKeys };
+  // }
 
   private sanitizePublicAccount(account: any): any {
     const base = {
@@ -734,14 +793,31 @@ export class AccountService {
     };
 
     switch (account.type) {
-      case 'COMPANY':
+      case 'INSTITUTION':
         return {
           ...base,
-          company: account.company
+          institution: account.institution
             ? {
-                name: account.company.name,
-                nseStatus: account.company.nseStatus,
-                businessCategoryId: account.company.businessCategoryId,
+                name: account.institution.name,
+                shortName: account.institution.shortName,
+                institutionType: account.institution.institutionType,
+                ownershipType: account.institution.ownershipType,
+                isAccredited: account.institution.isAccredited,
+              }
+            : null,
+        };
+
+      case 'SUG':
+        return {
+          ...base,
+          sug: account.sug
+            ? {
+                unionName: account.sug.unionName,
+                acronym: account.sug.acronym,
+                presidentName: account.sug.presidentName,
+                isActive: account.sug.isActive,
+                // Link to the parent institution name if the relation is loaded
+                institutionName: account.sug.institution?.name ?? null,
               }
             : null,
         };
@@ -754,19 +830,7 @@ export class AccountService {
                 firstName: account.individual.firstName,
                 lastName: account.individual.lastName,
                 gender: account.individual.gender,
-              }
-            : null,
-        };
-
-      case 'OPERATOR':
-        return {
-          ...base,
-          operator: account.operator
-            ? {
-                name: account.operator.name,
-                categoryId: account.operator.categoryId,
-                businessCategoryId: account.operator.businessCategoryId,
-                nseStatus: account.operator.nseStatus,
+                competencyId: account.individual.competencyId,
               }
             : null,
         };
@@ -779,6 +843,30 @@ export class AccountService {
                 firstName: account.admin.firstName,
                 lastName: account.admin.lastName,
                 position: account.admin.position,
+                // Return department name for academic context
+                departmentName: account.admin.department?.name ?? null,
+              }
+            : null,
+        };
+
+      case 'COMMUNITY_VENDOR':
+        return {
+          ...base,
+          communityVendor: account.communityVendor
+            ? {
+                name: account.communityVendor.name,
+                nogicNumber: account.communityVendor.nogicNumber,
+              }
+            : null,
+        };
+
+      case 'OPERATOR':
+        return {
+          ...base,
+          operator: account.operator
+            ? {
+                name: account.operator.name,
+                rcNumber: account.operator.rcNumber,
               }
             : null,
         };

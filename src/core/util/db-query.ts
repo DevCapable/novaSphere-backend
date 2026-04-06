@@ -49,11 +49,33 @@ export const newbuildSearchQuery = (options: any, searchableCols: string[]) => {
             }
           }
 
-          if (['company', 'operator', 'individual'].includes(col)) {
+          if (
+            [
+              'institution',
+              'sug',
+              'individual',
+              'communityVendor',
+              'operator',
+            ].includes(col)
+          ) {
             data = {
-              account: {
-                name: Like(`%${searchValue}%`),
-              },
+              account: [
+                // Search by Institution details
+                { institution: { name: Like(`%${searchValue}%`) } },
+                { institution: { shortName: Like(`%${searchValue}%`) } },
+
+                // Search by SUG details
+                { sug: { unionName: Like(`%${searchValue}%`) } },
+                { sug: { acronym: Like(`%${searchValue}%`) } },
+
+                // Search by Individual details
+                { individual: { firstName: Like(`%${searchValue}%`) } },
+                { individual: { lastName: Like(`%${searchValue}%`) } },
+
+                // Search by Community Vendor/Operator
+                { communityVendor: { name: Like(`%${searchValue}%`) } },
+                { operator: { name: Like(`%${searchValue}%`) } },
+              ],
             };
           }
 
@@ -136,12 +158,46 @@ export const buildSearchQuery = (
             }
           }
 
-          if (['company', 'operator', 'individual'].includes(searchableCol)) {
+          if (
+            ['institution', 'sug', 'individual', 'communityVendor'].includes(
+              searchableCol,
+            )
+          ) {
+            let searchCondition: any = {};
+
+            switch (searchableCol) {
+              case 'institution':
+                // Search by full name or acronym (e.g., "UNILAG")
+                searchCondition = [
+                  { name: Like(`%${searchValue}%`) },
+                  { shortName: Like(`%${searchValue}%`) },
+                ];
+                break;
+
+              case 'sug':
+                // Search by union name or acronym (e.g., "SUG")
+                searchCondition = [
+                  { unionName: Like(`%${searchValue}%`) },
+                  { acronym: Like(`%${searchValue}%`) },
+                ];
+                break;
+
+              case 'individual':
+                // Search by first or last name
+                searchCondition = [
+                  { firstName: Like(`%${searchValue}%`) },
+                  { lastName: Like(`%${searchValue}%`) },
+                ];
+                break;
+
+              default:
+                // Fallback for Community Vendor or Operator
+                searchCondition = { name: Like(`%${searchValue}%`) };
+            }
+
             return {
               account: {
-                [searchableCol]: {
-                  name: Like(`%${searchValue}%`),
-                },
+                [searchableCol]: searchCondition,
               },
             };
           }
@@ -212,8 +268,24 @@ export const buildSearchQueryBuilder = (
           return `UPPER(${joinedColumn}) LIKE UPPER(:${searchableCol})`;
         }
 
-        if (['company', 'operator', 'individual'].includes(searchableCol)) {
-          return `UPPER(${alias}.account.${searchableCol}.name) LIKE UPPER(:${searchableCol})`;
+        if (
+          ['institution', 'sug', 'individual', 'communityVendor'].includes(
+            searchableCol,
+          )
+        ) {
+          let field = 'name'; // Default for Institution, Community Vendor, Operator
+
+          switch (searchableCol) {
+            case 'sug':
+              field = 'unionName';
+              break;
+            case 'individual':
+              return `(UPPER(${alias}.account.individual.firstName) LIKE UPPER(:${searchableCol}) OR UPPER(${alias}.account.individual.lastName) LIKE UPPER(:${searchableCol}))`;
+            default:
+              field = 'name';
+          }
+
+          return `UPPER(${alias}.account.${searchableCol}.${field}) LIKE UPPER(:${searchableCol})`;
         }
 
         return null;

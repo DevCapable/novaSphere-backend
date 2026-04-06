@@ -1,6 +1,6 @@
 import { BaseRepository } from '@app/core/base/base.repository';
 
-import { Institution } from '@app/account/entities/institution.entity';
+import { Sug } from '@app/account/entities/sug.entity';
 import {
   CustomInternalServerException,
   CustomNotFoundException,
@@ -25,7 +25,7 @@ import { Account } from './entities/account.entity';
 import { Admin } from './entities/admin.entity';
 import { Auditor } from './entities/auditor.entity';
 import { CommunityVendor } from './entities/community-vendor.entity';
-import { Company } from './entities/company.entity';
+import { Institution } from './entities/institution.entity';
 import { Individual } from './entities/individual.entity';
 import { AccountTypeEnum } from './enums';
 import { generateCompetency } from './utils';
@@ -47,8 +47,8 @@ export class AccountRepository extends BaseRepository<Account> {
     private readonly institutionRepository: Repository<Institution>,
     @InjectRepository(Individual)
     private readonly individualRepository: Repository<Individual>,
-    @InjectRepository(Company)
-    private readonly companyRepository: Repository<Company>,
+    @InjectRepository(Sug)
+    private readonly sugRepository: Repository<Sug>,
     @InjectRepository(Admin)
     private readonly adminRepository: Repository<Admin>,
     @InjectRepository(CommunityVendor)
@@ -80,6 +80,8 @@ export class AccountRepository extends BaseRepository<Account> {
           ...userData,
           uuid: uuidv4(),
         });
+
+        // Save to Institution Table using tertiary fields
         await entityManager.save(
           Institution,
           buildFillable(
@@ -87,11 +89,45 @@ export class AccountRepository extends BaseRepository<Account> {
               ...userData,
               accountId: account.id,
               uuid: uuidv4(),
+              // Ensure we pass the new field names from the DTO/Entity
+              name: userData.name,
+              registrationNumber: userData.registrationNumber,
             },
             accountTypeMapping.INSTITUTION.fillable,
           ),
         );
         break;
+
+      case AccountTypeEnum.SUG:
+        // Optional: Custom NOGIC number prefix for Student Unions (e.g., 301)
+        const totalSugs = await entityManager.count(Account, {
+          where: { type: AccountTypeEnum.SUG, nogicNumber: Like('301/%') },
+        });
+
+        account = await entityManager.save(Account, {
+          ...userData,
+          uuid: uuidv4(),
+          nogicNumber: `301/${year}/${totalSugs + 1}`,
+        });
+
+        // FIX: Now correctly saves to the Sug entity instead of Institution
+        await entityManager.save(
+          Sug,
+          buildFillable(
+            {
+              ...userData,
+              accountId: account.id,
+              uuid: uuidv4(),
+              // These map to the fields in our updated Sug Entity
+              unionName: userData.unionName,
+              presidentName: userData.presidentName,
+              institutionId: userData.institutionId,
+            },
+            accountTypeMapping.SUG.fillable,
+          ),
+        );
+        break;
+
       case AccountTypeEnum.INDIVIDUAL:
         account = await entityManager.save(Account, {
           ...userData,
@@ -112,32 +148,7 @@ export class AccountRepository extends BaseRepository<Account> {
           ),
         );
         break;
-      case AccountTypeEnum.COMPANY:
-        const totalCompanies = await entityManager.count(Account, {
-          where: { type: AccountTypeEnum.COMPANY, nogicNumber: Like('201/%') },
-        });
 
-        account = await entityManager.save(Account, {
-          ...userData,
-          uuid: uuidv4(),
-          nogicNumber: `201/${year}/${totalCompanies + 1}`,
-        });
-
-        await entityManager.save(
-          Company,
-          buildFillable(
-            {
-              ...userData,
-              accountId: account.id,
-              uuid: uuidv4(),
-              rcNumber: userData.isOffshore
-                ? generateRandomCode(5)
-                : userData.rcNumber,
-            },
-            accountTypeMapping.COMPANY.fillable,
-          ),
-        );
-        break;
       case AccountTypeEnum.ADMIN:
         account = await entityManager.save(Account, {
           ...userData,
@@ -158,6 +169,7 @@ export class AccountRepository extends BaseRepository<Account> {
           ),
         );
         break;
+
       case AccountTypeEnum.COMMUNITY_VENDOR:
         const totalCommunityVendors = await entityManager.count(Account, {
           where: {
@@ -241,38 +253,6 @@ export class AccountRepository extends BaseRepository<Account> {
     }
   }
 
-  async createExternal(data, entityManager?: EntityManager): Promise<any> {
-    const nogicNumber = await generateCryptoString(12);
-    data.rcNumber = `AUTO-${nogicNumber}`;
-
-    const userData = {
-      ...data,
-      nogicNumber,
-      type: data.accountType,
-    };
-
-    const account = await entityManager.save(Account, {
-      ...userData,
-      uuid: uuidv4(),
-    });
-    switch (data.accountType) {
-      case AccountTypeEnum.COMPANY:
-        await entityManager.save(
-          Company,
-          buildFillable(
-            {
-              ...userData,
-              accountId: account.id,
-              uuid: uuidv4(),
-            },
-            accountTypeMapping.COMPANY.fillable,
-          ),
-        );
-        break;
-    }
-    return account;
-  }
-
   async findAll(filterOptions, paginationOptions): Promise<any> {
     const { sortKey, sortDir, type, ids, active, ...searchOptions } =
       filterOptions;
@@ -348,7 +328,7 @@ export class AccountRepository extends BaseRepository<Account> {
               lga: true,
               country: true,
             },
-            company: true,
+            sug: true,
             admin: true,
             communityVendor: {
               state: true,
@@ -370,28 +350,19 @@ export class AccountRepository extends BaseRepository<Account> {
     identifiers: { email: string; name: string; nogicUniqueId?: string }[],
   ) {
     const names = identifiers.map((i) => i.name.toLowerCase());
-    const nogicUniqueIds = identifiers
-      .map((i) => i.nogicUniqueId?.toLowerCase())
-      .filter((id) => !!id);
 
     const qb = this.accountRepository
       .createQueryBuilder('account')
-      .leftJoinAndSelect('account.company', 'company')
-      .leftJoinAndSelect('account.operator', 'operator');
+      .leftJoinAndSelect('account.institution', 'institution');
 
     const conditions: string[] = [];
 
     const likeNameConditions = names.map(
-      (_, i) =>
-        `(LOWER(company.name) LIKE :companyName${i} OR LOWER(operator.name) LIKE :operatorName${i})`,
+      (_, i) => `(LOWER(institution.name) LIKE :institutionName${i})`,
     );
 
     if (likeNameConditions.length > 0) {
       conditions.push(likeNameConditions.join(' OR '));
-    }
-
-    if (nogicUniqueIds.length > 0) {
-      conditions.push(`LOWER(account.nogicNumber) IN (:...nogicUniqueIds)`);
     }
 
     if (conditions.length > 0) {
@@ -401,14 +372,12 @@ export class AccountRepository extends BaseRepository<Account> {
     const nameLikeParams = names.reduce(
       (acc, name, i) => {
         const truncatedName = name.split(' ').slice(0, 2).join(' ');
-        acc[`companyName${i}`] = `%${truncatedName}%`;
-        acc[`operatorName${i}`] = `%${truncatedName}%`;
+        acc[`institutionName${i}`] = `%${truncatedName}%`;
         return acc;
       },
       {} as Record<string, string>,
     );
-    qb.setParameters({ ...nameLikeParams, nogicUniqueIds });
-
+    qb.setParameters(nameLikeParams);
     return qb.getMany();
   }
 
@@ -417,15 +386,10 @@ export class AccountRepository extends BaseRepository<Account> {
 
     const qb = this.accountRepository
       .createQueryBuilder('account')
-      .leftJoin('account.company', 'company')
-      .leftJoin('account.operator', 'operator')
-      .where(
-        'LOWER(company.email) = :companyEmail OR LOWER(operator.email) = :operatorEmail',
-        {
-          companyEmail: lowerEmail,
-          operatorEmail: lowerEmail,
-        },
-      );
+      .leftJoin('account.institution', 'institution')
+      .where('LOWER(institution.email) = :institutionEmail', {
+        institutionEmail: lowerEmail,
+      });
 
     const exists = await qb.getOne();
     return !!exists;
@@ -533,8 +497,8 @@ export class AccountRepository extends BaseRepository<Account> {
           where: { accountId: account.id },
         });
         break;
-      case AccountTypeEnum.COMPANY:
-        repository = this.companyRepository;
+      case AccountTypeEnum.SUG:
+        repository = this.sugRepository;
         fillableFields = accountTypeMapping[account.type].fillable;
         existingEntity = await repository.findOne({
           where: { accountId: account.id },
@@ -630,8 +594,8 @@ export class AccountRepository extends BaseRepository<Account> {
         return this.institutionRepository;
       case AccountTypeEnum.INDIVIDUAL:
         return this.individualRepository;
-      case AccountTypeEnum.COMPANY:
-        return this.companyRepository;
+      case AccountTypeEnum.SUG:
+        return this.sugRepository;
       case AccountTypeEnum.ADMIN:
         return this.adminRepository;
       case AccountTypeEnum.COMMUNITY_VENDOR:

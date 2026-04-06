@@ -11,7 +11,7 @@ import { LoggerService } from '@app/logger';
 /**
  * @TODO activate permission guards
  */
-@Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.COMPANY)
+@Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
 @Controller('permissions')
 export class PermissionController {
   constructor(
@@ -39,7 +39,7 @@ export class PermissionController {
   //   @checkAbilites({ action: 'read', subject: 'Permission' })
   //   @UseGuards(AbilitiesGuard)
   @Get('/group')
-  async findAllGroup(
+  findAllGroup(
     @FiltersQuery() filterOptions,
     @PaginationQuery() paginationOptions,
     @CurrentUser() user,

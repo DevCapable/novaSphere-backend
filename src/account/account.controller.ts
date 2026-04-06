@@ -86,34 +86,34 @@ export class AccountController {
     });
   }
 
-  @Public()
-  @ApiAccountCreate()
-  @Post('/external')
-  createExternal(
-    @Body(AccountValidationPipe(HandlerAction.CREATE))
-    createAccountDto: CreateAccountDto,
-    @Req() req: Request,
-  ) {
-    const originApp = req.get('X-Origin-Application');
-    const externalOrigin = ExternalLinkOriginEnum[originApp];
-    return this.accountService.createExternal(
-      {
-        ...createAccountDto,
-      },
-      externalOrigin,
-    );
-  }
+  // @Public()
+  // @ApiAccountCreate()
+  // @Post('/external')
+  // createExternal(
+  //   @Body(AccountValidationPipe(HandlerAction.CREATE))
+  //   createAccountDto: CreateAccountDto,
+  //   @Req() req: Request,
+  // ) {
+  //   const originApp = req.get('X-Origin-Application');
+  //   const externalOrigin = ExternalLinkOriginEnum[originApp];
+  //   return this.accountService.createExternal(
+  //     {
+  //       ...createAccountDto,
+  //     },
+  //     externalOrigin,
+  //   );
+  // }
 
-  @ApiEndpoint('find or create an account')
-  @Post('/find-create-account')
-  async matchOrCreateCompany(@Body() payload: IVendor[], @Req() req) {
-    const originApp = req.get('X-Origin-Application');
-    const externalOrigin = ExternalLinkOriginEnum[originApp];
-    return await this.accountService.matchOrCreateCompany(
-      payload,
-      externalOrigin,
-    );
-  }
+  // @ApiEndpoint('find or create an account')
+  // @Post('/find-create-account')
+  // async matchOrCreateCompany(@Body() payload: IVendor[], @Req() req) {
+  //   const originApp = req.get('X-Origin-Application');
+  //   const externalOrigin = ExternalLinkOriginEnum[originApp];
+  //   return await this.accountService.matchOrCreateCompany(
+  //     payload,
+  //     externalOrigin,
+  //   );
+  // }
 
   @Accounts(AccountTypeEnum.ADMIN)
   @Get(':id')

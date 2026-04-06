@@ -41,7 +41,7 @@ import { MultiUnarchiveStaffDto } from './dto/multi-restore-staff';
 export class StaffController {
   constructor(private readonly staffService: StaffService) {}
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: 200,
@@ -52,7 +52,7 @@ export class StaffController {
     return this.staffService.createStaff(createStaffDto);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @ApiFilterPagination('Get all staffs')
   @UseInterceptors(PaginationInterceptor)
   @Get()
@@ -63,8 +63,8 @@ export class StaffController {
     return await this.staffService.findAll(filterOptions, paginationOptions);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
-  @ApiFilterPagination('Get all user that dont belong to any company')
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
+  @ApiFilterPagination('Get all user that dont belong to any institution')
   @UseInterceptors(PaginationInterceptor)
   @Get('/individuals')
   async findAllIndividuals(
@@ -77,7 +77,7 @@ export class StaffController {
     );
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Get a Staff Record')
   @ApiResponse({
@@ -89,7 +89,7 @@ export class StaffController {
     return await this.staffService.findOne(id);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Unarchive All Staff Record',
@@ -103,7 +103,7 @@ export class StaffController {
     return this.staffService.unarchiveAll(staffData);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Unarchive Staff Record',
@@ -117,7 +117,7 @@ export class StaffController {
     return this.staffService.unarchive(id);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Update Staff Record',
@@ -131,7 +131,7 @@ export class StaffController {
     return this.staffService.update(id, data);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Multi Delete Staff Record')
   @ApiResponse({
@@ -143,7 +143,7 @@ export class StaffController {
     return this.staffService.multiDelete(staffData);
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.OPERATOR)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Delete Staff Record')
   @ApiResponse({

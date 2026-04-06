@@ -1,6 +1,6 @@
 import { Account } from '@app/account/entities/account.entity';
 import { Admin } from '@app/account/entities/admin.entity';
-import { Company } from '@app/account/entities/company.entity';
+import { Institution } from '@app/account/entities/institution.entity';
 import { Individual } from '@app/account/entities/individual.entity';
 import { BaseRecordRepository } from '@app/base-record/base-record.repository';
 import { BaseRecord } from '@app/base-record/entities/base-record.entity';
@@ -24,6 +24,7 @@ import { PermissionSeeder } from './permission.seeder';
 import { RoleSeeder } from './role.seeder';
 import { SeedService } from './seed.service';
 import { UserSeeder } from './user-seeder';
+import { Sug } from '@app/account/entities/sug.entity';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { UserSeeder } from './user-seeder';
       BaseRecord,
       Account,
       Individual,
-      Company,
+      Institution,
+      Sug,
       Admin,
       User,
       Document,

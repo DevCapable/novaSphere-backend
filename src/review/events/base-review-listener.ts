@@ -83,7 +83,7 @@ export class BaseReviewListener {
     template = 'review/company-returned',
     payload,
     teamEmail = DEFAULT_TEAM_EMAIL,
-    supportEmail = 'support@nogicjqs.com',
+    supportEmail = 'support@capetech.com',
     supportPhoneNumber = '01-6310962',
   }: SendReturnedEmailToCompanyParams) {
     const email = payload.nextReviewer?.email;

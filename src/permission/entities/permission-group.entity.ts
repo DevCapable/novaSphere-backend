@@ -3,16 +3,15 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { Permission } from './permission.entity';
 
 enum ACCOUNTTYPE {
-  AGENCY = 'AGENCY',
-  COMPANY = 'COMPANY',
-  OPERATOR = 'OPERATOR',
+  ADMIN = 'ADMIN',
+  INSTITUTION = 'INSTITUTION',
+  SUG = 'SUG',
+  INDIVIDUAL = 'INDIVIDUAL',
+  COMMUNITY_VENDOR = 'COMMUNITY_VENDOR',
 }
 
 export enum GROUPTYPE {
-  MARINE_VESSEL = 'MARINE_VESSEL',
   USER_MANAGEMENT = 'USER_MANAGEMENT',
-  NCTRC = 'NCTRC',
-  ADVERT = 'ADVERT',
 }
 
 @Entity()

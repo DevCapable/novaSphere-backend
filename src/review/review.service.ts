@@ -24,7 +24,7 @@ export class ReviewService {
         reviewableId,
         reviewableType,
       },
-      ['reviewer.accounts.agency'],
+      ['reviewer.accounts.admin'],
     );
 
     if (user.account.type !== AccountTypeEnum.ADMIN) {
@@ -33,8 +33,7 @@ export class ReviewService {
         return (
           review.status === AppStatus.PENDING ||
           ([AppStatus.RETURNED].includes(review.status) &&
-            (['PO', 'SP', 'MGR', 'GM'].includes(position) ||
-              reviewableType === ReviewType.ADVERT))
+            ['PO', 'SP', 'MGR', 'GM'].includes(position))
         );
       });
 
@@ -42,9 +41,9 @@ export class ReviewService {
         const reviewer =
           review.status === AppStatus.RETURNED
             ? {
-                firstName: 'NCDMB Reviewing Officer',
+                firstName: 'Admin Reviewing Officer',
                 lastName: '',
-                email: 'support@nogicjqs.org',
+                email: 'support@capetech.org',
               }
             : review.reviewer;
         return {
@@ -139,26 +138,12 @@ export class ReviewService {
 
     let status: AppStatus = command in AppStatus ? command : AppStatus.APPROVED;
 
-    if (
-      command === AppStatus.REJECTED &&
-      [
-        ReviewType.NCRC,
-        ReviewType.MARINE_VESSEL_APPLICATION,
-        ReviewType.NCEC,
-      ].includes(type) &&
-      position === 'PO' &&
-      !isNcrcSp
-    ) {
+    if (command === AppStatus.REJECTED && position === 'PO' && !isNcrcSp) {
       command = 'SP';
       status = AppStatus.REJECTED;
     }
 
-    if (
-      command === AppStatus.REJECTED &&
-      [ReviewType.NCEC].includes(type) &&
-      position === 'PO' &&
-      isNcrcSp
-    ) {
+    if (command === AppStatus.REJECTED && position === 'PO' && isNcrcSp) {
       command = 'SP';
       status = AppStatus.REJECTED;
     }

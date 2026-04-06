@@ -75,7 +75,7 @@ export class GuidelineController {
     );
   }
 
-  @Accounts(AccountTypeEnum.COMPANY, AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.INSTITUTION, AccountTypeEnum.ADMIN)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Get One Guideline Record')
   @ApiResponse({
