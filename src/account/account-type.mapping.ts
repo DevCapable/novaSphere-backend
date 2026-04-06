@@ -6,17 +6,15 @@ import {
   CreateAdminDto,
   CreateAuditorDto,
   CreateIndividualDto,
-  CreateOperatorDto,
   UpdateAdminDto,
   UpdateAuditorDto,
   UpdateIndividualDto,
-  UpdateOperatorDto,
 } from './dto';
 import { CreateCommunityVendorDto } from './dto/community-vendor/create-community-vendor.dto';
-import { CreateDepartmentDto } from '@app/department/dto/create-department.dto';
-import { UpdateDepartmentDto } from '@app/department/dto/update-department.dto';
 import { UpdateCommunityVendorDto } from './dto/community-vendor/update-community-vendor.dto';
 import { AccountTypeEnum } from './enums';
+import { CreateDepartmentDto } from '@app/department/dto/create-department.dto';
+import { UpdateDepartmentDto } from '@app/department/dto/update-department.dto';
 
 type Options = {
   fillable: string[];

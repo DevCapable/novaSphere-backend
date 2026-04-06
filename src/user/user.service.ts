@@ -464,7 +464,6 @@ export class UserService {
         'accounts.sug', // Student Union
         'accounts.admin', // Staff/Admin
         'accounts.communityVendor',
-        'accounts.operator',
         'roles',
         'permissions',
       ],
@@ -525,7 +524,6 @@ export class UserService {
       'accounts.sug', // Added for NovaSphere
       'accounts.admin', // Swapped from agency
       'accounts.communityVendor',
-      'accounts.operator',
       'roles',
       'roles.permissions',
       'permissions',

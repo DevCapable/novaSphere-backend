@@ -91,11 +91,7 @@ export class AuthenticationService {
     return await this.userRepository.login(email, password);
   }
 
-  async resendOtp(
-    data: any,
-    ip: string,
-    origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
-  ) {
+  async resendOtp(data: any, ip: string) {
     const user = await this.userRepository.findFirstBy({
       email: data.email,
     });
@@ -111,11 +107,12 @@ export class AuthenticationService {
     }
 
     await this.redis.set(cooldownKey, '1', 'EX', 60);
-    const indexKey = `${LOGIN_OTP}:${user.id}:${origin}`;
+    const indexKey = `${LOGIN_OTP}:${user.id}`;
 
     await this.redis.del(indexKey);
+    console.log('Login request received from origin:', data);
 
-    return this.sendOtp(user, origin);
+    return this.sendOtp(user);
   }
 
   async verifyLoginOtp(
@@ -138,40 +135,42 @@ export class AuthenticationService {
     await this.checkOtp(data.otp, user, origin);
     await this.redis.del(challengeKey);
 
-    return this.login(user, { email }, ip, origin);
+    return this.login(user, { email }, ip);
   }
 
   async initiateLogin(
     user: any,
     data: any,
     ip: string,
-    origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
+    // origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
   ) {
-    const ctx = await this.prepareLoginContext(user, data, origin);
+    const ctx = await this.prepareLoginContext(user, data);
+
     const isOtpOnLogin = await this.userService.getSettingValue(
       user.id,
       UserSettingKeyEnum.LOGIN_OTP_ENABLED,
     );
     if (isOtpOnLogin) {
-      await this.sendOtp(user, origin);
+      await this.sendOtp(user);
       return {
         data: null,
         code: 'OTP_SENT_TO_EMAIL',
       };
     }
+    console.log('Login request received from origin:', data);
 
-    return this.login(user, data, ip, origin, ctx);
+    return this.login(user, data, ip, ctx);
   }
 
   async login(
     user: any,
     data,
     ip,
-    externalOrigin?: ExternalLinkOriginEnum,
+    // externalOrigin?: ExternalLinkOriginEnum,
     context?: LoginContext,
   ) {
-    const ctx =
-      context ?? (await this.prepareLoginContext(user, data, externalOrigin));
+    const ctx = context ?? (await this.prepareLoginContext(user, data));
+
     const { accountId, accountType, accountAgencyPosition, sessionKey } = ctx;
     const sessionId = await generateCryptoString(16);
 
@@ -199,7 +198,7 @@ export class AuthenticationService {
       userId: user.id,
       action: AuditAction.LOGIN,
       ipAddress: ip,
-      origin: externalOrigin,
+      // origin: externalOrigin,
     });
 
     /*
@@ -482,10 +481,10 @@ export class AuthenticationService {
     );
   }
 
-  private async sendOtp(user: any, origin?: ExternalLinkOriginEnum) {
+  private async sendOtp(user: any) {
     const otp = generateRandomNumber(6);
     const hashedOtp = await this.hashingService.hash(String(otp));
-    const otpKey = `${LOGIN_OTP}:${user.id}:${origin}`;
+    const otpKey = `${LOGIN_OTP}:${user.id}`;
 
     await this.redis.set(otpKey, hashedOtp, 'EX', 300);
 
@@ -534,16 +533,16 @@ export class AuthenticationService {
   private async prepareLoginContext(
     user: any,
     data: any,
-    origin: ExternalLinkOriginEnum,
+    // origin: ExternalLinkOriginEnum,
   ): Promise<LoginContext> {
     let accountId = data.accountId || null;
-    const sessionKey = origin ? `${user.email}:${origin}` : user.email;
+    const sessionKey = user.email;
 
     if (!user?.accounts?.length) {
       throw new CustomNotFoundException('No Accounts created for user');
     }
 
-    if (!validateAccountId(accountId, user.accounts)) {
+    if (validateAccountId(accountId, user.accounts)) {
       throw new CustomBadRequestException('Invalid Account Specified');
     }
 

@@ -77,11 +77,11 @@ export class AuthenticationController {
     @Body() loginDto: LoginDto,
     @Req() req: Request,
   ) {
-    const originApp = req.get('X-Origin-Application');
-    const externalOrigin = ExternalLinkOriginEnum[originApp];
-
+    // const originApp = req.get('X-Origin-Application');
+    // const externalOrigin = ExternalLinkOriginEnum[originApp];
     const ip = BaseService.getClientIp(req);
-    return this.authService.initiateLogin(user, loginDto, ip, externalOrigin);
+
+    return this.authService.initiateLogin(user, loginDto, ip);
   }
 
   @Public()
@@ -107,7 +107,7 @@ export class AuthenticationController {
     const externalOrigin = ExternalLinkOriginEnum[originApp];
 
     const ip = BaseService.getClientIp(req);
-    return this.authService.resendOtp(otpDto, ip, externalOrigin);
+    return this.authService.resendOtp(otpDto, ip);
   }
 
   @Public()

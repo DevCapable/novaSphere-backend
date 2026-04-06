@@ -50,13 +50,9 @@ export const newbuildSearchQuery = (options: any, searchableCols: string[]) => {
           }
 
           if (
-            [
-              'institution',
-              'sug',
-              'individual',
-              'communityVendor',
-              'operator',
-            ].includes(col)
+            ['institution', 'sug', 'individual', 'communityVendor'].includes(
+              col,
+            )
           ) {
             data = {
               account: [
@@ -72,9 +68,7 @@ export const newbuildSearchQuery = (options: any, searchableCols: string[]) => {
                 { individual: { firstName: Like(`%${searchValue}%`) } },
                 { individual: { lastName: Like(`%${searchValue}%`) } },
 
-                // Search by Community Vendor/Operator
                 { communityVendor: { name: Like(`%${searchValue}%`) } },
-                { operator: { name: Like(`%${searchValue}%`) } },
               ],
             };
           }
@@ -191,7 +185,6 @@ export const buildSearchQuery = (
                 break;
 
               default:
-                // Fallback for Community Vendor or Operator
                 searchCondition = { name: Like(`%${searchValue}%`) };
             }
 
@@ -273,7 +266,7 @@ export const buildSearchQueryBuilder = (
             searchableCol,
           )
         ) {
-          let field = 'name'; // Default for Institution, Community Vendor, Operator
+          let field = 'name';
 
           switch (searchableCol) {
             case 'sug':
