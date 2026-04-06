@@ -13,6 +13,8 @@ import {
   UpdateOperatorDto,
 } from './dto';
 import { CreateCommunityVendorDto } from './dto/community-vendor/create-community-vendor.dto';
+import { CreateDepartmentDto } from '@app/department/dto/create-department.dto';
+import { UpdateDepartmentDto } from '@app/department/dto/update-department.dto';
 import { UpdateCommunityVendorDto } from './dto/community-vendor/update-community-vendor.dto';
 import { AccountTypeEnum } from './enums';
 
@@ -79,6 +81,28 @@ export const accountTypeMapping: AccountTypeMapping = {
     ],
     createDto: CreateSugDto,
     updateDto: UpdateSugDto,
+  },
+  [AccountTypeEnum.DEPARTMENT]: {
+    fillable: [
+      'name',
+      'code',
+      'description',
+      'type',
+      'headOfDepartmentName',
+      'isActive',
+      'institutionId',
+      'parentId',
+      'accountId',
+    ],
+    relations: ['institution', 'parent', 'admins'], // Relations from the Department entity
+    searchable: [
+      'department.name',
+      'department.code',
+      'department.type',
+      'institution.name', // Assuming institution is joined for search
+    ],
+    createDto: CreateDepartmentDto,
+    updateDto: UpdateDepartmentDto,
   },
   [AccountTypeEnum.INDIVIDUAL]: {
     fillable: [

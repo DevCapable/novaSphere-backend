@@ -30,7 +30,7 @@ export class PermissionSeeder implements SeederInterface {
         action: 'create',
         title: 'access ncdf',
         subject: 'special-permission',
-        permissionGroupId: 5,
+        permissionGroupId: 8,
       },
       ...accountPermissionsDbSeed,
       ...baseRecordPermissionDbSeed,
@@ -42,7 +42,7 @@ export class PermissionSeeder implements SeederInterface {
       ...auditLogPermissionsDbSeed,
       ...workflowPermissionsDbSeed,
     ];
-    await Bluebird.map(permissions, async (data) => {
+    await Bluebird.mapSeries(permissions, async (data) => {
       try {
         const existing = await this.permissionRepository.findOne({
           where: {

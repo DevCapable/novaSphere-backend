@@ -1,9 +1,9 @@
-import { agencyPermissionsDbSeed } from './agency-permissions.db.seed';
-import { companyPermissionsDbSeed } from './company-permissions.db.seed';
-import { operatorPermissionsDbSeed } from './operator-permissions.db.seed';
+import { adminPermissionsDbSeed } from './admin-permissions.db.seed';
+import { institutionPermissionsDbSeed } from './institution-permissions.db.seed';
+import { departmentPermissionsDbSeed } from './department-permissions.db.seed';
 
 export const userPermissionsDbSeed = [
-  ...agencyPermissionsDbSeed,
-  // ...companyPermissionsDbSeed,
-  ...operatorPermissionsDbSeed,
+  ...adminPermissionsDbSeed,
+  ...institutionPermissionsDbSeed,
+  ...departmentPermissionsDbSeed,
 ];

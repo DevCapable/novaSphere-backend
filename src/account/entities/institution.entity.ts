@@ -13,7 +13,7 @@ import { Department } from '@app/department/entities/department.entity';
 import { InstitutionTypeEnum, OwnershipType } from '../enums';
 
 @Entity({
-  name: TableName.INSTITUTIONS, // Ensure this maps to 'ACCOUNT_INSTITUTION' in your enum
+  name: 'ACCOUNT_INSTITUTIONS',
 })
 export class Institution {
   @PrimaryColumn()
