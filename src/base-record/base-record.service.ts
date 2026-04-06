@@ -61,7 +61,7 @@ export class BaseRecordService {
       );
 
       return { data, totalCount };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Error fetching records: ${error.message}`);
       throw new Error('Failed to retrieve records');
     }
@@ -173,7 +173,7 @@ export class BaseRecordService {
 
       if (genericKeysToDelete.length > 0)
         await this.redis.del(genericKeysToDelete);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to clear cache for type ${type}: ${error.message}`,
       );
