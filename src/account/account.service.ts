@@ -860,17 +860,6 @@ export class AccountService {
             : null,
         };
 
-      case 'OPERATOR':
-        return {
-          ...base,
-          operator: account.operator
-            ? {
-                name: account.operator.name,
-                rcNumber: account.operator.rcNumber,
-              }
-            : null,
-        };
-
       default:
         return base;
     }

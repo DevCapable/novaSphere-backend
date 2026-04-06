@@ -90,11 +90,11 @@ export class AuthenticationController {
   })
   @Post('/verify-otp')
   verifyOtp(@Body() otpDto: VerifyOtpDto, @Req() req: Request) {
-    const originApp = req.get('X-Origin-Application');
-    const externalOrigin = ExternalLinkOriginEnum[originApp];
+    // const originApp = req.get('X-Origin-Application');
+    // const externalOrigin = ExternalLinkOriginEnum[originApp];
 
     const ip = BaseService.getClientIp(req);
-    return this.authService.verifyLoginOtp(otpDto, ip, externalOrigin);
+    return this.authService.verifyLoginOtp(otpDto, ip);
   }
 
   @Public()

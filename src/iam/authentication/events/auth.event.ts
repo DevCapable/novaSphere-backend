@@ -6,7 +6,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 export class AuthEvent {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  async forgotPasswordEvent(payload) {
+  forgotPasswordEvent(payload) {
     this.eventEmitter.emit(eventType.FORGOT_PASSWORD, {
       to: payload.user.email,
       subject: 'Password Reset Request from NOGICJQS',
@@ -17,10 +17,10 @@ export class AuthEvent {
     });
   }
 
-  async otpEvent(payload: { email: string; otp: string }) {
+  otpEvent(payload: { email: string; otp: string }) {
     this.eventEmitter.emit(eventType.AUTH_OTP, {
       to: payload.email,
-      subject: 'Login OTP Request from NOGICJQS',
+      subject: 'Login OTP Request from NOVASPHERE',
       context: {
         otp: payload.otp,
       },

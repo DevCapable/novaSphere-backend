@@ -8,12 +8,14 @@ export class AuthListener {
   constructor(private readonly mailService: MailService) {}
 
   @OnEvent(eventType.FORGOT_PASSWORD)
-  async forgotPasswordListener(payload: any) {
+  forgotPasswordListener(payload: any) {
     this.mailService.send(payload, 'FORGOT-PASSWORD');
   }
 
   @OnEvent(eventType.AUTH_OTP)
-  async floginOtpListener(payload: any) {
+  loginOtpListener(payload: any) {
+    console.log('OTP event emitted for email:', payload);
+
     this.mailService.send(payload, 'LOGIN-OTP');
   }
 }

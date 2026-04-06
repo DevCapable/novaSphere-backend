@@ -32,7 +32,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         'accounts.institution', // University/Polytechnic data
         'accounts.sug', // Student Union data
         'accounts.admin', // Staff/Admin data
-        'accounts.operator', // Legacy or Corporate partners
         'accounts.communityVendor', // Campus businesses
         'roles',
         'roles.permissions',

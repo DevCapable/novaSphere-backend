@@ -49,6 +49,7 @@ export class MailService {
 
       this.loggerService.log(`Email sent successfully to ${payload.to}`);
     } catch (error) {
+      console.error('Error sending email:', error);
       this.loggerService.error('Error sending email:', error);
     }
   }

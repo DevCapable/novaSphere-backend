@@ -48,7 +48,7 @@ import { UserSettingKeyEnum } from '@app/user/enum';
 export interface LoginContext {
   accountId: number;
   accountType: AccountTypeEnum;
-  accountAgencyPosition?: any;
+  accountAdminPosition?: any;
   sessionKey: string;
 }
 
@@ -118,7 +118,7 @@ export class AuthenticationService {
   async verifyLoginOtp(
     data: any,
     ip: string,
-    origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
+    // origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
   ) {
     const challengeKey = `${LOGIN_CHALLENGE}:${data.otp}`;
     const challenge = await this.redis.get(challengeKey);
@@ -132,7 +132,7 @@ export class AuthenticationService {
       email,
     });
 
-    await this.checkOtp(data.otp, user, origin);
+    await this.checkOtp(data.otp, user);
     await this.redis.del(challengeKey);
 
     return this.login(user, { email }, ip);
@@ -146,18 +146,18 @@ export class AuthenticationService {
   ) {
     const ctx = await this.prepareLoginContext(user, data);
 
-    const isOtpOnLogin = await this.userService.getSettingValue(
-      user.id,
-      UserSettingKeyEnum.LOGIN_OTP_ENABLED,
-    );
-    if (isOtpOnLogin) {
-      await this.sendOtp(user);
-      return {
-        data: null,
-        code: 'OTP_SENT_TO_EMAIL',
-      };
-    }
-    console.log('Login request received from origin:', data);
+    // const isOtpOnLogin = await this.userService.getSettingValue(
+    //   user.id,
+    //   UserSettingKeyEnum.LOGIN_OTP_ENABLED,
+    // );
+
+    // if (isOtpOnLogin == null) {
+    //   await this.sendOtp(user);
+    //   return {
+    //     data: null,
+    //     code: 'OTP_SENT_TO_EMAIL',
+    //   };
+    // }
 
     return this.login(user, data, ip, ctx);
   }
@@ -171,16 +171,19 @@ export class AuthenticationService {
   ) {
     const ctx = context ?? (await this.prepareLoginContext(user, data));
 
-    const { accountId, accountType, accountAgencyPosition, sessionKey } = ctx;
+    const { accountId, accountType, accountAdminPosition, sessionKey } = ctx;
     const sessionId = await generateCryptoString(16);
 
     const { accessToken, refreshToken } = await this.getTokens(user.id, {
       email: user.email,
       currentAccountId: accountId,
       currentAccountType: accountType,
-      currentAccountAdminPosition: accountAgencyPosition || '',
+      currentAccountAdminPosition: accountAdminPosition || '',
       session: sessionId,
     });
+
+    console.log('Login context prepared:', ctx);
+    console.log('Login request received from origin:', accessToken);
 
     const hashedRt = await this.hashingService.hash(refreshToken);
     await this.userRepository.update(user.id, {
@@ -549,22 +552,22 @@ export class AuthenticationService {
     const hasActiveSession =
       await this.sessionService.hasActiveSession(sessionKey);
 
-    if (hasActiveSession) {
-      throw new CustomUnauthorizedException(
-        ErrorMessages.ExistingSessionForUser,
-        'ERR_ACT_SESS_EXIST',
-      );
-    }
+    // if (hasActiveSession) {
+    //   throw new CustomUnauthorizedException(
+    //     ErrorMessages.ExistingSessionForUser,
+    //     'ERR_ACT_SESS_EXIST',
+    //   );
+    // }
 
     // resolve account
     let accountType: AccountTypeEnum;
-    let accountAgencyPosition: string | undefined;
+    let accountAdminPosition: string | undefined;
 
     if (!accountId) {
       const account = user.accounts[0];
       accountId = account.id;
       accountType = account.type;
-      accountAgencyPosition = account?.agency?.position;
+      accountAdminPosition = account?.admin?.position;
     } else {
       const account = user.accounts.find((a) => a.id === accountId);
       accountType = account.type;
@@ -573,7 +576,7 @@ export class AuthenticationService {
     return {
       accountId,
       accountType,
-      accountAgencyPosition,
+      accountAdminPosition,
       sessionKey,
     };
   }
