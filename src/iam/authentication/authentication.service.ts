@@ -182,10 +182,7 @@ export class AuthenticationService {
       session: sessionId,
     });
 
-    console.log('Login context prepared:', ctx);
-    console.log('Login request received from origin:', accessToken);
-
-    const hashedRt = await this.hashingService.hash(refreshToken);
+    const hashedRt = await this.hashingService.hash(refreshToken.trim());
     await this.userRepository.update(user.id, {
       lastLogin: new Date(),
       hashedRt,
@@ -308,6 +305,12 @@ export class AuthenticationService {
     const account =
       user.accounts.find((a) => a.id === currentAccountId) || user.accounts[0];
 
+    if (!account) {
+      throw new CustomForbiddenException(
+        'No valid account associated with this session',
+      );
+    }
+
     const tokens = await this.getTokens(user.id, {
       email: user.email,
       currentAccountId: account.id,
@@ -336,7 +339,7 @@ export class AuthenticationService {
     if (!user) {
       throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
     }
-    this.userRepository.update(user.id, {
+    await this.userRepository.update(user.id, {
       hashedRt: null,
     });
   }
