@@ -21,18 +21,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    // 1. Fetch user with all academic and organizational relations
     const user = await this.userRepository.findFirstBy(
-      {
-        email: payload.email,
-      },
+      { email: payload.email },
       [
         'accounts',
         'accounts.individual',
-        'accounts.institution', // University/Polytechnic data
-        'accounts.sug', // Student Union data
-        'accounts.admin', // Staff/Admin data
-        'accounts.communityVendor', // Campus businesses
+        'accounts.institution',
+        'accounts.sug',
+        'accounts.admin',
+        'accounts.communityVendor',
         'roles',
         'roles.permissions',
         'permissions',
@@ -43,30 +40,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       return null;
     }
 
-    // 2. Transform accounts for the Request object
-    const accounts = user.accounts.map((account) => {
-      return {
-        id: account.id,
-        uuid: account.uuid,
-        name: account.name,
-        type: account.type,
-        createdAt: account.createdAt,
-        updatedAt: account.updatedAt,
-      };
-    });
-
-    // 3. Return the payload that will be attached to Request.user
+    const accounts = user.accounts.map((account) => ({
+      id: account.id,
+      uuid: account.uuid,
+      name: account.name,
+      type: account.type,
+      createdAt: account.createdAt,
+      updatedAt: account.updatedAt,
+    }));
     return {
       ...user,
       accounts,
       session: payload.session,
-      // Identify the current active profile context
-      activeAccount: {
+      account: {
         id: payload.currentAccountId,
         type: payload.currentAccountType,
-        // Optional: specific fields for Administrative roles
-        position: payload.currentAccountAdminPosition,
+        agencyPosition: payload.currentAccountAdminPosition,
       },
     };
+    // FIX END
   }
 }

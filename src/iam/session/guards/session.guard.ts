@@ -35,13 +35,11 @@ export class SessionGuard {
     // i.e For impersonated sessions, we do not store a session
     if (!user.session) return true;
 
-    const originApp = request.get('X-Origin-Application');
-    const externalOrigin =
-      ExternalLinkOriginEnum[originApp] ?? ExternalLinkOriginEnum.NOGIC;
+    // const originApp = request.get('X-Origin-Application');
+    // const externalOrigin =
+    //   ExternalLinkOriginEnum[originApp] ?? ExternalLinkOriginEnum.NOGIC;
 
-    const sessionKey = externalOrigin
-      ? `${user.email}:${externalOrigin}`
-      : user.email;
+    const sessionKey = user.email;
 
     const isValidSession = await this.sessionService.validateSession(
       sessionKey,
