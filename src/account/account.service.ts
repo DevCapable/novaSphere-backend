@@ -171,6 +171,16 @@ export class AccountService {
         };
       }
 
+      // 6. DEPARTMENT Transformation
+      if (item.type === AccountTypeEnum.DEPARTMENT) {
+        transformedItem = {
+          ...item,
+          name: item.department?.name?.toUpperCase(),
+          code: item.department?.code,
+          institution: item.department?.institution?.name,
+        };
+      }
+
       return {
         ...transformedItem,
         profilePicture: documentsByAccountId.get(item.id) || null,
@@ -514,6 +524,9 @@ export class AccountService {
 
     await this.accountRepository.update(id, {
       ...profileData,
+      establishmentDate: data.establishmentDate
+        ? new Date(data.establishmentDate)
+        : null,
       isOffshore: isOffshore === 'YES',
     });
 
@@ -724,6 +737,10 @@ export class AccountService {
       case AccountTypeEnum.SUG:
         // Primary display: "UNILAG SUG"
         name = account.sug?.unionName || '';
+        break;
+
+      case AccountTypeEnum.DEPARTMENT:
+        name = account.department?.name || '';
         break;
 
       case AccountTypeEnum.INDIVIDUAL:

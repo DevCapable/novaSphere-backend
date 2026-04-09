@@ -32,7 +32,7 @@ export class Department extends BaseEntity<Department> implements IDepartment {
     type: 'varchar2',
     enum: DepartmentType,
   })
-  type: DepartmentType; // FACULTY, ACADEMIC_DEPT, ADMINISTRATIVE_UNIT
+  departmentType: DepartmentType; // FACULTY, ACADEMIC_DEPT, ADMINISTRATIVE_UNIT
 
   @OneToMany(() => Admin, (account) => account)
   admins: Admin[];

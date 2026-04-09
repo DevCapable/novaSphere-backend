@@ -9,8 +9,8 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { Account } from './account.entity';
-import { Department } from '@app/department/entities/department.entity';
 import { InstitutionTypeEnum, OwnershipType } from '../enums';
+import { Department } from './department.entity';
 
 @Entity({
   name: 'ACCOUNT_INSTITUTIONS',

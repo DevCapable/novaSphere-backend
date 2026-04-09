@@ -21,6 +21,7 @@ import { Institution } from './entities/institution.entity';
 import { Individual } from './entities/individual.entity';
 import { AccountEvent } from './events/account.event';
 import { AccountListener } from './events/listeners/account.listener';
+import { Department } from './entities/department.entity';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AccountListener } from './events/listeners/account.listener';
       CommunityVendor,
       Institution,
       Auditor,
+      Department,
       Sug,
     ]),
     forwardRef(() => UserModule),

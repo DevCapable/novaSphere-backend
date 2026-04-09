@@ -44,7 +44,7 @@ export const accountTypeMapping: AccountTypeMapping = {
       'registrarName',
       'stateId',
     ],
-    relations: ['departments'],
+    relations: ['departments', 'account'],
     searchable: [
       'institution.name',
       'institution.shortName',
@@ -85,14 +85,14 @@ export const accountTypeMapping: AccountTypeMapping = {
       'name',
       'code',
       'description',
-      'type',
+      'departmentType',
       'headOfDepartmentName',
       'isActive',
       'institutionId',
       'parentId',
       'accountId',
     ],
-    relations: ['institution', 'parent', 'admins'], // Relations from the Department entity
+    relations: ['institution', 'parent', 'account'], // Relations from the Department entity
     searchable: [
       'department.name',
       'department.code',

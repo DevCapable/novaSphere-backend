@@ -14,4 +14,6 @@ export * from './institution/create-institution.dto';
 export * from './institution/update-institution.dto';
 export * from './institution/create-institution.dto';
 export * from './institution/update-institution.dto';
+export * from './department/create-department.dto';
+export * from './department/update-department.dto';
 export * from './auditor';

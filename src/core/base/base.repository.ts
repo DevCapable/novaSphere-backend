@@ -31,23 +31,61 @@ export abstract class BaseRepository<T> {
   }
 
   async save(entity: T | DeepPartial<T>): Promise<T> {
-    const newEntity = this.repository.create(entity) as T;
+    const newEntity = this.repository.create(entity);
     return this.repository.save(newEntity);
   }
 
-  async findOne(id, relations: string[] = []): Promise<T> {
-    relations = relations.length ? relations : this.relations;
-    const queryBuilder: SelectQueryBuilder<T> =
-      this.repository.createQueryBuilder('entity');
-    if (typeof id === 'number') {
-      queryBuilder.where('entity.id = :id', { id });
-    } else if (typeof id === 'object') {
-      Object.entries(id).forEach(([key, value]) => {
-        queryBuilder.andWhere(`entity.${key} = :${key}`, { [key]: value });
-      });
+  async findOne(
+    condition: number | Record<string, any>,
+    relations: string[] = [],
+  ): Promise<T | null> {
+    // ✅ HANDLE TypeORM FindOptions FIRST
+    if (
+      typeof condition === 'object' &&
+      condition !== null &&
+      ('where' in condition || 'relations' in condition)
+    ) {
+      return this.repository.findOne(condition as any);
     }
 
-    buildRelations(queryBuilder, relations);
+    const usedRelations = relations.length ? relations : this.relations;
+
+    const queryBuilder = this.repository.createQueryBuilder('entity');
+
+    if (typeof condition === 'number') {
+      queryBuilder.where('entity.id = :id', { id: condition });
+    } else if (typeof condition === 'object' && condition !== null) {
+      let hasCondition = false;
+
+      Object.entries(condition).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+
+        hasCondition = true;
+
+        if (Array.isArray(value)) {
+          if (value.length === 0) return;
+
+          queryBuilder.andWhere(`entity.${key} IN (:...${key})`, {
+            [key]: value,
+          });
+        } else if (typeof value === 'object') {
+          // ❗ VERY IMPORTANT: skip nested objects
+          return;
+        } else {
+          queryBuilder.andWhere(`entity.${key} = :${key}`, {
+            [key]: value,
+          });
+        }
+      });
+
+      if (!hasCondition) {
+        throw new Error('findOne called with empty conditions');
+      }
+    }
+
+    if (usedRelations.length) {
+      buildRelations(queryBuilder, usedRelations);
+    }
 
     return queryBuilder.getOne();
   }
@@ -93,7 +131,7 @@ export abstract class BaseRepository<T> {
 
   _findAll(
     queryBuilder: SelectQueryBuilder<T>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     options: Record<string, any>,
   ): SelectQueryBuilder<T> {
     return queryBuilder;
@@ -222,7 +260,7 @@ export abstract class BaseRepository<T> {
 
   async findWithoutApplication(
     accountId: number,
-    requestIds?: number[] | undefined,
+    requestIds?: number[],
   ): Promise<T[]> {
     const query = this.repository
       .createQueryBuilder('entity')

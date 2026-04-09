@@ -2,6 +2,8 @@ import { Account } from '@app/account/entities/account.entity';
 import { Admin } from '@app/account/entities/admin.entity';
 import { Institution } from '@app/account/entities/institution.entity';
 import { Individual } from '@app/account/entities/individual.entity';
+import { Auditor } from '@app/account/entities/auditor.entity';
+import { CommunityVendor } from '@app/account/entities/community-vendor.entity';
 import { BaseRecordRepository } from '@app/base-record/base-record.repository';
 import { BaseRecord } from '@app/base-record/entities/base-record.entity';
 import { Document } from '@app/document/entities/document.entity';
@@ -25,6 +27,7 @@ import { RoleSeeder } from './role.seeder';
 import { SeedService } from './seed.service';
 import { UserSeeder } from './user-seeder';
 import { Sug } from '@app/account/entities/sug.entity';
+import { Department } from '@app/account/entities/department.entity';
 
 @Module({
   imports: [
@@ -36,6 +39,9 @@ import { Sug } from '@app/account/entities/sug.entity';
       Account,
       Individual,
       Institution,
+      Department,
+      Auditor,
+      CommunityVendor,
       Sug,
       Admin,
       User,

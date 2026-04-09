@@ -34,6 +34,7 @@ import { SyncWorkflowEvent } from '@app/user/event';
 import { Events } from '@app/user/constants';
 import { WorkflowService } from '@app/workflow/workflow.service';
 import { User } from '@app/user/entities/user.entity';
+import { Department } from './entities/department.entity';
 
 @Injectable()
 export class AccountRepository extends BaseRepository<Account> {
@@ -51,6 +52,8 @@ export class AccountRepository extends BaseRepository<Account> {
     private readonly sugRepository: Repository<Sug>,
     @InjectRepository(Admin)
     private readonly adminRepository: Repository<Admin>,
+    @InjectRepository(Department)
+    private readonly departmentRepository: Repository<Department>,
     @InjectRepository(CommunityVendor)
     private readonly communityVendorRepository: Repository<CommunityVendor>,
     @InjectRepository(Auditor)
@@ -145,6 +148,24 @@ export class AccountRepository extends BaseRepository<Account> {
               competencyId,
             },
             accountTypeMapping.INDIVIDUAL.fillable,
+          ),
+        );
+        break;
+
+      case AccountTypeEnum.DEPARTMENT:
+        account = await entityManager.save(Account, {
+          ...userData,
+          uuid: uuidv4(),
+        });
+        await entityManager.save(
+          Department,
+          buildFillable(
+            {
+              ...userData,
+              accountId: account.id,
+              uuid: uuidv4(),
+            },
+            accountTypeMapping.DEPARTMENT.fillable,
           ),
         );
         break;
@@ -330,6 +351,7 @@ export class AccountRepository extends BaseRepository<Account> {
             },
             sug: true,
             admin: true,
+            department: true,
             communityVendor: {
               state: true,
             },
@@ -505,6 +527,14 @@ export class AccountRepository extends BaseRepository<Account> {
         });
         break;
 
+      case AccountTypeEnum.DEPARTMENT:
+        repository = this.departmentRepository;
+        fillableFields = accountTypeMapping[account.type].fillable;
+        existingEntity = await repository.findOne({
+          where: { accountId: account.id },
+        });
+        break;
+
       case AccountTypeEnum.ADMIN:
         repository = this.adminRepository;
         fillableFields = accountTypeMapping[account.type].fillable;
@@ -598,6 +628,8 @@ export class AccountRepository extends BaseRepository<Account> {
         return this.sugRepository;
       case AccountTypeEnum.ADMIN:
         return this.adminRepository;
+      case AccountTypeEnum.DEPARTMENT:
+        return this.departmentRepository;
       case AccountTypeEnum.COMMUNITY_VENDOR:
         return this.communityVendorRepository;
       case AccountTypeEnum.AUDITOR:

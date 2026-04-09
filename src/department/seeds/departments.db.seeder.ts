@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { departmentsNestedDbSeed } from '.';
-import { Department } from '../entities';
 import { DepartmentType } from '../enums';
+import { Department } from '@app/account/entities/department.entity';
 
 @Injectable()
 export class DepartmentSeeder {
@@ -21,7 +21,7 @@ export class DepartmentSeeder {
         await this.upsertDepartment(deptData);
       }
       this.loggerService.log('Seeding completed successfully');
-    } catch (e) {
+    } catch (e: any) {
       this.loggerService.error('Error in seeds:', e);
     }
   }
@@ -45,7 +45,7 @@ export class DepartmentSeeder {
     } else {
       department = this.departmentRepository.create({
         name: data.name,
-        type: data.type as DepartmentType,
+        departmentType: data.type as DepartmentType,
         parentId: parentId,
         uuid: uuidv4(),
       });

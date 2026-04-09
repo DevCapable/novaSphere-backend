@@ -9,6 +9,7 @@ import { CommunityVendor } from './community-vendor.entity';
 import { Institution } from './institution.entity';
 import { Individual } from './individual.entity';
 import { Auditor } from './auditor.entity';
+import { Department } from './department.entity';
 
 @Entity()
 export class Account extends BaseEntity<Account> {
@@ -54,6 +55,11 @@ export class Account extends BaseEntity<Account> {
 
   @OneToOne(() => Sug, (sug) => sug.account, { cascade: true })
   sug?: Sug;
+
+  @OneToOne(() => Department, (department) => department.account, {
+    cascade: true,
+  })
+  department?: Department;
 
   @OneToOne(() => Auditor, (auditor) => auditor.account, {
     cascade: true,

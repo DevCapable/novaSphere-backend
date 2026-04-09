@@ -1,9 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Department } from './entities';
 import { DepartmentService } from './department.service';
 import { DepartmentController } from './department.controller';
 import { AccountModule } from '@app/account/account.module';
+import { Department } from './entities/department.entity';
 
 @Module({
   imports: [

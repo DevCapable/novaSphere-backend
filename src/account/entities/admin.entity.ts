@@ -9,6 +9,7 @@ import {
 import { Account } from './account.entity';
 
 export enum Position {
+  // ... (existing enum values)
   PO = 'PO',
   SP = 'SP',
   MGR = 'MGR',

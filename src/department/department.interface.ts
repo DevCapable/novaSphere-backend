@@ -12,7 +12,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface IDepartment extends IBase {
   name: string;
-  type: DepartmentType;
+  departmentType: DepartmentType;
   parentId?: number;
   parent: IDepartment;
   description?: string;

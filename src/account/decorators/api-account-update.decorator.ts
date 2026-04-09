@@ -10,6 +10,7 @@ import {
   UpdateInstitutionDto,
   UpdateIndividualDto,
   UpdateOperatorDto,
+  UpdateDepartmentDto, // Import UpdateDepartmentDto
 } from '../dto';
 
 export const ApiAccountUpdate = () =>
@@ -21,6 +22,7 @@ export const ApiAccountUpdate = () =>
       UpdateIndividualDto,
       UpdateInstitutionDto,
       UpdateAdminDto,
+      UpdateDepartmentDto,
       UpdateOperatorDto,
     ),
     ApiBody({
@@ -34,6 +36,9 @@ export const ApiAccountUpdate = () =>
           },
           {
             $ref: getSchemaPath(UpdateAdminDto),
+          },
+          {
+            $ref: getSchemaPath(UpdateDepartmentDto),
           },
           {
             $ref: getSchemaPath(UpdateOperatorDto),
