@@ -22,7 +22,11 @@ export class BulkUploadRepository extends BaseRepository<BulkUpload> {
 
   public searchable = ['filePath'];
 
-  public relations = ['account.operator', 'account.company'];
+  public relations = [
+    'account.institution',
+    'account.department',
+    'account.individual',
+  ];
 
   constructor(
     @InjectRepository(BulkUpload) bulkUploadRepository: Repository<BulkUpload>,

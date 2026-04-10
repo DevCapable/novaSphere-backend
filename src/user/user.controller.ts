@@ -51,6 +51,8 @@ export class UserController {
   @Accounts(
     AccountTypeEnum.ADMIN,
     AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.INDIVIDUAL,
+    AccountTypeEnum.DEPARTMENT,
     AccountTypeEnum.SUG,
   )
   @Permission(PermisionActionTypeEnum.CREATE, PermisionSubjectTypeEnum.USER)

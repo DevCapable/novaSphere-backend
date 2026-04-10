@@ -211,11 +211,9 @@ export class AuthenticationService {
     return { accessToken, refreshToken };
   }
 
-  async logout(user: CurrentUserData, externalOrigin: string | null) {
+  async logout(user: CurrentUserData) {
     const email = user.email;
-    const sessionKey = externalOrigin
-      ? `${user.email}:${externalOrigin}`
-      : user.email;
+    const sessionKey = user.email;
 
     await this.sessionService.clearSession(sessionKey);
     await this.removeRefreshToken(email);
@@ -555,12 +553,12 @@ export class AuthenticationService {
     const hasActiveSession =
       await this.sessionService.hasActiveSession(sessionKey);
 
-    // if (hasActiveSession) {
-    //   throw new CustomUnauthorizedException(
-    //     ErrorMessages.ExistingSessionForUser,
-    //     'ERR_ACT_SESS_EXIST',
-    //   );
-    // }
+    if (hasActiveSession) {
+      throw new CustomUnauthorizedException(
+        ErrorMessages.ExistingSessionForUser,
+        'ERR_ACT_SESS_EXIST',
+      );
+    }
 
     // resolve account
     let accountType: AccountTypeEnum;

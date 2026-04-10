@@ -173,11 +173,11 @@ export class AuthenticationController {
   @HttpCode(HttpStatus.OK)
   @Post('/logout')
   async logout(@CurrentUser() user: CurrentUserData, @Req() req: Request) {
-    const originApp = req.get('X-Origin-Application');
-    const externalOrigin =
-      ExternalLinkOriginEnum[originApp] ?? ExternalLinkOriginEnum.NOGIC;
+    // const originApp = req.get('X-Origin-Application');
+    // const externalOrigin =
+    //   ExternalLinkOriginEnum[originApp] ?? ExternalLinkOriginEnum.NOGIC;
 
-    return this.authService.logout(user, externalOrigin);
+    return this.authService.logout(user);
   }
 
   @Public()
@@ -185,11 +185,11 @@ export class AuthenticationController {
   @UseGuards(LocalAuthGuard)
   @Post('/logout-all')
   async logoutAll(@CurrentUser() user: CurrentUserData, @Req() req: Request) {
-    const originApp = req.get('X-Origin-Application');
-    const externalOrigin =
-      ExternalLinkOriginEnum[originApp] ?? ExternalLinkOriginEnum.NOGIC;
+    // const originApp = req.get('X-Origin-Application');
+    // const externalOrigin =
+    //   ExternalLinkOriginEnum[originApp] ?? ExternalLinkOriginEnum.NOGIC;
 
-    return this.authService.logout(user, externalOrigin);
+    return this.authService.logout(user);
   }
 
   @Public()
