@@ -9,7 +9,7 @@ export class AuthEvent {
   forgotPasswordEvent(payload) {
     this.eventEmitter.emit(eventType.FORGOT_PASSWORD, {
       to: payload.user.email,
-      subject: 'Password Reset Request from NOGICJQS',
+      subject: 'Password Reset Request from NOVASPHERE',
       context: {
         resetLink: `${process.env.MAIL_FRONTEND_URL}/auth/${payload.token}/reset-password`,
         name: `${payload.user.firstName} ${payload.user.lastName}`,

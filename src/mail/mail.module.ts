@@ -27,7 +27,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/adapters/ejs.adapter';
           },
         },
         defaults: {
-          from: `NOGICJQS <${process.env.MAIL_FROM}>`,
+          from: `NOVASPHERE <${process.env.MAIL_FROM}>`,
         },
         template: {
           dir: join(__dirname, 'templates'),
