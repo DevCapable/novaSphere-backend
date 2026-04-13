@@ -34,7 +34,7 @@ import { Public } from '@app/iam/decorators';
 export class BaseRecordController {
   constructor(private readonly baseRecordService: BaseRecordService) {}
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @HttpCode(HttpStatus.CREATED)
   @ApiEndpoint('Create Base Record')
   @ApiResponse({
@@ -78,7 +78,7 @@ export class BaseRecordController {
     return this.baseRecordService.findOne(+id);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Update Base Record',
@@ -96,7 +96,7 @@ export class BaseRecordController {
     return this.baseRecordService.update(+id, updateBaseRecordDto);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Delete Base Record')
   @ApiResponse({
