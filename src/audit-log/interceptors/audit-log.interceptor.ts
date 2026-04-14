@@ -46,7 +46,7 @@ export const AuditLogInterceptor = <
 >({
   entityType,
   entityTitleKey = 'id',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   service,
   factory,
   action: defaultAction,
@@ -75,10 +75,17 @@ export const AuditLogInterceptor = <
       if (!action || !user || exceptionEntities.includes(entityType))
         return next.handle();
 
-      let entityId = request.params.id || request.body.id;
+      let entityId = request?.params?.id || request?.body?.id;
+
       let oldData: Record<string, any> | null = null;
-      let entityTitle =
-        request.body[entityTitleKey] || request.params[entityTitleKey];
+
+      let entityTitle;
+
+      if (request.body !== undefined) {
+        entityTitle = request.body[entityTitleKey];
+      } else {
+        entityTitle = request.params[entityTitleKey];
+      }
 
       if (factory) {
         const { data, title } = await factory(this.service, request);
@@ -91,6 +98,7 @@ export const AuditLogInterceptor = <
       return next.handle().pipe(
         tap((result) => {
           let changes: Record<string, AuditLogChanges<any>> | null;
+
           entityId = entityId || result?.id;
           if (action === AuditAction.UPDATE && changeKeys) {
             changes = oldData

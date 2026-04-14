@@ -104,9 +104,10 @@ export class BaseRecordService {
 
   async update(id: number, data) {
     const currentRecord = await this.baseRecordRepository.findById(id);
+    const { accountId, ...rest } = data;
 
     const baseRecordData = {
-      ...data,
+      ...rest,
       name: data.name.toUpperCase(),
     };
 

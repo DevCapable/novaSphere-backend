@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Accounts } from '@app/account/decorators/accounts.decorator';
 import { AccountTypeEnum } from '@app/account/enums';
@@ -104,7 +105,7 @@ export class BaseRecordController {
     description: 'Ok',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: ParseIntPipe) {
     return this.baseRecordService.delete(+id);
   }
 }
