@@ -1,4 +1,5 @@
 export * from './account-type.enum';
+export * from './academic-rank.enum';
 export * from './shared.enum';
 export enum InstitutionTypeEnum {
   UNIVERSITY = 'UNIVERSITY',

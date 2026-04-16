@@ -51,7 +51,11 @@ export class AccountController {
     return await this.accountService.findAll(filterOptions, paginationOptions);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
+  @Accounts(
+    AccountTypeEnum.ADMIN,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.DEPARTMENT,
+  )
   @ApiAccountCreate()
   @Post()
   @UseInterceptors(
@@ -62,7 +66,7 @@ export class AccountController {
   )
   create(
     @Body(AccountValidationPipe(HandlerAction.CREATE))
-    createAccountDto: CreateAccountDto,
+    createAccountDto: any,
   ) {
     console.log('Creating account with data:', createAccountDto);
     return this.accountService.create({
@@ -116,7 +120,11 @@ export class AccountController {
   //   );
   // }
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(
+    AccountTypeEnum.ADMIN,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.DEPARTMENT,
+  )
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.accountService.findOne(+id);
@@ -130,7 +138,11 @@ export class AccountController {
     return await this.accountService.findStats(+id);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(
+    AccountTypeEnum.ADMIN,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.DEPARTMENT,
+  )
   @ApiAccountUpdate()
   @Patch(':id')
   @UseInterceptors(
@@ -143,7 +155,11 @@ export class AccountController {
     return this.accountService.update(+id, updateAccountDto);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(
+    AccountTypeEnum.ADMIN,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.DEPARTMENT,
+  )
   @ApiAccountUpdate()
   @Patch('/institution/:id')
   updateInstitution(

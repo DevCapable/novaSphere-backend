@@ -182,6 +182,17 @@ export class AccountService {
         };
       }
 
+      // 7. LECTURER Transformation
+      if (item.type === AccountTypeEnum.LECTURER) {
+        transformedItem = {
+          ...item,
+          firstName: item.lecturer?.firstName?.toUpperCase(),
+          lastName: item.lecturer?.lastName?.toUpperCase(),
+          title: item.lecturer?.title,
+          staffNumber: item.lecturer?.staffNumber,
+        };
+      }
+
       return {
         ...transformedItem,
         profilePicture: documentsByAccountId.get(item.id) || null,
@@ -189,7 +200,6 @@ export class AccountService {
     });
 
     const result = { data: transformedData, totalCount };
-    console.log('result', result);
 
     try {
       await this.redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
@@ -555,6 +565,12 @@ export class AccountService {
     }
 
     // 3. Logic for Organizational Accounts (Institution, SUG, Vendor, Operator)
+    const personTypes = [
+      AccountTypeEnum.ADMIN,
+      AccountTypeEnum.INDIVIDUAL,
+      AccountTypeEnum.LECTURER,
+    ];
+
     const orgTypes = [
       AccountTypeEnum.INSTITUTION,
       AccountTypeEnum.SUG,
@@ -747,6 +763,11 @@ export class AccountService {
 
       case AccountTypeEnum.INDIVIDUAL:
         name = `${account.individual?.firstName ?? ''} ${account.individual?.lastName ?? ''}`;
+        break;
+
+      case AccountTypeEnum.LECTURER:
+        const lec = account.lecturer;
+        name = `${lec?.title ?? ''} ${lec?.firstName ?? ''} ${lec?.lastName ?? ''}`;
         break;
 
       case AccountTypeEnum.ADMIN:

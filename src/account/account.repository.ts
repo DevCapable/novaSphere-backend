@@ -35,6 +35,7 @@ import { Events } from '@app/user/constants';
 import { WorkflowService } from '@app/workflow/workflow.service';
 import { User } from '@app/user/entities/user.entity';
 import { Department } from './entities/department.entity';
+import { Lecturer } from './entities/lecturer.entity';
 
 @Injectable()
 export class AccountRepository extends BaseRepository<Account> {
@@ -58,6 +59,8 @@ export class AccountRepository extends BaseRepository<Account> {
     private readonly communityVendorRepository: Repository<CommunityVendor>,
     @InjectRepository(Auditor)
     private readonly auditorRepository: Repository<Auditor>,
+    @InjectRepository(Lecturer)
+    private readonly lecturerRepository: Repository<Lecturer>,
     private eventEmitter: EventEmitter2,
     private readonly workflowService: WorkflowService,
     private readonly loggerService: LoggerService,
@@ -74,6 +77,7 @@ export class AccountRepository extends BaseRepository<Account> {
       type: data.accountType,
     };
 
+    console.log('Creating account with data:', userData); // Debugging log
     let account;
     const year = new Date().getFullYear().toString().slice(-2);
 
@@ -127,6 +131,23 @@ export class AccountRepository extends BaseRepository<Account> {
               institutionId: userData.institutionId,
             },
             accountTypeMapping.SUG.fillable,
+          ),
+        );
+        break;
+
+      case AccountTypeEnum.LECTURER:
+        account = await entityManager.save(Account, {
+          ...userData,
+          uuid: uuidv4(),
+        });
+        await entityManager.save(
+          Lecturer,
+          buildFillable(
+            {
+              ...userData,
+              accountId: account.id,
+            },
+            accountTypeMapping.LECTURER.fillable,
           ),
         );
         break;
@@ -512,6 +533,14 @@ export class AccountRepository extends BaseRepository<Account> {
         });
         break;
 
+      case AccountTypeEnum.LECTURER:
+        repository = this.lecturerRepository;
+        fillableFields = accountTypeMapping[account.type].fillable;
+        existingEntity = await repository.findOne({
+          where: { accountId: account.id },
+        });
+        break;
+
       case AccountTypeEnum.INDIVIDUAL:
         repository = this.individualRepository;
         fillableFields = accountTypeMapping[account.type].fillable;
@@ -634,6 +663,8 @@ export class AccountRepository extends BaseRepository<Account> {
         return this.communityVendorRepository;
       case AccountTypeEnum.AUDITOR:
         return this.auditorRepository;
+      case AccountTypeEnum.LECTURER:
+        return this.lecturerRepository;
       default:
         throw new CustomInternalServerException(
           `Unsupported account type: ${accountType as string}`,

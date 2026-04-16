@@ -26,7 +26,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       [
         'accounts',
         'accounts.individual',
+        'accounts.department',
         'accounts.institution',
+        'accounts.lecturer',
         'accounts.sug',
         'accounts.admin',
         'accounts.communityVendor',

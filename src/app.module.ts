@@ -35,6 +35,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MailModule } from './mail/mail.module';
 import { StatModule } from './stat/stat.module';
 import { DepartmentModule } from './department/department.module';
+import { JobExperienceModule } from './job-experience/job-experience.module';
+import { TrainingModule } from './training/training.module';
+import { SkillModule } from './skill/skill.module';
 
 @Module({
   imports: [
@@ -87,6 +90,9 @@ import { DepartmentModule } from './department/department.module';
     GuidelineModule,
     AuditLogModule,
     DepartmentModule,
+    JobExperienceModule,
+    TrainingModule,
+    SkillModule,
   ],
   providers: [
     {

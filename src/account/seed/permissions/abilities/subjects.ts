@@ -3,6 +3,10 @@ export const subject = {
   sug: 'sug',
   admin: 'admin',
   institution: 'institution',
+  lecturer: 'lecturer',
+  communityVendor: 'communityVendor',
+  auditor: 'auditor',
+  department: 'department',
 };
 
 export const permissionSubjectName = {

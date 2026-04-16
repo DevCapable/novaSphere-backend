@@ -5,6 +5,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { AccountTypeEnum } from '../enums';
+import { Account } from '../entities/account.entity';
 
 @Injectable()
 export class AccountGuard implements CanActivate {
@@ -32,7 +33,13 @@ export class AccountGuard implements CanActivate {
     const accountId = user.account.id;
 
     // Append Current User AccountID to request body and query
-    if (user.account.type !== AccountTypeEnum.ADMIN) {
+    if (
+      ![
+        (AccountTypeEnum.ADMIN,
+        AccountTypeEnum.INSTITUTION,
+        AccountTypeEnum.DEPARTMENT),
+      ].includes(accountType as any)
+    ) {
       if (request.body && typeof request.body === 'object') {
         request.body['accountId'] = accountId;
       }

@@ -6,9 +6,11 @@ import {
   CreateAdminDto,
   CreateAuditorDto,
   CreateIndividualDto,
+  CreateLecturerDto,
   UpdateAdminDto,
   UpdateAuditorDto,
   UpdateIndividualDto,
+  UpdateLecturerDto,
 } from './dto';
 import { CreateCommunityVendorDto } from './dto/community-vendor/create-community-vendor.dto';
 import { UpdateCommunityVendorDto } from './dto/community-vendor/update-community-vendor.dto';
@@ -146,6 +148,65 @@ export const accountTypeMapping: AccountTypeMapping = {
     ],
     createDto: CreateIndividualDto,
     updateDto: UpdateIndividualDto,
+  },
+  [AccountTypeEnum.LECTURER]: {
+    fillable: [
+      'firstName',
+      'lastName',
+      'otherNames',
+      'title', // Added Title (Prof, Dr, etc.)
+      'isExpatriate',
+      'dob',
+      'gender',
+      'phoneNumber',
+      'staffNumber', // Added for Nigerian University tracking
+      'ippisNumber', // Added for Federal payroll tracking
+      'rank', // Added for Academic/Staff Level
+      'highestQualification',
+      'areaOfSpecialization',
+      'countryId',
+      'nationalityId',
+      'stateOfOriginId', // Added for Federal Character compliance
+      'altEmail',
+      'altPhoneNumber',
+      'address',
+      'stateId',
+      'cityResidence',
+      'stateResidenceForeign',
+      'stateResidenceId',
+      'lgaId',
+      'homeTown',
+      'employmentStatus',
+      'employmentType', // Added (Full-time, Visiting, etc.)
+      'currentEmployer',
+      'dateEmployed',
+      'dateOfFirstAppointment',
+      'ninNumber',
+      'accountId',
+      'uuid',
+      'competencyId',
+      'nextOfKinName',
+      'nextOfKinPhone',
+    ],
+    relations: [
+      'country',
+      'nationality',
+      // 'state',
+      'lga',
+      // 'stateResidence',
+      'stateOfOrigin',
+    ],
+    searchable: [
+      'users.email',
+      'individual.firstName',
+      'individual.lastName',
+      'individual.staffNumber', // Highly searchable in Uni systems
+      'individual.ippisNumber',
+      'individual.phoneNumber',
+      'individual.ninNumber',
+    ],
+    createDto: CreateLecturerDto,
+    updateDto: UpdateLecturerDto,
   },
   [AccountTypeEnum.ADMIN]: {
     fillable: [

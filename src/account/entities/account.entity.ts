@@ -10,6 +10,7 @@ import { Institution } from './institution.entity';
 import { Individual } from './individual.entity';
 import { Auditor } from './auditor.entity';
 import { Department } from './department.entity';
+import { Lecturer } from './lecturer.entity';
 
 @Entity()
 export class Account extends BaseEntity<Account> {
@@ -39,6 +40,11 @@ export class Account extends BaseEntity<Account> {
 
   @Column({ default: true })
   active?: boolean;
+
+  @OneToOne(() => Lecturer, (lecturer) => lecturer.account, {
+    cascade: true,
+  })
+  lecturer?: Lecturer;
 
   @OneToOne(() => Institution, (institution) => institution.account, {
     cascade: true,

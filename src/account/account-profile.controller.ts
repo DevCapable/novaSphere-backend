@@ -21,6 +21,7 @@ import { EntityType } from '@app/audit-log/enum';
   AccountTypeEnum.ADMIN,
   AccountTypeEnum.DEPARTMENT,
   AccountTypeEnum.COMMUNITY_VENDOR,
+  AccountTypeEnum.LECTURER,
 )
 @ApiTags('account')
 @UseInterceptors(
@@ -37,6 +38,7 @@ export class AccountProfileController {
     summary: 'Get Authenticated Account Profile',
   })
   async findOne(@CurrentUser() user: CurrentUserData) {
+    console.log('Current User Data:  ', user); // Debugging log
     return await this.accountService.findOne(user?.account?.id);
   }
 

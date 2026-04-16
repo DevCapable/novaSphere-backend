@@ -19,6 +19,7 @@ import { Auditor } from './entities/auditor.entity';
 import { CommunityVendor } from './entities/community-vendor.entity';
 import { Institution } from './entities/institution.entity';
 import { Individual } from './entities/individual.entity';
+import { Lecturer } from './entities/lecturer.entity';
 import { AccountEvent } from './events/account.event';
 import { AccountListener } from './events/listeners/account.listener';
 import { Department } from './entities/department.entity';
@@ -31,10 +32,10 @@ import { Department } from './entities/department.entity';
       Institution,
       Individual,
       CommunityVendor,
-      Institution,
       Auditor,
       Department,
       Sug,
+      Lecturer,
     ]),
     forwardRef(() => UserModule),
     RoleModule,

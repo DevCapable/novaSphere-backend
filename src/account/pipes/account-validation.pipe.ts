@@ -102,6 +102,7 @@ function createAccountValidationPipe(
         return { ...value, accountType };
       } catch (error: any) {
         // ✅ Preserve known validation errors
+        console.error('AccountValidationPipe Error:', error);
         if (error instanceof CustomValidationException) {
           throw error;
         }

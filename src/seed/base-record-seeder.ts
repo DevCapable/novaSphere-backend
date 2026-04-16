@@ -81,23 +81,25 @@ export class BaseRecordSeeder implements SeederInterface {
   }
 
   async baseRecordSkeletonForLga() {
-    if (await this.checkIfTypeExists(BaseRecordEnum.LGA)) return;
+    // if (await this.checkIfTypeExists(BaseRecordEnum.LGA)) return;
     const data = await convertCSVToObject(this.csvFilePath('lga.csv'));
 
     data.map(async (data) => {
       // ADD THIS CHECK: Skip if name is null, undefined, empty, or only whitespace
-      if (!data.name || data.name.trim() === '') return;
+      if (!data['name"'] || !data['name"'].trim()) return;
 
+      console.log('Processing LGA:', data);
       const state = await this.baseRecord.findOne({
         where: {
-          slug: StringHelper.slugify(data.state),
+          name: data.state,
         },
       });
+      console.log('State found for LGA:', state);
 
       if (state) {
         const record = this.baseRecord.create({
           uuid: uuidv4(),
-          name: removeSpecialCharacters(data.name).toUpperCase().trim(),
+          name: removeSpecialCharacters(data['name"']).toUpperCase().trim(),
           type: BaseRecordEnum.LGA,
           parentId: state.id,
         });
