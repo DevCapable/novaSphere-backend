@@ -86,17 +86,18 @@ export class AccountService {
         type: 'A valid Account type is required',
       });
     }
-
+    // const keys = await this.redis.keys('accounts:*');
+    // await this.redis.re(keys);
     const cacheKey = `accounts:${JSON.stringify({ filterOptions, paginationOptions })}`;
 
-    try {
-      const cachedResult = await this.redis.get(cacheKey);
-      if (cachedResult) {
-        return JSON.parse(cachedResult);
-      }
-    } catch (e) {
-      this.logger.error('Redis cache fetch failed');
-    }
+    // try {
+    //   const cachedResult = await this.redis.get(cacheKey);
+    //   if (cachedResult) {
+    //     return JSON.parse(cachedResult);
+    //   }
+    // } catch (e) {
+    //   this.logger.error('Redis cache fetch failed');
+    // }
 
     const [data, totalCount] = await this.accountRepository.findAll(
       filterOptions,
@@ -187,15 +188,14 @@ export class AccountService {
       };
     });
 
-    const result = [transformedData, totalCount];
+    const result = { data: transformedData, totalCount };
+    console.log('result', result);
 
-    // Cache the result before returning
     try {
       await this.redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
     } catch (e) {
       this.logger.error('Redis cache set failed');
     }
-
     return result;
   }
 
@@ -217,6 +217,7 @@ export class AccountService {
         AccountTypeEnum.INSTITUTION,
         AccountTypeEnum.SUG,
         AccountTypeEnum.COMMUNITY_VENDOR,
+        AccountTypeEnum.DEPARTMENT,
       ];
 
       if (orgTypes.includes(accountData.accountType)) {
@@ -309,6 +310,7 @@ export class AccountService {
 
       return account;
     } catch (error: any) {
+      console.error('Error during account creation:', error);
       throw new CustomBadRequestException(
         'Error encountered during account creation: ' + error.message,
       );

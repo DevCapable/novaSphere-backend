@@ -74,6 +74,11 @@ export class Department extends BaseEntity<Department> implements IDepartment {
   @Column({ name: 'IS_ACTIVE', default: true })
   isActive: boolean;
 
+  @Column({ unique: true })
+  email: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
   // @OneToMany(() => Admin, (admin) => admin.department)
   // admins: Admin[];
 }

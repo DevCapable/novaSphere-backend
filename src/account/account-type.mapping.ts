@@ -90,6 +90,10 @@ export const accountTypeMapping: AccountTypeMapping = {
       'isActive',
       'institutionId',
       'parentId',
+      'uuid',
+      'email',
+      'phoneNumber',
+      'accountType',
       'accountId',
     ],
     relations: ['institution', 'parent', 'account'], // Relations from the Department entity

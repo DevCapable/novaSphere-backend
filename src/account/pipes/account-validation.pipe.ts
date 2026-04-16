@@ -95,7 +95,7 @@ function createAccountValidationPipe(
           errors.forEach((err) => {
             errMsg[err.property] = Object.values(err.constraints || {});
           });
-
+          console.log('Validation errors:', errMsg);
           throw new CustomValidationException(errMsg);
         }
 

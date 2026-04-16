@@ -50,7 +50,7 @@ export class CreateDepartmentDto extends PickType(CreateAccountDto, [
   })
   @IsEnum(DepartmentType)
   @IsNotEmpty()
-  type: DepartmentType;
+  departmentType: DepartmentType;
 
   @ApiProperty({
     description: 'Name of the current Dean or HOD',
@@ -63,11 +63,11 @@ export class CreateDepartmentDto extends PickType(CreateAccountDto, [
 
   @ApiProperty({
     description: 'The ID of the parent Institution',
-    example: 1,
+    example: 'inst-123',
   })
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
-  institutionId: number;
+  institutionId: string;
 
   @ApiProperty({
     description:

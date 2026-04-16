@@ -51,7 +51,7 @@ export class AccountController {
     return await this.accountService.findAll(filterOptions, paginationOptions);
   }
 
-  @Accounts(AccountTypeEnum.ADMIN)
+  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
   @ApiAccountCreate()
   @Post()
   @UseInterceptors(
@@ -64,6 +64,7 @@ export class AccountController {
     @Body(AccountValidationPipe(HandlerAction.CREATE))
     createAccountDto: CreateAccountDto,
   ) {
+    console.log('Creating account with data:', createAccountDto);
     return this.accountService.create({
       ...createAccountDto,
       isActivated: true,

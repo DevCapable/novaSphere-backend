@@ -63,6 +63,7 @@ export class UserService {
   ) {}
 
   async create(data: any, manager?: any) {
+    console.log('Creating user with data:', omit(data, ['password'])); // Avoid logging sensitive info
     const wfUserGroups =
       data?.workflowGroups?.length > 0 ? data.workflowGroups : [];
     const baseData = {
