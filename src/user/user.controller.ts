@@ -54,6 +54,8 @@ export class UserController {
     AccountTypeEnum.INDIVIDUAL,
     AccountTypeEnum.DEPARTMENT,
     AccountTypeEnum.SUG,
+    AccountTypeEnum.COMMUNITY_VENDOR,
+    AccountTypeEnum.LECTURER,
   )
   @Permission(PermisionActionTypeEnum.CREATE, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.CREATED)
@@ -158,7 +160,15 @@ export class UserController {
     return await this.userService.findSettings();
   }
 
-  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
+  @Accounts(
+    AccountTypeEnum.ADMIN,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.INDIVIDUAL,
+    AccountTypeEnum.DEPARTMENT,
+    AccountTypeEnum.SUG,
+    AccountTypeEnum.COMMUNITY_VENDOR,
+    AccountTypeEnum.LECTURER,
+  )
   @ApiFilterPagination('Get All Users')
   @UseInterceptors(PaginationInterceptor)
   @Get()
@@ -174,7 +184,15 @@ export class UserController {
     );
   }
 
-  @Accounts(AccountTypeEnum.ADMIN, AccountTypeEnum.INSTITUTION)
+  @Accounts(
+    AccountTypeEnum.ADMIN,
+    AccountTypeEnum.INSTITUTION,
+    AccountTypeEnum.INDIVIDUAL,
+    AccountTypeEnum.DEPARTMENT,
+    AccountTypeEnum.SUG,
+    AccountTypeEnum.COMMUNITY_VENDOR,
+    AccountTypeEnum.LECTURER,
+  )
   @Permission(PermisionActionTypeEnum.READ, PermisionSubjectTypeEnum.USER)
   @HttpCode(HttpStatus.OK)
   @ApiEndpoint('Get One User ')
