@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DepartmentRepository } from './department.repository';
+import { LecturerRepository } from './lecturer.repository';
 import { BaseService } from '@app/core/base/base.service';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department } from '@app/account/entities/department.entity';
+import { Lecturer } from '@app/account/entities/lecturer.entity';
 
 @Injectable()
-export class DepartmentService extends BaseService<Department> {
-  constructor(private readonly departmentRepository: DepartmentRepository) {
-    super(departmentRepository);
+export class LecturerService extends BaseService<Lecturer> {
+  constructor(private readonly lecturerRepository: LecturerRepository) {
+    super(lecturerRepository);
   }
 
   async findAll(filterOptions: any = {}, paginationOptions: any = {}) {
-    const [data, totalCount] = await this.departmentRepository.findAll(
+    const [data, totalCount] = await this.lecturerRepository.findAll(
       filterOptions,
       paginationOptions,
     );
@@ -19,23 +20,23 @@ export class DepartmentService extends BaseService<Department> {
     return { data, totalCount };
   }
 
-  async findOne(id: number): Promise<Department> {
-    const department = await this.departmentRepository.findOne({
+  async findOne(id: number): Promise<Lecturer> {
+    const lecturer = await this.lecturerRepository.findOne({
       where: { id: id as any },
       relations: ['parent', 'institution', 'account', 'children'],
     });
 
-    if (!department) {
-      throw new NotFoundException(`Department with ID ${id} not found`);
+    if (!lecturer) {
+      throw new NotFoundException(`Lecturer with ID ${id} not found`);
     }
-    return department;
+    return lecturer;
   }
 
   // async update(id: number, data: UpdateDepartmentDto): Promise<any> {
-  //   return this.departmentRepository.update(id, data);
+  //   return this.lecturerRepository.update(id, data);
   // }
 
   async remove(id: number) {
-    return this.departmentRepository.delete(id);
+    return this.lecturerRepository.delete(id);
   }
 }

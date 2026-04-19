@@ -9,6 +9,7 @@ import {
 import { Account } from './account.entity';
 import { BaseRecord } from '@app/base-record/entities/base-record.entity';
 import { AcademicRank } from '../enums';
+import { Department } from './department.entity';
 
 export enum EmploymentType {
   FULL_TIME = 'FULL_TIME',
@@ -154,4 +155,13 @@ export class Lecturer {
 
   @Column({ nullable: true })
   signature?: string; // For digital result processing
+
+  @Column({ name: 'DEPARTMENT_ID', nullable: true })
+  departmentId?: number;
+
+  @ManyToOne(() => Department, (department) => department.lecturers, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'DEPARTMENT_ID' })
+  department: Department;
 }

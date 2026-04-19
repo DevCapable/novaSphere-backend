@@ -37,6 +37,7 @@ export enum EntityType {
   SERVICE_CODE = 'SERVICE_CODE',
   SERVICE_CODE_PAYMENT = 'SERVICE_CODE_PAYMENT',
   SETTING = 'SETTING',
+  DEPARTMENT = 'DEPARTMENT',
 }
 
 export enum AuditAction {

@@ -115,11 +115,7 @@ export class AuthenticationService {
     return this.sendOtp(user);
   }
 
-  async verifyLoginOtp(
-    data: any,
-    ip: string,
-    // origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
-  ) {
+  async verifyLoginOtp(data: any, ip: string) {
     const challengeKey = `${LOGIN_CHALLENGE}:${data.otp}`;
     const challenge = await this.redis.get(challengeKey);
 
@@ -138,37 +134,26 @@ export class AuthenticationService {
     return this.login(user, { email }, ip);
   }
 
-  async initiateLogin(
-    user: any,
-    data: any,
-    ip: string,
-    // origin: ExternalLinkOriginEnum = ExternalLinkOriginEnum.NOGIC,
-  ) {
+  async initiateLogin(user: any, data: any, ip: string) {
     const ctx = await this.prepareLoginContext(user, data);
 
-    // const isOtpOnLogin = await this.userService.getSettingValue(
-    //   user.id,
-    //   UserSettingKeyEnum.LOGIN_OTP_ENABLED,
-    // );
+    const isOtpOnLogin = await this.userService.getSettingValue(
+      user.id,
+      UserSettingKeyEnum.LOGIN_OTP_ENABLED,
+    );
 
-    // if (isOtpOnLogin == null) {
-    //   await this.sendOtp(user);
-    //   return {
-    //     data: null,
-    //     code: 'OTP_SENT_TO_EMAIL',
-    //   };
-    // }
+    if (isOtpOnLogin == null) {
+      await this.sendOtp(user);
+      return {
+        data: null,
+        code: 'OTP_SENT_TO_EMAIL',
+      };
+    }
 
     return this.login(user, data, ip, ctx);
   }
 
-  async login(
-    user: any,
-    data,
-    ip,
-    // externalOrigin?: ExternalLinkOriginEnum,
-    context?: LoginContext,
-  ) {
+  async login(user: any, data, ip, context?: LoginContext) {
     const ctx = context ?? (await this.prepareLoginContext(user, data));
 
     const { accountId, accountType, accountAdminPosition, sessionKey } = ctx;
@@ -513,12 +498,8 @@ export class AuthenticationService {
     };
   }
 
-  private async checkOtp(
-    otp: string,
-    user: any,
-    origin?: ExternalLinkOriginEnum,
-  ) {
-    const otpKey = `${LOGIN_OTP}:${user.id}:${origin}`;
+  private async checkOtp(otp: string, user: any) {
+    const otpKey = `${LOGIN_OTP}:${user.id}`;
     const hashedOtp = await this.redis.get(otpKey);
 
     if (!hashedOtp) {

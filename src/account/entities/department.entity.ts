@@ -14,6 +14,7 @@ import { Institution } from '@app/account/entities/institution.entity';
 import { DepartmentType } from '@app/department/enums';
 import { Account } from './account.entity';
 import { IDepartment } from '@app/department/department.interface';
+import { Lecturer } from './lecturer.entity';
 
 @Entity({
   name: 'ACCOUNT_DEPARTMENTS',
@@ -81,4 +82,7 @@ export class Department extends BaseEntity<Department> implements IDepartment {
   phoneNumber: string;
   // @OneToMany(() => Admin, (admin) => admin.department)
   // admins: Admin[];
+
+  @OneToMany(() => Lecturer, (department) => department.department)
+  lecturers: Lecturer[];
 }

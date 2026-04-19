@@ -15,7 +15,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { DepartmentService } from './department.service';
+import { LecturerService } from './lecturer.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { AccountTypeEnum } from '@app/account/enums/account-type.enum';
@@ -33,8 +33,8 @@ import { PaginationInterceptor } from '@app/core/providers/pagination/pagination
 @ApiTags('Departments')
 @Controller('departments')
 @ApiBearerAuth()
-export class DepartmentController {
-  constructor(private readonly departmentService: DepartmentService) {}
+export class LecturerController {
+  constructor(private readonly lecturerService: LecturerService) {}
 
   @Accounts(
     AccountTypeEnum.INSTITUTION,
@@ -46,7 +46,7 @@ export class DepartmentController {
   @UseInterceptors(
     AuditLogInterceptor({
       entityType: EntityType.DEPARTMENT,
-      service: DepartmentService,
+      service: LecturerService,
     }),
   )
   @Post()
@@ -56,7 +56,7 @@ export class DepartmentController {
     description: 'The department has been successfully created.',
   })
   create(@Body() createDepartmentDto: any) {
-    return this.departmentService.create(createDepartmentDto);
+    return this.lecturerService.create(createDepartmentDto);
   }
 
   @Accounts(
@@ -73,10 +73,7 @@ export class DepartmentController {
     @FiltersQuery() filterOptions,
     @PaginationQuery() paginationOptions,
   ) {
-    return await this.departmentService.findAll(
-      filterOptions,
-      paginationOptions,
-    );
+    return await this.lecturerService.findAll(filterOptions, paginationOptions);
   }
 
   @Accounts(
@@ -89,7 +86,7 @@ export class DepartmentController {
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a department by ID' })
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.departmentService.findOne(id);
+    return this.lecturerService.findOne(id);
   }
 
   @Accounts(
@@ -102,7 +99,7 @@ export class DepartmentController {
   @UseInterceptors(
     AuditLogInterceptor({
       entityType: EntityType.DEPARTMENT,
-      service: DepartmentService,
+      service: LecturerService,
     }),
   )
   @Patch(':id')
@@ -111,7 +108,7 @@ export class DepartmentController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDepartmentDto: any,
   ) {
-    return this.departmentService.update(id, updateDepartmentDto);
+    return this.lecturerService.update(id, updateDepartmentDto);
   }
 
   @Accounts(
@@ -124,12 +121,12 @@ export class DepartmentController {
   @UseInterceptors(
     AuditLogInterceptor({
       entityType: EntityType.DEPARTMENT,
-      service: DepartmentService,
+      service: LecturerService,
     }),
   )
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a department by ID' })
   remove(@Param('id', ParseIntPipe) id: number) {
-    return this.departmentService.remove(id);
+    return this.lecturerService.remove(id);
   }
 }

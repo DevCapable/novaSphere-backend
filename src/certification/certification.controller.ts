@@ -29,6 +29,9 @@ import { PaginationInterceptor } from '@app/core/providers/pagination/pagination
   AccountTypeEnum.ADMIN,
   AccountTypeEnum.DEPARTMENT,
   AccountTypeEnum.INSTITUTION,
+  AccountTypeEnum.SUG,
+  AccountTypeEnum.COMMUNITY_VENDOR,
+  AccountTypeEnum.LECTURER,
 )
 @ApiTags('certifications')
 export class CertificationController {

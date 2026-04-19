@@ -38,7 +38,6 @@ export class AccountProfileController {
     summary: 'Get Authenticated Account Profile',
   })
   async findOne(@CurrentUser() user: CurrentUserData) {
-    console.log('Current User Data:  ', user); // Debugging log
     return await this.accountService.findOne(user?.account?.id);
   }
 

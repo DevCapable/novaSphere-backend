@@ -38,6 +38,9 @@ import { DepartmentModule } from './department/department.module';
 import { JobExperienceModule } from './job-experience/job-experience.module';
 import { TrainingModule } from './training/training.module';
 import { SkillModule } from './skill/skill.module';
+import { AcademicModule } from './academic/academic.module';
+import { CertificationModule } from './certification/certification.module';
+import { LecturerModule } from './lecturer/lecturer.module';
 
 @Module({
   imports: [
@@ -93,6 +96,9 @@ import { SkillModule } from './skill/skill.module';
     JobExperienceModule,
     TrainingModule,
     SkillModule,
+    AcademicModule,
+    CertificationModule,
+    LecturerModule,
   ],
   providers: [
     {

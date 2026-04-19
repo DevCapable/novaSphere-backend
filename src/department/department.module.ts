@@ -3,7 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DepartmentService } from './department.service';
 import { DepartmentController } from './department.controller';
 import { AccountModule } from '@app/account/account.module';
-import { Department } from './entities/department.entity';
+import { DepartmentRepository } from './department.repository';
+import { Department } from '@app/account/entities/department.entity';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { Department } from './entities/department.entity';
     forwardRef(() => AccountModule),
   ],
   controllers: [DepartmentController],
-  providers: [DepartmentService],
+  providers: [DepartmentService, DepartmentRepository],
   exports: [DepartmentService],
 })
 export class DepartmentModule {}
